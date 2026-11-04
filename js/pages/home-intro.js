@@ -1,11 +1,11 @@
 // Home intro, modelled on the reference video: a "Loading…" scene with the girl
-// illustration and cycling thought icons, then the girl flies into her place in the
-// layout and the page fades in, hero lines one after another.
+// illustration and cycling thought icons; the scene fades out, then the page fades in
+// with the same character appearing together with the hero lines.
 
 const MIN_LOADING_MS = 1800;
 const MAX_LOADING_MS = 4000;
 const THOUGHT_EVERY_MS = 380;
-const LAND_MS = 900;
+const FADE_OUT_MS = 600;
 const LINE_STAGGER_MS = 160;
 const EASE_OUT = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
@@ -62,24 +62,16 @@ function loadingDone(intro) {
   return Promise.race([Promise.all([ready, wait(MIN_LOADING_MS)]), wait(MAX_LOADING_MS)]);
 }
 
-/** Fly the overlay girl onto the real one in the layout (FLIP), fading the backdrop. */
-async function land(intro) {
-  const from = intro.querySelector('.intro__girl');
-  const to = document.querySelector('.art__girl');
+/** Fade the whole loading scene out (character, icons, backdrop). */
+async function fadeOutScene(intro) {
   intro.classList.add('is-leaving');
-  if (!from || !to) return;
-
-  const a = from.getBoundingClientRect();
-  const b = to.getBoundingClientRect();
-  const dx = b.left - a.left;
-  const dy = b.top - a.top;
-  const k = a.width ? b.width / a.width : 1;
-  const flight = from.animate(
-    [{ transform: 'none' }, { transform: `translate(${dx}px, ${dy}px) scale(${k})` }],
-    { duration: LAND_MS, easing: EASE_OUT, fill: 'forwards' }
-  );
+  const out = intro.animate([{ opacity: 1 }, { opacity: 0 }], {
+    duration: FADE_OUT_MS,
+    easing: 'ease-out',
+    fill: 'forwards',
+  });
   // timers keep going when a background tab stops painting, so never wait on frames alone
-  await Promise.race([flight.finished, wait(LAND_MS + 150)]);
+  await Promise.race([out.finished, wait(FADE_OUT_MS + 150)]);
 }
 
 const fadeIn = (node, delay, from = '0 16px') =>
@@ -101,6 +93,8 @@ function revealPage() {
     .map((sel) => document.querySelector(sel))
     .filter(Boolean);
   const heroIn = lines.map((node, i) => fadeIn(node, 100 + i * LINE_STAGGER_MS, '0 10px')).filter(Boolean);
+  // the character from the loading scene shows up again in the layout, with the text
+  fadeIn(document.querySelector('.art__girl'), 100, '0 10px');
 
   const header = document.querySelectorAll('.site-header__left, .logo, .site-header__right');
   header.forEach((node, i) => fadeIn(node, 300 + i * 120, '0 -16px'));
@@ -131,8 +125,8 @@ export async function playIntro() {
     const stopLoading = startLoadingScene(intro);
     await loadingDone(intro);
     stopLoading();
-    await land(intro);
-    intro.remove(); // the real girl takes over exactly where the flying one landed
+    await fadeOutScene(intro);
+    intro.remove();
     await revealPage();
   } catch (err) {
     console.error(err);

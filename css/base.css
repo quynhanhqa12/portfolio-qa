@@ -272,6 +272,16 @@ button:focus-visible {
   font-weight: var(--fw-regular);
 }
 
+.site-header__nav a {
+  transition: color 0.2s;
+}
+
+.site-header__nav a:hover,
+.site-header__nav a:focus-visible {
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+}
+
 .site-header__toggle {
   display: none;
   width: 44px;

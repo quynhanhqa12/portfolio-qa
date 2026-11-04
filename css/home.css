@@ -294,7 +294,6 @@
   display: grid;
   place-items: center;
   background: var(--color-bg);
-  transition: background-color 0.6s;
   animation: intro-failsafe-hide 0.4s 8s forwards;
 }
 
@@ -307,7 +306,6 @@
   display: block;
   width: 100%;
   height: auto;
-  transform-origin: 0 0;
 }
 
 /* thought icons pop in turn above her head, like the icons over the character in the video */
@@ -356,14 +354,7 @@
 }
 
 .intro.is-leaving {
-  background-color: transparent;
   pointer-events: none;
-}
-
-.intro.is-leaving .intro__thought,
-.intro.is-leaving .intro__loading {
-  opacity: 0;
-  transition: opacity 0.25s;
 }
 
 @keyframes intro-dots {
