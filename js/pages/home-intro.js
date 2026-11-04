@@ -5,9 +5,11 @@
 const MIN_LOADING_MS = 1800;
 const MAX_LOADING_MS = 4000;
 const THOUGHT_EVERY_MS = 380;
-const FADE_OUT_MS = 600;
-const LINE_STAGGER_MS = 160;
-const EASE_OUT = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const FADE_OUT_MS = 900;
+const FADE_IN_MS = 1400;
+const LINE_STAGGER_MS = 260;
+// gentle ease-in-out: no snap at the start, long soft landing
+const EASE_SOFT = 'cubic-bezier(0.45, 0, 0.2, 1)';
 
 let state = 'idle'; // idle → playing → done
 
@@ -67,17 +69,17 @@ async function fadeOutScene(intro) {
   intro.classList.add('is-leaving');
   const out = intro.animate([{ opacity: 1 }, { opacity: 0 }], {
     duration: FADE_OUT_MS,
-    easing: 'ease-out',
+    easing: 'ease-in-out',
     fill: 'forwards',
   });
   // timers keep going when a background tab stops painting, so never wait on frames alone
   await Promise.race([out.finished, wait(FADE_OUT_MS + 150)]);
 }
 
-const fadeIn = (node, delay, from = '0 16px') =>
+const fadeIn = (node, delay, from = '0 8px') =>
   node?.animate(
     [{ opacity: 0, translate: from }, { opacity: 1, translate: '0 0' }],
-    { duration: 700, delay, easing: EASE_OUT, fill: 'backwards' }
+    { duration: FADE_IN_MS, delay, easing: EASE_SOFT, fill: 'backwards' }
   );
 
 function revealPage() {
@@ -92,24 +94,24 @@ function revealPage() {
   ]
     .map((sel) => document.querySelector(sel))
     .filter(Boolean);
-  const heroIn = lines.map((node, i) => fadeIn(node, 100 + i * LINE_STAGGER_MS, '0 10px')).filter(Boolean);
+  const heroIn = lines.map((node, i) => fadeIn(node, 150 + i * LINE_STAGGER_MS)).filter(Boolean);
   // the character from the loading scene shows up again in the layout, with the text
-  fadeIn(document.querySelector('.art__girl'), 100, '0 10px');
+  fadeIn(document.querySelector('.art__girl'), 150);
 
   const header = document.querySelectorAll('.site-header__left, .logo, .site-header__right');
-  header.forEach((node, i) => fadeIn(node, 300 + i * 120, '0 -16px'));
-  fadeIn(document.querySelector('.home__portrait'), 250, '-24px 0');
-  fadeIn(document.querySelector('.hero__go'), 800);
-  fadeIn(document.querySelector('.home__titles'), 900);
+  header.forEach((node, i) => fadeIn(node, 500 + i * 180, '0 -8px'));
+  fadeIn(document.querySelector('.home__portrait'), 400, '-12px 0');
+  fadeIn(document.querySelector('.hero__go'), 1200);
+  fadeIn(document.querySelector('.home__titles'), 1400);
   document.querySelectorAll('.art__cube, .art__eye').forEach((node, i) => {
     node.animate(
-      [{ opacity: 0, translate: '0 24px' }, { opacity: 1, translate: '0 0' }],
-      { duration: 650, delay: 150 + i * 150, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'backwards' }
+      [{ opacity: 0, translate: '0 8px' }, { opacity: 1, translate: '0 0' }],
+      { duration: FADE_IN_MS, delay: 400 + i * 200, easing: EASE_SOFT, fill: 'backwards' }
     );
   });
 
   // timers keep going when a background tab stops painting, so never wait on frames alone
-  return Promise.race([Promise.all(heroIn.map((a) => a.finished)), wait(1600)]);
+  return Promise.race([Promise.all(heroIn.map((a) => a.finished)), wait(150 + 3 * LINE_STAGGER_MS + FADE_IN_MS + 200)]);
 }
 
 /** Run the intro once the page is rendered. Called on every visit to Home. */
