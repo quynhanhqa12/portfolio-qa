@@ -1,9 +1,24 @@
-/* Home (Figma 2796:61531, 1920x1080). Everything below the 175px header is laid out
-   in cqw of .home (1cqw = 19.2px at 1920) so the composition scales from 1280 to 1920.
+/* Home (Figma 2796:61531, 1920x1080) always fits one screen: the page is a column of
+   header + .home, and .home is a size container, so everything below the header is laid
+   out in --u = one Figma pixel scaled to whichever of width / height runs out first.
    Coordinates are Figma values minus the 175px header height. */
+.page-home {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100svh;
+}
+
+.page-home #app {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .home {
-  container-type: inline-size;
+  container: home / size;
+  position: relative;
   width: 100%;
+  height: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
 }
@@ -167,94 +182,223 @@
   pointer-events: none;
 }
 
-/* ---------- desktop >=1280: absolute stage ---------- */
-@media (min-width: 1280px) {
+/* ---------- landscape: Figma composition scaled by --u ---------- */
+@container home (min-aspect-ratio: 11 / 10) {
   .home__stage {
-    --fs-hero: 3.258cqw;          /* 62.553px at 1920 */
-    --fs-hero-initial: 6.516cqw;  /* 125.106px at 1920 */
-    --fs-h4: 1.0417cqw;           /* 20px at 1920 */
-    position: relative;
-    height: 47.135cqw;            /* 905px = 1080 - 175 header */
+    --u: min(100cqw / 1920, 100cqh / 905);
+    --fs-hero: calc(62.553 * var(--u));
+    --fs-hero-initial: calc(125.106 * var(--u));
+    --fs-h4: max(12px, calc(20 * var(--u)));
+    --x0: calc((100cqw - 1920 * var(--u)) / 2);
+    /* composition (403u tall) sits centred in the room left above the titles */
+    --y0: max(12px, calc((100cqh - 190 * var(--u) - 403 * var(--u)) / 2));
+    position: absolute;
+    inset: 0;
   }
 
-  .home__stage > * {
+  .home__comp > *,
+  .home__titles {
     position: absolute;
   }
 
   .home__portrait {
-    top: 9.427cqw;
-    left: 10.4167cqw;
-    width: 20.104cqw;
+    top: var(--y0);
+    left: calc(var(--x0) + 200 * var(--u));
+    width: calc(386 * var(--u));
     aspect-ratio: 386 / 222;
   }
 
   .home__hero {
-    top: 9.427cqw;
-    left: 37.2396cqw;
+    top: var(--y0);
+    left: calc(var(--x0) + 715 * var(--u));
   }
 
   .home__art {
-    top: 11.917cqw;
-    left: 66.1323cqw;
-    width: 24.45cqw;
+    top: calc(var(--y0) + 47.8 * var(--u));
+    left: calc(var(--x0) + 1269.7 * var(--u));
+    width: calc(469.4 * var(--u));
   }
 
+  /* bottom line sits on the bottom edge, 78px up as in Figma (never closer than 28px) */
   .home__titles {
-    top: 41.823cqw;
+    bottom: max(28px, calc(78 * var(--u)));
     left: 0;
     right: 0;
   }
 }
 
-/* ---------- tablet / mobile: stacked ---------- */
-@media (max-width: 1279px) {
+/* ---------- portrait (phones, tablets upright): stacked, still one screen ---------- */
+@container home (max-aspect-ratio: 11 / 10) {
   .home__stage {
+    --fs-hero: min(calc((100cqw - 2 * var(--gutter)) / 8.2), 6.2cqh);
+    --fs-hero-initial: calc(var(--fs-hero) * 2);
+    --fs-h4: clamp(12px, 3.6cqw, 18px);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2cqh var(--gutter) max(24px, 4cqh);
+  }
+
+  .home__comp {
     display: grid;
+    flex: 1 1 auto;
+    min-height: 0;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 40px 32px;
+    align-content: safe center;
     align-items: center;
-    padding: 48px var(--gutter) 64px;
+    gap: 4cqh 20px;
   }
 
   .home__hero {
     grid-column: 1 / -1;
-    order: -1; /* hero first, then portrait + illustrations */
+    order: -1; /* hero on top, portrait + illustrations side by side below */
     justify-self: center;
   }
 
   .home__portrait {
-    width: 100%;
+    width: min(100%, 38cqh);
+    justify-self: end;
     aspect-ratio: 386 / 222;
   }
 
   .home__art {
-    width: 100%;
-    max-width: 420px;
-    justify-self: center;
+    width: min(100%, 30cqh);
+    justify-self: start;
   }
 
   .home__titles {
-    grid-column: 1 / -1;
     flex-direction: column;
-    gap: 4px;
-    margin-top: 8px;
+    gap: 2px;
     text-align: center;
   }
 
   .home__amp {
     position: static;
-    font-size: calc(var(--fs-hero-initial) * 0.75);
+    font-size: calc(var(--fs-h4) * 3);
     line-height: 0.9;
   }
 }
 
-@media (max-width: 480px) {
-  .home__stage {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
+/* ---------- intro (index.html #intro, driven by js/pages/home-intro.js) ---------- */
+.is-intro #site-header,
+.is-intro #app {
+  opacity: 0;
+  /* failsafe: if the script never runs, show the page anyway */
+  animation: intro-failsafe-show 0.4s 8s forwards;
+}
+
+.is-revealing .hero__welcome,
+.is-revealing .hero__art .title-initial__rest,
+.is-revealing .hero__of,
+.is-revealing .hero__first,
+.is-revealing .hero__name .title-initial__rest {
+  opacity: 0;
+}
+
+.is-revealing .hero .is-scrambling.is-scrambling {
+  opacity: 1;
+}
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--color-bg);
+  transition: background-color 0.6s;
+  animation: intro-failsafe-hide 0.4s 8s forwards;
+}
+
+.intro__scene {
+  position: relative;
+  width: min(46vmin, 440px);
+}
+
+.intro__girl {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 0 0;
+}
+
+/* thought icons pop in turn above her head, like the icons over the character in the video */
+.intro__thought {
+  position: absolute;
+  top: -24%;
+  left: 30%;
+  width: 22%;
+  aspect-ratio: 1;
+}
+
+.intro__thought img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(10px) scale(0.7) rotate(-8deg);
+  transition: opacity 0.18s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.intro__thought img.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.intro__loading {
+  position: absolute;
+  right: -8%;
+  bottom: -14%;
+  margin: 0;
+  font-size: var(--fs-small);
+  font-weight: var(--fw-light);
+  white-space: nowrap;
+  transition: opacity 0.3s;
+}
+
+.intro__dots::after {
+  content: "...";
+  display: inline-block;
+  width: 1.2em;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: intro-dots 1.2s steps(4) infinite;
+}
+
+.intro.is-leaving {
+  background-color: transparent;
+  pointer-events: none;
+}
+
+.intro.is-leaving .intro__thought,
+.intro.is-leaving .intro__loading {
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+@keyframes intro-dots {
+  from { width: 0; }
+  to { width: 1.2em; }
+}
+
+@keyframes intro-failsafe-show {
+  to { opacity: 1; }
+}
+
+@keyframes intro-failsafe-hide {
+  to { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
   }
 
-  .home__art {
-    max-width: 300px;
+  .is-intro #site-header,
+  .is-intro #app {
+    opacity: 1;
+    animation: none;
   }
 }

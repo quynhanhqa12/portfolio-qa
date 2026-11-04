@@ -6,8 +6,21 @@
   <title>Portfolio</title>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/home.css">
+  <noscript><style>.intro { display: none; } .is-intro #site-header, .is-intro #app { opacity: 1; }</style></noscript>
 </head>
-<body class="page-home">
+<body class="page-home is-intro">
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro__scene">
+      <div class="intro__thought">
+        <img src="assets/illustrations/05-sparkle-cam.png" alt="">
+        <img src="assets/illustrations/03-chat-bubble-cam.png" alt="">
+        <img src="assets/illustrations/01-chom-sao-y-tuong.png" alt="">
+        <img src="assets/illustrations/06-bang-mau-hoa-si.png" alt="">
+      </div>
+      <img class="intro__girl" src="assets/illustrations/01-co-gai-cam-ipad.png" alt="">
+      <p class="intro__loading">Loading<span class="intro__dots"></span> <span class="intro__count">(0)</span></p>
+    </div>
+  </div>
   <header id="site-header"></header>
   <main id="app"></main>
   <noscript><p class="noscript">Trang này cần bật JavaScript để hiển thị nội dung. Hãy bật JavaScript trong trình duyệt rồi tải lại trang.</p></noscript>

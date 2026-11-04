@@ -1,4 +1,5 @@
 import { bootPage, el, imageBox } from '../ui/shell.js';
+import { playIntro, skipIntro } from './home-intro.js';
 
 const ARROW_ICON =
   '<svg viewBox="0 0 51.25 51.25" fill="none" aria-hidden="true" focusable="false">' +
@@ -86,13 +87,19 @@ function render(data, root) {
       el(
         'div',
         { className: 'home__stage' },
-        imageBox(data.home?.photo, site.name ? `Portrait of ${site.name}` : '', { className: 'home__portrait' }),
-        renderHero(site),
-        renderArt(),
+        el(
+          'div',
+          { className: 'home__comp' },
+          imageBox(data.home?.photo, site.name ? `Portrait of ${site.name}` : '', { className: 'home__portrait' }),
+          renderHero(site),
+          renderArt()
+        ),
         renderTitles(site)
       )
     )
   );
+  playIntro();
 }
 
-bootPage('home', render);
+// the intro overlay must never outlive a failed boot (fatal panel instead of a page)
+bootPage('home', render).finally(skipIntro);

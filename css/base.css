@@ -36,7 +36,7 @@
   --fs-title: 80px;             /* Works/About/Contact rest of title (Gilda Display, uppercase) */
   --fs-h3: 30px;                /* project name, email, ticker (Be Vietnam Pro Bold) */
   --fs-h4: 20px;                /* tags, meta, section labels */
-  --fs-menu: 18px;              /* nav + Resume */
+  --fs-menu: 16px;              /* nav + Resume (Figma 18px, reduced on request) */
   --fs-body: 16px;              /* paragraphs */
   --fs-small: 14px;             /* footer copyright, social links */
   --fs-logo-initial: 65.813px;  /* "Q" of the QA logo (Rouge Script) */
@@ -71,7 +71,7 @@
     --fs-title: 56px;
     --fs-h3: 24px;
     --fs-h4: 18px;
-    --fs-menu: 16px;
+    --fs-menu: 14px;
     --fs-logo-initial: 52px;
     --fs-logo: 42px;
   }
@@ -88,7 +88,7 @@
     --fs-title: 40px;
     --fs-h3: 20px;
     --fs-h4: 16px;
-    --fs-menu: 16px;
+    --fs-menu: 14px;
     --fs-body: 15px;
     --fs-small: 13px;
     --fs-logo-initial: 44px;
@@ -262,7 +262,7 @@ button:focus-visible {
 .site-header__nav {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 12px;
   font-size: var(--fs-menu);
   font-weight: var(--fw-light);
   line-height: 1.2778; /* 23px at 18px, as in Figma */
@@ -320,10 +320,101 @@ button:focus-visible {
   display: block;
   width: 24px;
   height: 24px;
+  transition: color 0.2s;
 }
 
+/* bold copy stacked under the label reserves the bold width, so hover doesn't shift the header */
 .resume__label {
+  display: inline-grid;
   color: var(--color-accent);
+}
+
+.resume__label::after {
+  content: attr(data-text);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: var(--fw-bold);
+}
+
+.resume:hover .resume__label,
+.resume:focus-visible .resume__label {
+  font-weight: var(--fw-bold);
+}
+
+.resume:hover .resume__icon,
+.resume:focus-visible .resume__icon {
+  color: var(--color-accent);
+}
+
+/* logo hover: Q tilts and turns accent, A steps aside, "Home" caption rises underneath */
+.logo {
+  position: relative;
+}
+
+.logo__q,
+.logo__a {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s;
+}
+
+.logo__home {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: var(--fw-regular);
+  letter-spacing: 0.2em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-accent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 6px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.logo__home::before {
+  content: "";
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s 0.05s;
+}
+
+.logo:hover .logo__q,
+.logo:focus-visible .logo__q {
+  color: var(--color-accent);
+  transform: rotate(-10deg) scale(1.08);
+}
+
+.logo:hover .logo__a,
+.logo:focus-visible .logo__a {
+  transform: translateX(6px);
+}
+
+.logo:hover .logo__home,
+.logo:focus-visible .logo__home {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.logo:hover .logo__home::before,
+.logo:focus-visible .logo__home::before {
+  width: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo__q,
+  .logo__a,
+  .logo__home,
+  .logo__home::before {
+    transition: none;
+  }
 }
 
 /* mobile header: menu collapses into a toggle */

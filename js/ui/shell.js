@@ -90,7 +90,8 @@ export function renderHeader(root, site, activePage) {
     'a',
     { className: 'logo', href: 'index.html', 'aria-label': 'QA — trang chủ' },
     el('span', { className: 'logo__q', 'aria-hidden': 'true' }, 'Q'),
-    el('span', { className: 'logo__a', 'aria-hidden': 'true' }, 'A')
+    el('span', { className: 'logo__a', 'aria-hidden': 'true' }, 'A'),
+    el('span', { className: 'logo__home', 'aria-hidden': 'true' }, 'Home')
   );
 
   const resumeHref = resolveImage(s.resume);
@@ -99,7 +100,7 @@ export function renderHeader(root, site, activePage) {
         'a',
         { className: 'resume', href: resumeHref, download: true },
         el('span', { className: 'resume__icon', html: DOWNLOAD_ICON }),
-        el('span', { className: 'resume__label' }, 'Resume')
+        el('span', { className: 'resume__label', dataset: { text: 'Resume' } }, 'Resume')
       )
     : null;
 
