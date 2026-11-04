@@ -1,0 +1,98 @@
+import { bootPage, el, imageBox } from '../ui/shell.js';
+
+const ARROW_ICON =
+  '<svg viewBox="0 0 51.25 51.25" fill="none" aria-hidden="true" focusable="false">' +
+  '<circle cx="25.625" cy="25.625" r="25" stroke="currentColor" stroke-width="1.25"/>' +
+  '<path d="M26.25 12.3535C26.25 12.0083 25.9702 11.7285 25.625 11.7285C25.2798 11.7285 25 12.0083 25 12.3535L25.625 12.3535L26.25 12.3535ZM25.625 12.3535L25 12.3535L25 39.0542L25.625 39.0542L26.25 39.0542L26.25 12.3535L25.625 12.3535ZM25.1831 39.4961C25.4271 39.7402 25.8229 39.7402 26.0669 39.4961L30.0444 35.5187C30.2885 35.2746 30.2885 34.8789 30.0444 34.6348C29.8003 34.3907 29.4046 34.3907 29.1605 34.6348L25.625 38.1703L22.0895 34.6348C21.8454 34.3907 21.4497 34.3907 21.2056 34.6348C20.9615 34.8789 20.9615 35.2746 21.2056 35.5187L25.1831 39.4961Z" fill="currentColor"/>' +
+  '</svg>';
+
+function initialPair(word, extraClass = '') {
+  return el(
+    'span',
+    { className: `title-initial title-initial--hero ${extraClass}`.trim() },
+    el('span', { className: 'title-initial__cap' }, word.slice(0, 1)),
+    el('span', { className: 'title-initial__rest' }, word.slice(1))
+  );
+}
+
+function renderHero(site) {
+  const name = (site.heroName || site.name || '').trim();
+  const words = name.split(/\s+/).filter(Boolean);
+  const last = words.pop() || '';
+  const first = words.join(' ');
+
+  const nameRow = el(
+    'span',
+    { className: 'hero__name', 'aria-hidden': 'true' },
+    first ? el('span', { className: 'hero__first' }, first) : null,
+    last ? initialPair(last, 'title-initial--accent') : null
+  );
+
+  return el(
+    'div',
+    { className: 'home__hero' },
+    el(
+      'div',
+      { className: 'hero' },
+      el(
+        'h1',
+        { className: 'hero__title', 'aria-label': `Welcome to Art space of ${name}`.trim() },
+        el('span', { className: 'hero__welcome', 'aria-hidden': 'true' }, 'Welcome to'),
+        el('span', { className: 'hero__art', 'aria-hidden': 'true' }, initialPair('Art space')),
+        el('span', { className: 'hero__of', 'aria-hidden': 'true' }, 'of'),
+        nameRow
+      ),
+      el('a', {
+        className: 'hero__go',
+        href: 'works.html',
+        'aria-label': 'View works',
+        html: ARROW_ICON,
+      })
+    )
+  );
+}
+
+function renderArt() {
+  const img = (cls, file) =>
+    el('img', { className: `art__item ${cls}`, src: `assets/illustrations/${file}`, alt: '', 'aria-hidden': 'true' });
+  return el(
+    'div',
+    { className: 'home__art art', 'aria-hidden': 'true' },
+    img('art__cube', '03-khoi-cube.png'),
+    img('art__girl', '01-co-gai-cam-ipad.png'),
+    img('art__eye', '02-con-mat-viewfinder.png')
+  );
+}
+
+function renderTitles(site) {
+  const titles = Array.isArray(site.titles) ? site.titles.filter(Boolean) : [];
+  if (!titles.length) return null;
+  return el(
+    'p',
+    { className: 'home__titles' },
+    el('span', { className: 'home__title' }, titles[0]),
+    titles[1] ? el('span', { className: 'home__amp', 'aria-hidden': 'true' }, '&') : null,
+    titles[1] ? el('span', { className: 'home__title' }, titles[1]) : null
+  );
+}
+
+function render(data, root) {
+  const site = data.site || {};
+  document.title = `${site.name || 'Portfolio'} — Portfolio`;
+  root.replaceChildren(
+    el(
+      'div',
+      { className: 'home' },
+      el(
+        'div',
+        { className: 'home__stage' },
+        imageBox(data.home?.photo, site.name ? `Portrait of ${site.name}` : '', { className: 'home__portrait' }),
+        renderHero(site),
+        renderArt(),
+        renderTitles(site)
+      )
+    )
+  );
+}
+
+bootPage('home', render);

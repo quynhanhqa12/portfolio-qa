@@ -1,0 +1,260 @@
+/* Home (Figma 2796:61531, 1920x1080). Everything below the 175px header is laid out
+   in cqw of .home (1cqw = 19.2px at 1920) so the composition scales from 1280 to 1920.
+   Coordinates are Figma values minus the 175px header height. */
+.home {
+  container-type: inline-size;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+}
+
+/* ---------- hero group (sized in em of --fs-hero: 1em = 62.553px at 1920) ---------- */
+.home__hero {
+  font-size: var(--fs-hero);
+}
+
+.hero {
+  position: relative;
+  width: 7.827em;  /* 489.6px */
+  height: 6.443em; /* 403px */
+  font-family: var(--font-display);
+  line-height: 1.183;
+  color: var(--color-text);
+}
+
+.hero__title {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  font-weight: var(--fw-regular);
+}
+
+.hero__title > * {
+  position: absolute;
+  white-space: nowrap;
+}
+
+.hero__welcome {
+  top: 0;
+  left: 0.833em;
+  text-transform: uppercase;
+}
+
+.hero__art {
+  top: 0.833em;
+  left: 0;
+}
+
+.hero__of {
+  top: 1.583em;
+  right: 0;
+  text-transform: uppercase;
+}
+
+.hero__name {
+  top: 4.092em;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.452em;
+  color: var(--color-accent);
+}
+
+.hero__first {
+  margin-top: 0.917em; /* same drop as the rest of the script pair */
+  text-transform: uppercase;
+}
+
+.hero .title-initial__cap {
+  line-height: 1.175; /* Rouge Script "normal" in Figma: 147px at 125px */
+}
+
+.hero .title-initial__rest {
+  line-height: 1.183;
+}
+
+.hero__art .title-initial {
+  --ti-overlap: -0.115;
+}
+
+.hero__name .title-initial {
+  --ti-drop: 0.458;
+  --ti-overlap: -0.056;
+}
+
+/* round arrow button -> works.html */
+.hero__go {
+  position: absolute;
+  top: 3.693em;
+  left: 50%;
+  display: grid;
+  width: max(0.8em, 44px);
+  height: max(0.8em, 44px);
+  place-items: center;
+  transform: translate(-50%, -50%);
+  color: var(--color-text);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.hero__go svg {
+  width: 0.82em;
+  height: 0.82em;
+}
+
+.hero__go:hover {
+  color: var(--color-accent);
+  transform: translate(-50%, -50%) translateY(0.12em);
+}
+
+/* ---------- illustrations cluster (children positioned in % of the 469.4 x 357.2 cluster) ---------- */
+.art {
+  position: relative;
+  aspect-ratio: 469.44 / 357.2;
+}
+
+.art__item {
+  position: absolute;
+  height: auto;
+  max-width: none;
+}
+
+.art__cube {
+  top: 0;
+  left: 0;
+  width: 33.62%;
+  transform: rotate(-17.34deg);
+  scale: 0.798; /* 125.988 / 157.825: image sits inside the rotated 157.8px box */
+}
+
+.art__girl {
+  top: 1.173%;
+  left: 6.446%;
+  width: 75.2%;
+}
+
+.art__eye {
+  top: 26.9%;
+  left: 60.79%;
+  width: 39.21%;
+  transform: rotate(15.56deg);
+  scale: 0.812; /* 149.429 / 184.054 */
+}
+
+/* ---------- bottom line ---------- */
+.home__titles {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.15em; /* 83px at 20px */
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.home__amp {
+  position: absolute;
+  top: calc(var(--fs-h4) * -3.45);
+  left: calc(50% + var(--fs-h4) * 1.9);
+  font-family: var(--font-script);
+  font-size: var(--fs-hero-initial);
+  letter-spacing: var(--ls-script);
+  line-height: 1.175;
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+/* ---------- desktop >=1280: absolute stage ---------- */
+@media (min-width: 1280px) {
+  .home__stage {
+    --fs-hero: 3.258cqw;          /* 62.553px at 1920 */
+    --fs-hero-initial: 6.516cqw;  /* 125.106px at 1920 */
+    --fs-h4: 1.0417cqw;           /* 20px at 1920 */
+    position: relative;
+    height: 47.135cqw;            /* 905px = 1080 - 175 header */
+  }
+
+  .home__stage > * {
+    position: absolute;
+  }
+
+  .home__portrait {
+    top: 9.427cqw;
+    left: 10.4167cqw;
+    width: 20.104cqw;
+    aspect-ratio: 386 / 222;
+  }
+
+  .home__hero {
+    top: 9.427cqw;
+    left: 37.2396cqw;
+  }
+
+  .home__art {
+    top: 11.917cqw;
+    left: 66.1323cqw;
+    width: 24.45cqw;
+  }
+
+  .home__titles {
+    top: 41.823cqw;
+    left: 0;
+    right: 0;
+  }
+}
+
+/* ---------- tablet / mobile: stacked ---------- */
+@media (max-width: 1279px) {
+  .home__stage {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 32px;
+    align-items: center;
+    padding: 48px var(--gutter) 64px;
+  }
+
+  .home__hero {
+    grid-column: 1 / -1;
+    order: -1; /* hero first, then portrait + illustrations */
+    justify-self: center;
+  }
+
+  .home__portrait {
+    width: 100%;
+    aspect-ratio: 386 / 222;
+  }
+
+  .home__art {
+    width: 100%;
+    max-width: 420px;
+    justify-self: center;
+  }
+
+  .home__titles {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .home__amp {
+    position: static;
+    font-size: calc(var(--fs-hero-initial) * 0.75);
+    line-height: 0.9;
+  }
+}
+
+@media (max-width: 480px) {
+  .home__stage {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .home__art {
+    max-width: 300px;
+  }
+}
