@@ -90,7 +90,7 @@ function render(data, root) {
         el(
           'div',
           { className: 'home__comp' },
-          imageBox(data.home?.photo, site.name ? `Portrait of ${site.name}` : '', { className: 'home__portrait' }),
+          imageBox(data.home?.photo, site.name ? `Portrait of ${site.name}` : '', { className: 'home__portrait', loading: 'eager' }),
           renderHero(site),
           renderArt()
         ),

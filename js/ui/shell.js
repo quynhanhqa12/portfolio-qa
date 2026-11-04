@@ -29,13 +29,13 @@ export function el(tag, attrs, ...children) {
 }
 
 /** Grey placeholder box; shows the image when the path resolves and the file loads. */
-export function imageBox(path, alt, { className = '', fit = 'cover' } = {}) {
+export function imageBox(path, alt, { className = '', fit = 'cover', loading = 'lazy' } = {}) {
   const box = el('div', {
     className: ['img-box', fit === 'contain' ? 'img-box--contain' : '', className].filter(Boolean).join(' '),
   });
   const src = resolveImage(path);
   if (src) {
-    const img = el('img', { src, alt: alt || '', loading: 'lazy' });
+    const img = el('img', { src, alt: alt || '', loading });
     img.addEventListener('error', () => img.remove());
     box.append(img);
   }
