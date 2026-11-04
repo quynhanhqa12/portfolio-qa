@@ -1,0 +1,497 @@
+{
+  "site": {
+    "name": "Quỳnh Anh",
+    "heroName": "Quynh Anh",
+    "titles": [
+      "Senior Graphic Designer",
+      "Visual Artist"
+    ],
+    "email": "quynhanh.qa1236@gmail.com",
+    "resume": "files/cv.pdf",
+    "location": "Hanoi, VN",
+    "availableForWork": true,
+    "social": [
+      {
+        "name": "Behance",
+        "url": ""
+      },
+      {
+        "name": "Dribbble",
+        "url": ""
+      },
+      {
+        "name": "Instagram",
+        "url": ""
+      },
+      {
+        "name": "LinkedIn",
+        "url": ""
+      }
+    ]
+  },
+  "home": {
+    "photo": "images/home-portrait.jpg"
+  },
+  "works": {
+    "intro": "Below are selected projects I have worked on over the past few years, featuring both personal designs and corporate client work. Each project presents a unique challenge, yet they all share a consistent approach: trusting the process while staying creatively flexible. The goal is always to deliver optimal design solutions that fully satisfy the brief and meet the project timeline."
+  },
+  "about": {
+    "bio": "I am Quỳnh Anh, a Senior Graphic Designer and Visual Artist specializing in brand identity, social media design, print, digital illustration, and creative advertising. I believe every project has its own unique \"personality.\" Whether collaborating with corporate brands or individuals, I adapt flexibly while staying true to my signature style: modern, clean, and spacious. My design highlight is the balance between neat layouts and a playful approach to colors and patterns. Every visual element I choose aims to guide the viewer's emotions, creating striking yet highly accessible designs that help the message connect naturally and memorably.",
+    "photo": "images/about-photo.jpg",
+    "services": [
+      {
+        "name": "Digital Illustration",
+        "description": "Delivering digital illustration projects with a distinct personal touch through unique color palettes and pattern play."
+      },
+      {
+        "name": "Brand Identity",
+        "description": "Delivering digital illustration projects with a distinct personal touch through unique color palettes and pattern play."
+      },
+      {
+        "name": "Print & Creative Ads",
+        "description": "Designing print and creative ads that balance visual appeal with communication goals."
+      },
+      {
+        "name": "Digital & Social Design",
+        "description": "Crafting digital and social assets with clean, engaging layouts optimized for the best user experience."
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "brand-identity",
+      "name": "Brand Identity"
+    },
+    {
+      "id": "digital-illustration",
+      "name": "Digital Illustration"
+    },
+    {
+      "id": "digital-social-design",
+      "name": "Digital & Social Design"
+    },
+    {
+      "id": "photography",
+      "name": "Photography"
+    }
+  ],
+  "projects": [
+    {
+      "id": "habitify-brand-identity",
+      "project": "Habitify",
+      "category": "brand-identity",
+      "year": 2019,
+      "company": "Unstatic Co.",
+      "tags": [
+        "Brand Identity",
+        "Logo Design"
+      ],
+      "cover": "images/habitify-brand-identity/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Habitify. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Habitify. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/habitify-brand-identity/intro-1.jpg",
+        "images/habitify-brand-identity/intro-2.jpg",
+        "images/habitify-brand-identity/intro-3.jpg",
+        "images/habitify-brand-identity/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Habitify. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/habitify-brand-identity/section-1-1.jpg",
+            "images/habitify-brand-identity/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Habitify. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/habitify-brand-identity/section-2-1.jpg",
+            "images/habitify-brand-identity/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nami-innovation-brand-identity",
+      "project": "Nami Innovation",
+      "category": "brand-identity",
+      "year": 2024,
+      "company": "Nami Foundation",
+      "tags": [
+        "Brand Identity",
+        "Logo Design"
+      ],
+      "cover": "images/nami-innovation-brand-identity/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Nami Innovation. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Nami Innovation. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/nami-innovation-brand-identity/intro-1.jpg",
+        "images/nami-innovation-brand-identity/intro-2.jpg",
+        "images/nami-innovation-brand-identity/intro-3.jpg",
+        "images/nami-innovation-brand-identity/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Nami Innovation. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/nami-innovation-brand-identity/section-1-1.jpg",
+            "images/nami-innovation-brand-identity/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Nami Innovation. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/nami-innovation-brand-identity/section-2-1.jpg",
+            "images/nami-innovation-brand-identity/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tendoo-brand-identity",
+      "project": "Tendoo",
+      "category": "brand-identity",
+      "year": 2025,
+      "company": "Viettel Telecom",
+      "tags": [
+        "Brand Identity",
+        "Logo Design"
+      ],
+      "cover": "images/tendoo-brand-identity/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Tendoo. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Tendoo. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/tendoo-brand-identity/intro-1.jpg",
+        "images/tendoo-brand-identity/intro-2.jpg",
+        "images/tendoo-brand-identity/intro-3.jpg",
+        "images/tendoo-brand-identity/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Tendoo. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/tendoo-brand-identity/section-1-1.jpg",
+            "images/tendoo-brand-identity/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Tendoo. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/tendoo-brand-identity/section-2-1.jpg",
+            "images/tendoo-brand-identity/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "good-moods-digital-illustration",
+      "project": "Good Moods",
+      "category": "digital-illustration",
+      "year": 2024,
+      "company": "Good Moods",
+      "tags": [
+        "Digital Illustration",
+        "Visual Design"
+      ],
+      "cover": "images/good-moods-digital-illustration/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Good Moods. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Good Moods. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/good-moods-digital-illustration/intro-1.jpg",
+        "images/good-moods-digital-illustration/intro-2.jpg",
+        "images/good-moods-digital-illustration/intro-3.jpg",
+        "images/good-moods-digital-illustration/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Good Moods. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/good-moods-digital-illustration/section-1-1.jpg",
+            "images/good-moods-digital-illustration/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Good Moods. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/good-moods-digital-illustration/section-2-1.jpg",
+            "images/good-moods-digital-illustration/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nami-innovation-digital-illustration",
+      "project": "Nami Innovation",
+      "category": "digital-illustration",
+      "year": 2024,
+      "company": "Nami Foundation",
+      "tags": [
+        "Digital Illustration",
+        "Visual Design"
+      ],
+      "cover": "images/nami-innovation-digital-illustration/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Nami Innovation. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Nami Innovation. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/nami-innovation-digital-illustration/intro-1.jpg",
+        "images/nami-innovation-digital-illustration/intro-2.jpg",
+        "images/nami-innovation-digital-illustration/intro-3.jpg",
+        "images/nami-innovation-digital-illustration/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Nami Innovation. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/nami-innovation-digital-illustration/section-1-1.jpg",
+            "images/nami-innovation-digital-illustration/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Nami Innovation. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/nami-innovation-digital-illustration/section-2-1.jpg",
+            "images/nami-innovation-digital-illustration/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tendoo-digital-illustration",
+      "project": "Tendoo",
+      "category": "digital-illustration",
+      "year": 2025,
+      "company": "Viettel Telecom",
+      "tags": [
+        "Digital Illustration",
+        "Visual Design"
+      ],
+      "cover": "images/tendoo-digital-illustration/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Tendoo. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Tendoo. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/tendoo-digital-illustration/intro-1.jpg",
+        "images/tendoo-digital-illustration/intro-2.jpg",
+        "images/tendoo-digital-illustration/intro-3.jpg",
+        "images/tendoo-digital-illustration/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Tendoo. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/tendoo-digital-illustration/section-1-1.jpg",
+            "images/tendoo-digital-illustration/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Tendoo. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/tendoo-digital-illustration/section-2-1.jpg",
+            "images/tendoo-digital-illustration/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sci-labs-digital-illustration",
+      "project": "Sci Labs",
+      "category": "digital-illustration",
+      "year": 2024,
+      "company": "Nami Innovation",
+      "tags": [
+        "Digital Illustration",
+        "Visual Design"
+      ],
+      "cover": "images/sci-labs-digital-illustration/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Sci Labs. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Sci Labs. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/sci-labs-digital-illustration/intro-1.jpg",
+        "images/sci-labs-digital-illustration/intro-2.jpg",
+        "images/sci-labs-digital-illustration/intro-3.jpg",
+        "images/sci-labs-digital-illustration/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Sci Labs. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/sci-labs-digital-illustration/section-1-1.jpg",
+            "images/sci-labs-digital-illustration/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Sci Labs. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/sci-labs-digital-illustration/section-2-1.jpg",
+            "images/sci-labs-digital-illustration/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "habitify-digital-social-design",
+      "project": "Habitify",
+      "category": "digital-social-design",
+      "year": 2019,
+      "company": "Unstatic Co.",
+      "tags": [
+        "Digital Design",
+        "Social Design"
+      ],
+      "cover": "images/habitify-digital-social-design/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Habitify. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Habitify. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/habitify-digital-social-design/intro-1.jpg",
+        "images/habitify-digital-social-design/intro-2.jpg",
+        "images/habitify-digital-social-design/intro-3.jpg",
+        "images/habitify-digital-social-design/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Habitify. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/habitify-digital-social-design/section-1-1.jpg",
+            "images/habitify-digital-social-design/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Habitify. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/habitify-digital-social-design/section-2-1.jpg",
+            "images/habitify-digital-social-design/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nami-innovation-digital-social-design",
+      "project": "Nami Innovation",
+      "category": "digital-social-design",
+      "year": 2024,
+      "company": "Nami Foundation",
+      "tags": [
+        "Digital Design",
+        "Social Design"
+      ],
+      "cover": "images/nami-innovation-digital-social-design/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Nami Innovation. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Nami Innovation. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/nami-innovation-digital-social-design/intro-1.jpg",
+        "images/nami-innovation-digital-social-design/intro-2.jpg",
+        "images/nami-innovation-digital-social-design/intro-3.jpg",
+        "images/nami-innovation-digital-social-design/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Nami Innovation. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/nami-innovation-digital-social-design/section-1-1.jpg",
+            "images/nami-innovation-digital-social-design/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Nami Innovation. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/nami-innovation-digital-social-design/section-2-1.jpg",
+            "images/nami-innovation-digital-social-design/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tendoo-digital-social-design",
+      "project": "Tendoo",
+      "category": "digital-social-design",
+      "year": 2025,
+      "company": "Viettel Telecom",
+      "tags": [
+        "Digital Design",
+        "Social Design"
+      ],
+      "cover": "images/tendoo-digital-social-design/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Tendoo. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Tendoo. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/tendoo-digital-social-design/intro-1.jpg",
+        "images/tendoo-digital-social-design/intro-2.jpg",
+        "images/tendoo-digital-social-design/intro-3.jpg",
+        "images/tendoo-digital-social-design/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Tendoo. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/tendoo-digital-social-design/section-1-1.jpg",
+            "images/tendoo-digital-social-design/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Tendoo. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/tendoo-digital-social-design/section-2-1.jpg",
+            "images/tendoo-digital-social-design/section-2-2.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "habitify-photography",
+      "project": "Habitify",
+      "category": "photography",
+      "year": 2019,
+      "company": "Unstatic Co.",
+      "tags": [
+        "Photography"
+      ],
+      "cover": "images/habitify-photography/cover.jpg",
+      "intro": [
+        "Placeholder introduction for Habitify. Replace this paragraph with a short summary of the brief and the goals of the project.",
+        "Placeholder second paragraph for Habitify. Describe the approach, the deliverables and the result."
+      ],
+      "introImages": [
+        "images/habitify-photography/intro-1.jpg",
+        "images/habitify-photography/intro-2.jpg",
+        "images/habitify-photography/intro-3.jpg",
+        "images/habitify-photography/intro-4.jpg"
+      ],
+      "sections": [
+        {
+          "text": "Placeholder text for section 1 of Habitify. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/habitify-photography/section-1-1.jpg",
+            "images/habitify-photography/section-1-2.jpg"
+          ]
+        },
+        {
+          "text": "Placeholder text for section 2 of Habitify. Explain this part of the process in a few sentences.",
+          "images": [
+            "images/habitify-photography/section-2-1.jpg",
+            "images/habitify-photography/section-2-2.jpg"
+          ]
+        }
+      ]
+    }
+  ]
+}
