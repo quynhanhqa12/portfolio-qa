@@ -1,0 +1,195 @@
+/* Project detail (Figma 2796:61649, 1920 wide; Figma y minus the 175px header gives the offsets here).
+   Title y=313, tags y=471 (right edge 1720), name+meta y=543 (x=200, 440 wide), intro paragraphs y=724 / 868 (417 wide),
+   intro grid x=780 y=543 (2x2, 450 squares, 40 gap), section text y=1525 then 748 squares x=200 / x=972 (24 gap), next text y=2397. */
+.project {
+  padding-bottom: 120px;
+}
+
+/* ---------- title + tags ---------- */
+.project__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 138px; /* title y=313, header ends 175 */
+}
+
+.project__works-link {
+  display: block;
+}
+
+.project__works-link .title-initial__cap {
+  line-height: 1.175; /* Rouge Script "normal": 188px at 160px */
+}
+
+.project__tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 24px;
+  margin-top: 158px; /* tags y=471, title y=313 */
+  color: var(--color-accent);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-light);
+}
+
+/* ---------- name + intro | image grid ---------- */
+.project__top {
+  display: grid;
+  grid-template-columns: 440fr 940fr; /* 440 text column + 940 image grid at 1920 */
+  column-gap: 9.2105%; /* 140 / 1520 */
+  align-items: start;
+  margin-top: 42px; /* name y=543, title ends 501 */
+}
+
+.project__info {
+  min-width: 0;
+}
+
+.project__name {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.project__meta {
+  margin-top: 12px;
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-light);
+}
+
+.project__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: min(417px, 100%);
+  margin-top: 106px; /* first paragraph y=724, meta ends 618 */
+  font-size: var(--fs-body);
+  font-weight: var(--fw-light);
+  text-align: justify;
+}
+
+.project__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2.0833vw, 40px); /* 40 at 1920 */
+}
+
+.project__image {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* squares at every width; no radius in Figma */
+}
+
+/* ---------- sections ---------- */
+.project__section {
+  margin-top: 42px; /* text y=1525, grid ends 1483; next text y=2397, squares end 2355 */
+}
+
+.project__text {
+  max-width: 1520px;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-light);
+  text-align: justify;
+}
+
+.project__pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.25vw, 24px); /* 24 at 1920 */
+  margin-top: 42px; /* images y=1607, text ends ~1565 */
+}
+
+.project__pair:first-child {
+  margin-top: 0;
+}
+
+/* ---------- not found ---------- */
+.project-missing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  min-height: 50vh;
+  padding-top: 138px;
+}
+
+.project-missing__text {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+}
+
+.project-missing__link {
+  color: var(--color-accent);
+  font-size: var(--fs-h4);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------- tablet ---------- */
+@media (max-width: 1279px) {
+  .project {
+    padding-bottom: 80px;
+  }
+
+  .project__head {
+    margin-top: 48px;
+  }
+
+  .project__tags {
+    margin-top: 0;
+    padding-top: 12px;
+    gap: 6px 16px;
+  }
+
+  .project__top {
+    margin-top: 32px;
+  }
+
+  .project__intro {
+    margin-top: 40px;
+    text-align: left; /* narrow column: justify leaves rivers */
+  }
+
+  .project__section {
+    margin-top: 32px;
+  }
+
+  .project__pair {
+    margin-top: 24px;
+  }
+}
+
+/* ---------- single column below 768 ---------- */
+@media (max-width: 767px) {
+  .project__head {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .project__tags {
+    justify-content: flex-start;
+    padding-top: 0;
+  }
+
+  .project__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .project__intro {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .project__intro,
+  .project__text {
+    text-align: left;
+  }
+
+  .project-missing {
+    padding-top: 64px;
+  }
+}
