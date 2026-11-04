@@ -62,7 +62,7 @@ const CHEVRON =
   '<path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 const ARROW = (dir) =>
-  '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">' +
+  '<svg width="24" height="24" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">' +
   `<path d="${dir === 'prev' ? 'M12 4 6 10l6 6' : 'M8 4l6 6-6 6'}" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 /** Category filter as one dropdown button. options: [{id, name}], id null = All. */
@@ -143,6 +143,13 @@ function renderArrows(row) {
     prev.disabled = row.scrollLeft <= 1;
     next.disabled = row.scrollLeft >= max - 1;
     nav.hidden = max <= 1; // everything fits: no arrows
+    // centre the arrows on the first (square) image rather than the whole row
+    const image = row.querySelector('.card__image');
+    if (image && row.parentElement) {
+      const box = image.getBoundingClientRect();
+      const top = box.top + box.height / 2 - row.parentElement.getBoundingClientRect().top;
+      nav.style.setProperty('--nav-top', `${top}px`);
+    }
   };
   const nav = el('div', { className: 'row-nav' }, prev, next);
   row.addEventListener('scroll', update, { passive: true });
@@ -195,8 +202,8 @@ function render(data, root) {
         'div',
         { className: 'works__inner page' },
         el('div', { className: 'works__head' }, renderTitle(), intro ? el('p', { className: 'works__intro' }, intro) : null),
-        el('div', { className: 'works__toolbar' }, filter.node, arrows.node),
-        grid
+        el('div', { className: 'works__toolbar' }, filter.node),
+        el('div', { className: 'works__rowwrap' }, grid, arrows.node)
       ),
       renderTicker(),
       site.email

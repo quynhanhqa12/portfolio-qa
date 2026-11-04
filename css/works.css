@@ -142,33 +142,52 @@
   font-weight: var(--fw-bold);
 }
 
-.row-nav {
+/* prev / next arrows sit outside the card row, in the side gutters, vertically centred */
+.works__rowwrap {
+  position: relative;
   display: flex;
-  gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: clamp(12px, 3svh, 32px);
 }
 
 .row-nav__btn {
+  position: absolute;
+  top: var(--nav-top, 50%);
+  z-index: 2;
   display: grid;
-  width: 40px;
-  height: 40px;
+  width: min(56px, var(--gutter) - 8px); /* never wider than the gutter it sits in */
+  height: min(56px, var(--gutter) - 8px);
   padding: 0;
   place-items: center;
   border: 1px solid var(--color-text);
   border-radius: 50%;
-  background: transparent;
+  background: var(--color-bg);
   color: var(--color-text);
+  opacity: 0.35;
   cursor: pointer;
+  transform: translate(-50%, -50%);
   transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
 }
 
-.row-nav__btn:hover:not(:disabled) {
+.row-nav__btn--prev {
+  left: calc(var(--gutter) / -2);
+}
+
+.row-nav__btn--next {
+  left: calc(100% + var(--gutter) / 2);
+}
+
+.row-nav__btn:hover:not(:disabled),
+.row-nav__btn:focus-visible {
   border-color: var(--color-accent);
   background: var(--color-accent);
   color: var(--color-bg);
+  opacity: 1;
 }
 
 .row-nav__btn:disabled {
-  opacity: 0.25;
+  opacity: 0.1;
   cursor: default;
 }
 
@@ -187,8 +206,8 @@
   flex: 1 1 auto;
   align-items: flex-start;
   gap: var(--gap);
+  min-width: 0;
   min-height: 0;
-  margin-top: clamp(12px, 3svh, 32px);
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
@@ -358,9 +377,19 @@
     font-size: 14px;
   }
 
+  /* gutters are too narrow on phones: arrows float over the row edges instead */
   .row-nav__btn {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
+    opacity: 0.6;
+  }
+
+  .row-nav__btn--prev {
+    left: 22px;
+  }
+
+  .row-nav__btn--next {
+    left: calc(100% - 22px);
   }
 
   .works__row {
