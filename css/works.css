@@ -1,0 +1,274 @@
+/* Works (Figma 2796:61567, Works part y=0..1600 of 1920x3225).
+   Figma y minus the 175px header gives the offsets used here. Title y=265, intro y=318 x=1106 w=614,
+   cards y=543, ticker y=1286, email box y=1442 (540x148). */
+.works {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-bottom: 96px;
+}
+
+/* ---------- title + intro ---------- */
+.works__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 90px; /* title at y=265, header ends at 175 */
+}
+
+.works__title .title-initial__cap {
+  line-height: 1.175; /* Rouge Script "normal": 188px at 160px */
+}
+
+.works__intro {
+  flex: none;
+  width: min(614px, 50%);
+  margin-top: 53px; /* intro at y=318, title at y=265 */
+  font-size: var(--fs-body);
+  font-weight: var(--fw-light);
+  text-align: justify;
+}
+
+/* ---------- filter bar (no Figma design: body font, accent = active) ---------- */
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.filter__btn {
+  padding: 10px 22px;
+  border: 1px solid var(--color-text);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-light);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.filter__btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.filter__btn[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* ---------- grid: cards top-aligned; square (1:1) and wide (441:300) images give Figma's staggered heights ---------- */
+.works__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* Figma's 4th card overflows 1720; 4 columns fit the gutters */
+  align-items: start;
+  gap: 80px clamp(24px, 2.0833vw, 40px);
+  margin-top: 29px; /* cards at y=543 (filter bar ends at 514) */
+}
+
+.works__empty {
+  grid-column: 1 / -1;
+  padding: 48px 0;
+  font-size: var(--fs-h4);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 42px; /* label -> image -> name, as in Figma */
+  min-width: 0;
+}
+
+.card__label,
+.card__meta {
+  font-size: clamp(16px, 1.0417vw, 20px);
+  font-weight: var(--fw-light);
+}
+
+.card__name {
+  margin-bottom: -30px; /* name + meta are 12px apart; flex gap would be 42 */
+  font-size: clamp(20px, 1.5625vw, 30px);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.card__image {
+  width: 100%;
+  border-radius: var(--radius-card);
+}
+
+.card__image--square {
+  aspect-ratio: 1 / 1;
+}
+
+.card__image--wide {
+  aspect-ratio: 441 / 300;
+}
+
+.card__image > img {
+  transition: transform 0.4s;
+}
+
+.card:hover .card__image > img {
+  transform: scale(1.03);
+}
+
+/* ---------- marquee ---------- */
+.works__ticker {
+  overflow: hidden;
+  margin-top: 119px; /* ticker y=1286, tallest card ends 1167 */
+  color: var(--color-muted);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-ticker);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker 40s linear infinite;
+}
+
+.ticker__group {
+  display: flex;
+  flex: none;
+  gap: 120px;
+  padding-right: 120px; /* keeps the loop seamless: two equal groups, shift by 50% */
+}
+
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track {
+    animation: none;
+  }
+
+  .card__image > img {
+    transition: none;
+  }
+}
+
+/* ---------- email box ---------- */
+.works__contact {
+  display: flex;
+  justify-content: center;
+  margin-top: 118px; /* box y=1442, ticker ends 1324 */
+}
+
+.email-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: min(540px, 100%);
+  min-height: 148px;
+  padding: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  text-align: center;
+  overflow-wrap: anywhere;
+  transition: opacity 0.2s;
+}
+
+.email-box:hover {
+  opacity: 0.9;
+}
+
+/* ---------- tablet ---------- */
+@media (max-width: 1279px) {
+  .works__head {
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .works__intro {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .filter {
+    margin-top: 32px;
+  }
+
+  .works__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 56px 32px;
+    margin-top: 40px;
+  }
+
+  .card {
+    gap: 24px;
+  }
+
+  .card__label,
+  .card__meta {
+    font-size: var(--fs-h4);
+  }
+
+  .card__name {
+    margin-bottom: -12px;
+    font-size: var(--fs-h3);
+  }
+
+  .works__ticker {
+    margin-top: 80px;
+  }
+
+  .ticker__group {
+    gap: 64px;
+    padding-right: 64px;
+  }
+
+  .works__contact {
+    margin-top: 64px;
+  }
+
+  .email-box {
+    min-height: 120px;
+    padding: 32px;
+  }
+
+  .works {
+    padding-bottom: 64px;
+  }
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 480px) {
+  .works__intro {
+    text-align: left;
+  }
+
+  .works__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+
+  .filter__btn {
+    padding: 8px 16px;
+  }
+
+  .works__ticker {
+    margin-top: 56px;
+  }
+
+  .email-box {
+    min-height: 96px;
+    padding: 24px 20px;
+  }
+}
