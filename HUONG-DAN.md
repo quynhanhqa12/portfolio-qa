@@ -48,9 +48,9 @@ Các mục lớn trong `data.json` và chúng điều khiển gì:
 ```
 
 - **`name`**: tên đầy đủ (có dấu). Hiện ở dòng bản quyền cuối trang Contact và trong tiêu đề tab trình duyệt.
-- **`heroName`**: tên viết ở dòng chào lớn trang chủ ("Welcome to Art space of ..."). Từ **cuối cùng** sẽ được viết to bằng chữ thư pháp màu nhấn (ví dụ "Quynh **A**nh" thì chữ "Anh" là chữ to).
+- **`heroName`**: tên viết ở dòng chào lớn trang chủ ("Welcome to Art space of ..."). Cả tên hiện màu cam. Các từ đứng trước được viết hoa kiểu chữ có chân; riêng từ **cuối cùng**, **chữ cái đầu** là chữ to kiểu thư pháp, các chữ còn lại viết hoa kiểu có chân (ví dụ "Quynh Anh": "QUYNH" viết hoa, còn trong "Anh" thì chữ **A** to kiểu thư pháp, "NH" viết hoa theo sau).
 - **`titles`**: chức danh ở trang chủ. Hiển thị tối đa 2 chức danh, nối nhau bằng dấu `&` ("Senior Graphic Designer & Visual Artist"). Nếu chỉ có 1 chức danh thì chỉ hiện chức danh đó, không có dấu `&`.
-- **`email`**: hiện ở trang Works (khung email cuối trang) và trang Contact; bấm vào sẽ mở thư mới. Để trống `""` thì các khung này biến mất.
+- **`email`**: hiện ở trang Works (khung email cuối trang) và trang Contact; bấm vào sẽ mở thư mới. Để trống `""` thì khung email ở trang Works biến mất; ở trang Contact khung vẫn còn nhưng chỉ có câu mời liên hệ, không có địa chỉ email.
 - **`resume`**: đường dẫn file CV cho nút **Resume** ở thanh trên cùng. Hiện tại là `files/cv.pdf`. **Để trống `""` thì nút Resume biến mất.** Cách thay file CV: xem mục 6.
 - **`location`**: hiện ở trang Contact cùng đồng hồ ("Hanoi, VN — 08:32 AM"). Giờ luôn là giờ Hà Nội.
 - **`availableForWork`**: `true` thì trang Contact hiện dòng **"Available for work"** với chấm tròn màu cam phía trước. Đổi thành `false` thì dòng đó ẩn đi. Chỉ gõ `true` hoặc `false`, **không** có ngoặc kép, viết thường.
@@ -179,7 +179,7 @@ Từng mục nghĩa là gì:
 ## 5. Cách thêm/đổi ảnh
 
 1. Mỗi dự án có một thư mục ảnh riêng: `images/<id của dự án>/`, ví dụ `images/habitify-brand-identity/`. Ảnh chung (chân dung trang chủ, ảnh About) nằm thẳng trong `images/`.
-2. Tải ảnh lên đúng thư mục (trên github.com: mở thư mục `images` > **Add file** > **Upload files**, hoặc chọn **Create new file** nếu cần thư mục mới bằng cách gõ `ten-thu-muc/` trong ô tên).
+2. Tải ảnh lên đúng thư mục (trên github.com: mở thư mục `images` > **Add file** > **Upload files**). Với dự án mới, hãy kéo thả **cả thư mục ảnh** từ máy tính vào (thư mục phải đặt tên đúng bằng `id` của dự án); GitHub sẽ giữ nguyên cấu trúc thư mục. Nếu thư mục của dự án đã có sẵn thì chỉ cần mở thư mục đó rồi tải ảnh lên.
 3. Trong `data.json`, ghi đường dẫn đúng **y hệt tên file đã tải lên**:
    `"cover": "images/habitify-brand-identity/cover.jpg"`
 4. **Tên file phân biệt chữ hoa/chữ thường** (`Cover.jpg` khác `cover.jpg`) trên GitHub Pages. Nên đặt tên **chữ thường, không dấu, không khoảng trắng**, dùng dấu gạch ngang. Ghi sai tên thì chỗ đó chỉ hiện ô xám.
@@ -258,7 +258,7 @@ Nếu sửa xong mà website không lên và bạn không tìm ra lỗi: bấm *
 ## 9. Một vài thông báo khác có thể gặp
 
 - **"Không tìm thấy dự án."**: đường dẫn dự án sai hoặc `id` dự án đã bị đổi/xóa.
-- **Khung vàng cảnh báo đầu trang** ("Dữ liệu trong data.json có vấn đề nhỏ..."): website vẫn chạy nhưng đã bỏ qua một số dự án có `category` không tồn tại hoặc `id` bị trùng. Đọc dòng cảnh báo để biết dự án nào, rồi sửa lại.
+- **Khung cảnh báo đầu trang** (nền màu be, viền dưới màu cam) ("Dữ liệu trong data.json có vấn đề nhỏ..."): website vẫn chạy nhưng đã bỏ qua một số dự án có `category` không tồn tại hoặc `id` bị trùng. Đọc dòng cảnh báo để biết dự án nào, rồi sửa lại.
 - **Ảnh không hiện, chỉ thấy ô xám:** kiểm tra tên file và đường dẫn trong `data.json` (đúng chữ hoa/thường, đúng thư mục, đúng đuôi `.jpg`/`.png`).
 
 ---
