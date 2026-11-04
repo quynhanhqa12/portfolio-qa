@@ -156,8 +156,8 @@
   top: var(--nav-top, 50%);
   z-index: 2;
   display: grid;
-  width: min(56px, var(--gutter) - 8px); /* never wider than the gutter it sits in */
-  height: min(56px, var(--gutter) - 8px);
+  width: min(44px, var(--gutter) - 8px); /* never wider than the gutter it sits in */
+  height: min(44px, var(--gutter) - 8px);
   padding: 0;
   place-items: center;
   border: 1px solid var(--color-text);
@@ -278,7 +278,7 @@
   overflow: hidden;
   margin-top: clamp(10px, 2.4svh, 32px);
   color: var(--color-muted);
-  font-size: clamp(14px, 2.4svh, 24px);
+  font-size: clamp(12px, 1.8svh, 18px);
   font-weight: var(--fw-regular);
   letter-spacing: var(--ls-ticker);
   text-transform: uppercase;
@@ -319,18 +319,18 @@
   display: flex;
   flex: none;
   justify-content: center;
-  margin-top: clamp(8px, 1.6svh, 20px);
+  margin-top: clamp(16px, 3.2svh, 36px);
 }
 
 .email-box {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(8px, 1.4svh, 14px) 28px;
+  padding: clamp(6px, 1.1svh, 11px) 24px;
   border-radius: var(--radius-pill);
   background: var(--color-accent);
   color: var(--color-bg);
-  font-size: clamp(14px, 2svh, 18px);
+  font-size: clamp(13px, 1.7svh, 16px);
   font-weight: var(--fw-bold);
   text-align: center;
   overflow-wrap: anywhere;
@@ -379,17 +379,17 @@
 
   /* gutters are too narrow on phones: arrows float over the row edges instead */
   .row-nav__btn {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     opacity: 0.6;
   }
 
   .row-nav__btn--prev {
-    left: 22px;
+    left: 18px;
   }
 
   .row-nav__btn--next {
-    left: calc(100% - 22px);
+    left: calc(100% - 18px);
   }
 
   .works__row {
@@ -400,6 +400,6 @@
 
   .email-box {
     padding-inline: 20px;
-    font-size: min(15px, 4vw); /* keeps the address on one line */
+    font-size: min(14px, 3.8vw); /* keeps the address on one line */
   }
 }
