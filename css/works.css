@@ -57,23 +57,26 @@
   text-align: justify;
 }
 
-/* ---------- filter bar (no Figma design: body font, accent = active) ---------- */
-.filter {
+/* ---------- toolbar: filter dropdown (left) + row arrows (right) ---------- */
+.works__toolbar {
   display: flex;
   flex: none;
-  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-top: clamp(8px, 2svh, 20px);
-  overflow-x: auto;
-  scrollbar-width: none;
 }
 
-.filter::-webkit-scrollbar {
-  display: none;
+.filter {
+  position: relative;
+  z-index: 5;
 }
 
-.filter__btn {
-  flex: none;
-  padding: 8px 20px;
+.filter__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 8px 20px;
   border: 1px solid var(--color-text);
   border-radius: var(--radius-pill);
   background: transparent;
@@ -81,20 +84,92 @@
   font-size: var(--fs-body);
   font-weight: var(--fw-light);
   line-height: 1.2;
-  white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, color 0.2s;
 }
 
-.filter__btn:hover {
+.filter__toggle:hover,
+.filter__toggle[aria-expanded="true"] {
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
 
-.filter__btn[aria-pressed="true"] {
+.filter__value {
+  font-weight: var(--fw-regular);
+}
+
+.filter__chevron {
+  display: grid;
+  transition: transform 0.2s;
+}
+
+.filter__toggle[aria-expanded="true"] .filter__chevron {
+  transform: rotate(180deg);
+}
+
+.filter__list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 100%;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid var(--color-text);
+  border-radius: 16px;
+  background: var(--color-bg);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.08);
+}
+
+.filter__option {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-light);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.filter__option:hover,
+.filter__option:focus-visible {
+  outline: none;
+  color: var(--color-accent);
+  background: var(--color-placeholder);
+}
+
+.filter__option[aria-selected="true"] {
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+}
+
+.row-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.row-nav__btn {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--color-text);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.row-nav__btn:hover:not(:disabled) {
   border-color: var(--color-accent);
   background: var(--color-accent);
   color: var(--color-bg);
+}
+
+.row-nav__btn:disabled {
+  opacity: 0.25;
+  cursor: default;
 }
 
 /* ---------- one row of cards, scrolled sideways ----------
@@ -104,7 +179,7 @@
 .works__row {
   --per-view: 4;
   --gap: clamp(20px, 2.0833vw, 40px);
-  --card-text: 100px; /* label + name + meta + their gaps */
+  --card-text: 84px; /* label + name + meta + their gaps */
   --card-w: calc((100cqw - (var(--per-view) - 1) * var(--gap)) / var(--per-view));
   --img-h: min(var(--card-w), 100cqh - var(--card-text) - 12px);
   container-type: size;
@@ -137,7 +212,7 @@
 
 .card__label,
 .card__meta {
-  font-size: clamp(14px, 1.0417vw, 20px);
+  font-size: clamp(12px, 0.8333vw, 16px);
   font-weight: var(--fw-light);
   line-height: 1.25;
   white-space: nowrap;
@@ -161,7 +236,7 @@
 
 .card__name {
   margin-bottom: 4px;
-  font-size: clamp(16px, 1.5625vw, 30px);
+  font-size: clamp(14px, 1.1458vw, 22px);
   font-weight: var(--fw-bold);
   line-height: 1.25;
   text-transform: uppercase;
@@ -179,22 +254,12 @@
 }
 
 /* ---------- marquee ---------- */
-/* ticker and email pill share one band: the pill is centred over the running text */
-.works__band {
-  display: grid;
-  flex: none;
-  align-items: center;
-  margin-top: clamp(12px, 3svh, 40px);
-}
-
-.works__band > * {
-  grid-area: 1 / 1;
-}
-
 .works__ticker {
+  flex: none;
   overflow: hidden;
+  margin-top: clamp(10px, 2.4svh, 32px);
   color: var(--color-muted);
-  font-size: clamp(16px, 3svh, 30px);
+  font-size: clamp(14px, 2.4svh, 24px);
   font-weight: var(--fw-regular);
   letter-spacing: var(--ls-ticker);
   text-transform: uppercase;
@@ -230,23 +295,23 @@
   }
 }
 
-/* ---------- email pill ---------- */
+/* ---------- email pill (below the ticker, compact) ---------- */
 .works__contact {
-  position: relative; /* above the ticker */
   display: flex;
+  flex: none;
   justify-content: center;
+  margin-top: clamp(8px, 1.6svh, 20px);
 }
 
 .email-box {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: min(540px, 100%);
-  padding: clamp(10px, 2.4svh, 32px) 40px;
+  padding: clamp(8px, 1.4svh, 14px) 28px;
   border-radius: var(--radius-pill);
   background: var(--color-accent);
   color: var(--color-bg);
-  font-size: clamp(16px, 3svh, 30px);
+  font-size: clamp(14px, 2svh, 18px);
   font-weight: var(--fw-bold);
   text-align: center;
   overflow-wrap: anywhere;
@@ -272,7 +337,7 @@
 
   .works__row {
     --per-view: 3;
-    --card-text: 90px;
+    --card-text: 80px;
   }
 
   .ticker__group {
@@ -288,19 +353,24 @@
     font-size: 13px;
   }
 
-  .filter__btn {
-    padding: 6px 14px;
+  .filter__toggle {
+    padding: 6px 12px 6px 16px;
     font-size: 14px;
+  }
+
+  .row-nav__btn {
+    width: 34px;
+    height: 34px;
   }
 
   .works__row {
     --per-view: 1.6; /* a peek of the next card shows the row scrolls */
     --gap: 16px;
-    --card-text: 84px;
+    --card-text: 76px;
   }
 
   .email-box {
     padding-inline: 20px;
-    font-size: min(18px, 4.6vw); /* keeps the address on one line */
+    font-size: min(15px, 4vw); /* keeps the address on one line */
   }
 }
