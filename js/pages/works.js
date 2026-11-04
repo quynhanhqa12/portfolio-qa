@@ -43,6 +43,20 @@ function renderTicker() {
   );
 }
 
+/** The page has no vertical scroll, so a plain mouse wheel over the row moves it sideways. */
+function scrollSidewaysOnWheel(row) {
+  row.addEventListener(
+    'wheel',
+    (event) => {
+      if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return; // pinch, trackpad swipe
+      if (row.scrollWidth <= row.clientWidth) return;
+      event.preventDefault();
+      row.scrollLeft += event.deltaY;
+    },
+    { passive: false }
+  );
+}
+
 function render(data, root) {
   const site = data.site || {};
   const categories = data.categories || [];
@@ -51,7 +65,8 @@ function render(data, root) {
 
   let current = normalizeCategory(data, getParam(location.search, 'category')); // null = All
 
-  const grid = el('div', { className: 'works__grid' });
+  const grid = el('div', { className: 'works__row', tabindex: '0', 'aria-label': 'Danh sách dự án, cuộn ngang' });
+  scrollSidewaysOnWheel(grid);
   const filterBar = el('div', { className: 'filter', role: 'group', 'aria-label': 'Lọc dự án theo mảng' });
 
   const buttons = [
@@ -73,6 +88,7 @@ function render(data, root) {
       return;
     }
     grid.replaceChildren(...list.map((p, i) => renderCard(data, p, i)));
+    grid.scrollLeft = 0;
   }
 
   function select(id, pushUrl) {
@@ -94,14 +110,19 @@ function render(data, root) {
         filterBar,
         grid
       ),
-      renderTicker(),
-      site.email
-        ? el(
-            'div',
-            { className: 'works__contact page' },
-            el('a', { className: 'email-box', href: `mailto:${site.email}` }, site.email)
-          )
-        : null
+      // the email pill sits on top of the ticker band to keep the page within one screen
+      el(
+        'div',
+        { className: 'works__band' },
+        renderTicker(),
+        site.email
+          ? el(
+              'div',
+              { className: 'works__contact page' },
+              el('a', { className: 'email-box', href: `mailto:${site.email}` }, site.email)
+            )
+          : null
+      )
     )
   );
   select(current, false);

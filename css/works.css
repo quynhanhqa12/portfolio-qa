@@ -1,20 +1,47 @@
-/* Works (Figma 2796:61567, Works part y=0..1600 of 1920x3225).
-   Figma y minus the 175px header gives the offsets used here. Title y=265, intro y=318 x=1106 w=614,
-   cards y=543, ticker y=1286, email box y=1442 (540x148). */
+/* Works (Figma 2796:61567, Works part). The page always fits one screen: header, title +
+   intro, filter, ONE row of cards that scrolls sideways (4 cards per view on desktop),
+   then the ticker and the email pill. The card row takes whatever height is left and the
+   cards size themselves from it, so nothing scrolls vertically. */
+.page-works {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100svh;
+  /* the big script title scales with screen height so short screens keep room for the cards */
+  --fs-title-initial: clamp(64px, 12svh, 160px);
+  --fs-title: calc(var(--fs-title-initial) / 2);
+}
+
+.page-works #app {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .works {
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-bottom: 96px;
+  padding-bottom: clamp(16px, 3svh, 40px);
+}
+
+.works__inner {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
 }
 
 /* ---------- title + intro ---------- */
 .works__head {
   display: flex;
+  flex: none;
   align-items: flex-start;
   justify-content: space-between;
   gap: 40px;
-  margin-top: 90px; /* title at y=265, header ends at 175 */
+  margin-top: clamp(8px, 3svh, 48px);
 }
 
 .works__title .title-initial__cap {
@@ -24,7 +51,7 @@
 .works__intro {
   flex: none;
   width: min(614px, 50%);
-  margin-top: 53px; /* intro at y=318, title at y=265 */
+  margin-top: calc(var(--fs-title-initial) * 0.33); /* Figma: intro 53px below the title top */
   font-size: var(--fs-body);
   font-weight: var(--fw-light);
   text-align: justify;
@@ -33,13 +60,20 @@
 /* ---------- filter bar (no Figma design: body font, accent = active) ---------- */
 .filter {
   display: flex;
-  flex-wrap: wrap;
+  flex: none;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: clamp(8px, 2svh, 20px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter::-webkit-scrollbar {
+  display: none;
 }
 
 .filter__btn {
-  padding: 10px 22px;
+  flex: none;
+  padding: 8px 20px;
   border: 1px solid var(--color-text);
   border-radius: var(--radius-pill);
   background: transparent;
@@ -47,6 +81,7 @@
   font-size: var(--fs-body);
   font-weight: var(--fw-light);
   line-height: 1.2;
+  white-space: nowrap;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
@@ -62,53 +97,77 @@
   color: var(--color-bg);
 }
 
-/* ---------- grid: cards top-aligned; square (1:1) and wide (441:300) images give Figma's staggered heights ---------- */
-.works__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)); /* Figma's 4th card overflows 1720; 4 columns fit the gutters */
-  align-items: start;
-  gap: 80px clamp(24px, 2.0833vw, 40px);
-  margin-top: 29px; /* cards at y=543 (filter bar ends at 514) */
+/* ---------- one row of cards, scrolled sideways ----------
+   The row is a size container: a card is always a quarter of the row (3 gaps between
+   4 cards). Images are square (1:1) or wide (441:300) like Figma's staggered heights; on
+   short screens the square height is capped by the room left and the wide one follows. */
+.works__row {
+  --per-view: 4;
+  --gap: clamp(20px, 2.0833vw, 40px);
+  --card-text: 100px; /* label + name + meta + their gaps */
+  --card-w: calc((100cqw - (var(--per-view) - 1) * var(--gap)) / var(--per-view));
+  --img-h: min(var(--card-w), 100cqh - var(--card-text) - 12px);
+  container-type: size;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: flex-start;
+  gap: var(--gap);
+  min-height: 0;
+  margin-top: clamp(12px, 3svh, 32px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-muted) transparent;
 }
 
 .works__empty {
-  grid-column: 1 / -1;
-  padding: 48px 0;
+  padding: 24px 0;
   font-size: var(--fs-h4);
 }
 
 .card {
   display: flex;
+  flex: none;
   flex-direction: column;
-  gap: 42px; /* label -> image -> name, as in Figma */
-  min-width: 0;
+  width: var(--card-w);
+  scroll-snap-align: start;
 }
 
 .card__label,
 .card__meta {
-  font-size: clamp(16px, 1.0417vw, 20px);
+  font-size: clamp(14px, 1.0417vw, 20px);
   font-weight: var(--fw-light);
-}
-
-.card__name {
-  margin-bottom: -30px; /* name + meta are 12px apart; flex gap would be 42 */
-  font-size: clamp(20px, 1.5625vw, 30px);
-  font-weight: var(--fw-bold);
-  text-transform: uppercase;
-  overflow-wrap: anywhere;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card__image {
   width: 100%;
+  margin-block: clamp(8px, 1.6svh, 20px) clamp(8px, 1.6svh, 16px);
   border-radius: var(--radius-card);
 }
 
 .card__image--square {
-  aspect-ratio: 1 / 1;
+  height: var(--img-h);
 }
 
 .card__image--wide {
-  aspect-ratio: 441 / 300;
+  height: calc(var(--img-h) * 300 / 441);
+}
+
+.card__name {
+  margin-bottom: 4px;
+  font-size: clamp(16px, 1.5625vw, 30px);
+  font-weight: var(--fw-bold);
+  line-height: 1.25;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card__image > img {
@@ -120,11 +179,22 @@
 }
 
 /* ---------- marquee ---------- */
+/* ticker and email pill share one band: the pill is centred over the running text */
+.works__band {
+  display: grid;
+  flex: none;
+  align-items: center;
+  margin-top: clamp(12px, 3svh, 40px);
+}
+
+.works__band > * {
+  grid-area: 1 / 1;
+}
+
 .works__ticker {
   overflow: hidden;
-  margin-top: 119px; /* ticker y=1286, tallest card ends 1167 */
   color: var(--color-muted);
-  font-size: var(--fs-h3);
+  font-size: clamp(16px, 3svh, 30px);
   font-weight: var(--fw-regular);
   letter-spacing: var(--ls-ticker);
   text-transform: uppercase;
@@ -160,11 +230,11 @@
   }
 }
 
-/* ---------- email box ---------- */
+/* ---------- email pill ---------- */
 .works__contact {
+  position: relative; /* above the ticker */
   display: flex;
   justify-content: center;
-  margin-top: 118px; /* box y=1442, ticker ends 1324 */
 }
 
 .email-box {
@@ -172,12 +242,11 @@
   align-items: center;
   justify-content: center;
   min-width: min(540px, 100%);
-  min-height: 148px;
-  padding: 40px;
+  padding: clamp(10px, 2.4svh, 32px) 40px;
   border-radius: var(--radius-pill);
   background: var(--color-accent);
   color: var(--color-bg);
-  font-size: var(--fs-h3);
+  font-size: clamp(16px, 3svh, 30px);
   font-weight: var(--fw-bold);
   text-align: center;
   overflow-wrap: anywhere;
@@ -192,59 +261,23 @@
 @media (max-width: 1279px) {
   .works__head {
     flex-direction: column;
-    gap: 24px;
-    margin-top: 48px;
+    gap: 8px;
   }
 
   .works__intro {
     width: 100%;
     margin-top: 0;
+    font-size: 14px;
   }
 
-  .filter {
-    margin-top: 32px;
-  }
-
-  .works__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 56px 32px;
-    margin-top: 40px;
-  }
-
-  .card {
-    gap: 24px;
-  }
-
-  .card__label,
-  .card__meta {
-    font-size: var(--fs-h4);
-  }
-
-  .card__name {
-    margin-bottom: -12px;
-    font-size: var(--fs-h3);
-  }
-
-  .works__ticker {
-    margin-top: 80px;
+  .works__row {
+    --per-view: 3;
+    --card-text: 90px;
   }
 
   .ticker__group {
     gap: 64px;
     padding-right: 64px;
-  }
-
-  .works__contact {
-    margin-top: 64px;
-  }
-
-  .email-box {
-    min-height: 120px;
-    padding: 32px;
-  }
-
-  .works {
-    padding-bottom: 64px;
   }
 }
 
@@ -252,23 +285,22 @@
 @media (max-width: 480px) {
   .works__intro {
     text-align: left;
-  }
-
-  .works__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 48px;
+    font-size: 13px;
   }
 
   .filter__btn {
-    padding: 8px 16px;
+    padding: 6px 14px;
+    font-size: 14px;
   }
 
-  .works__ticker {
-    margin-top: 56px;
+  .works__row {
+    --per-view: 1.6; /* a peek of the next card shows the row scrolls */
+    --gap: 16px;
+    --card-text: 84px;
   }
 
   .email-box {
-    min-height: 96px;
-    padding: 24px 20px;
+    padding-inline: 20px;
+    font-size: min(18px, 4.6vw); /* keeps the address on one line */
   }
 }
