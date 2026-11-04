@@ -1,14 +1,12 @@
 // Home intro, modelled on the reference video: a "Loading…" scene with the girl
 // illustration and cycling thought icons, then the girl flies into her place in the
-// layout, the hero lines scramble in and the rest of the page fades up.
-import { scrambleFrame } from '../core/scramble.js';
+// layout and the page fades in, hero lines one after another.
 
 const MIN_LOADING_MS = 1800;
 const MAX_LOADING_MS = 4000;
 const THOUGHT_EVERY_MS = 380;
 const LAND_MS = 900;
-const SCRAMBLE_MS = 750;
-const LINE_STAGGER_MS = 140;
+const LINE_STAGGER_MS = 160;
 const EASE_OUT = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
 let state = 'idle'; // idle → playing → done
@@ -19,7 +17,7 @@ const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)'
 function finish() {
   state = 'done';
   document.getElementById('intro')?.remove();
-  document.body.classList.remove('is-intro', 'is-revealing');
+  document.body.classList.remove('is-intro');
 }
 
 /** End the intro at once if it never started (failed boot, fatal panel). */
@@ -84,36 +82,6 @@ async function land(intro) {
   await Promise.race([flight.finished, wait(LAND_MS + 150)]);
 }
 
-function scramble(node, delay) {
-  const text = node.textContent;
-  node.textContent = scrambleFrame(text, 0);
-  return wait(delay).then(
-    () =>
-      new Promise((resolve) => {
-        node.classList.add('is-scrambling');
-        const start = performance.now();
-        let done = false;
-        const end = () => {
-          if (done) return;
-          done = true;
-          node.textContent = text;
-          resolve();
-        };
-        const step = (now) => {
-          if (done) return;
-          const p = (now - start) / SCRAMBLE_MS;
-          if (p >= 1) end();
-          else {
-            node.textContent = scrambleFrame(text, p);
-            requestAnimationFrame(step);
-          }
-        };
-        requestAnimationFrame(step);
-        setTimeout(end, SCRAMBLE_MS + 150); // same guard as the flight: frames may not come
-      })
-  );
-}
-
 const fadeIn = (node, delay, from = '0 16px') =>
   node?.animate(
     [{ opacity: 0, translate: from }, { opacity: 1, translate: '0 0' }],
@@ -121,26 +89,18 @@ const fadeIn = (node, delay, from = '0 16px') =>
   );
 
 function revealPage() {
-  document.body.classList.add('is-revealing');
   document.body.classList.remove('is-intro');
 
-  // hero lines scramble in one after another; the script capitals blur in with them
+  // hero lines fade in one after another (script capitals included)
   const lines = [
     '.hero__welcome',
-    '.hero__art .title-initial__rest',
+    '.hero__art',
     '.hero__of',
-    '.hero__first',
-    '.hero__name .title-initial__rest',
+    '.hero__name',
   ]
     .map((sel) => document.querySelector(sel))
     .filter(Boolean);
-  const scrambles = lines.map((node, i) => scramble(node, i * LINE_STAGGER_MS));
-  document.querySelectorAll('.hero .title-initial__cap').forEach((cap, i) => {
-    cap.animate(
-      [{ opacity: 0, filter: 'blur(8px)', translate: '0 -12px' }, { opacity: 1, filter: 'blur(0)', translate: '0 0' }],
-      { duration: 900, delay: 200 + i * 400, easing: EASE_OUT, fill: 'backwards' }
-    );
-  });
+  const heroIn = lines.map((node, i) => fadeIn(node, 100 + i * LINE_STAGGER_MS, '0 10px')).filter(Boolean);
 
   const header = document.querySelectorAll('.site-header__left, .logo, .site-header__right');
   header.forEach((node, i) => fadeIn(node, 300 + i * 120, '0 -16px'));
@@ -154,7 +114,8 @@ function revealPage() {
     );
   });
 
-  return Promise.all(scrambles).then(() => wait(900));
+  // timers keep going when a background tab stops painting, so never wait on frames alone
+  return Promise.race([Promise.all(heroIn.map((a) => a.finished)), wait(1600)]);
 }
 
 /** Run the intro once the page is rendered. Called on every visit to Home. */

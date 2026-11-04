@@ -90,8 +90,7 @@ export function renderHeader(root, site, activePage) {
     'a',
     { className: 'logo', href: 'index.html', 'aria-label': 'QA — trang chủ' },
     el('span', { className: 'logo__q', 'aria-hidden': 'true' }, 'Q'),
-    el('span', { className: 'logo__a', 'aria-hidden': 'true' }, 'A'),
-    el('span', { className: 'logo__home', 'aria-hidden': 'true' }, 'Home')
+    el('span', { className: 'logo__a', 'aria-hidden': 'true' }, 'A')
   );
 
   const resumeHref = resolveImage(s.resume);

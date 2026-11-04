@@ -287,18 +287,6 @@
   animation: intro-failsafe-show 0.4s 8s forwards;
 }
 
-.is-revealing .hero__welcome,
-.is-revealing .hero__art .title-initial__rest,
-.is-revealing .hero__of,
-.is-revealing .hero__first,
-.is-revealing .hero__name .title-initial__rest {
-  opacity: 0;
-}
-
-.is-revealing .hero .is-scrambling.is-scrambling {
-  opacity: 1;
-}
-
 .intro {
   position: fixed;
   inset: 0;
