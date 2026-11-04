@@ -127,6 +127,18 @@
   text-underline-offset: 4px;
 }
 
+/* ---------- stacked name/intro above the image grid below 1024 ---------- */
+@media (max-width: 1023px) {
+  .project__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .project__intro {
+    width: 100%;
+  }
+}
+
 /* ---------- tablet ---------- */
 @media (max-width: 1279px) {
   .project {
@@ -173,14 +185,6 @@
     padding-top: 0;
   }
 
-  .project__top {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
-  }
-
-  .project__intro {
-    width: 100%;
-  }
 }
 
 @media (max-width: 480px) {
