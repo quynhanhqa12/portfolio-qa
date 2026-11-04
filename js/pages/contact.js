@@ -1,5 +1,5 @@
 import { bootPage, el } from '../ui/shell.js';
-import { formatHanoiTime } from '../core/clock.js';
+import { formatHanoiTime, msUntilNextMinute } from '../core/clock.js';
 
 const ILLUSTRATIONS = 'assets/illustrations/';
 
@@ -96,11 +96,14 @@ function renderFooter(site) {
     clock.textContent = site.location ? `${site.location} — ${time}` : time;
   };
   tick();
-  // Refresh on the next minute boundary, then every 60 s.
-  setTimeout(() => {
-    tick();
-    setInterval(tick, 60000);
-  }, 60000 - (Date.now() % 60000));
+  // Re-arm after every tick so the clock realigns with the minute boundary
+  // (timers can fire early/late; sleeping laptops and throttled tabs shift the phase).
+  const schedule = () =>
+    setTimeout(() => {
+      tick();
+      schedule();
+    }, msUntilNextMinute(Date.now()));
+  schedule();
 
   return el(
     'footer',

@@ -10,3 +10,8 @@ const hanoiFormat = new Intl.DateTimeFormat('en-US', {
 export function formatHanoiTime(date) {
   return hanoiFormat.format(date);
 }
+
+/** Milliseconds from nowMs to just after the next minute boundary (margin keeps a timer from landing early). */
+export function msUntilNextMinute(nowMs, marginMs = 50) {
+  return 60000 - (nowMs % 60000) + marginMs;
+}
