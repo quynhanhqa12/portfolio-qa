@@ -1,0 +1,283 @@
+/* Contact (Figma 2796:61498, 1920x1080, no site header: social links + logo form the top bar).
+   Top bar reuses .site-header__bar (grid 1fr auto 1fr) and .logo from base.css.
+   Social list x=200,y=62 (82 wide, items 38 apart, arrows at x=291) · logo x=928,y=62 ·
+   title y=329 · box 551x181 at x=685,y=566 · footer text baseline row ends y=1019 (61px above the bottom).
+
+   Desktop (>=1280): illustrations are positioned from the box (Figma px offsets times --u,
+   where --u = 1 Figma pixel = 1px at 1920, 0.667px at 1280) so the girl keeps overlapping the box edge.
+   Tablet/mobile: illustrations reflow into a row under the box. */
+.page-contact {
+  background: var(--color-bg-contact);
+}
+
+.contact {
+  --u: calc(min(100vw, var(--page-max)) / 1920);
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+/* ---------- top bar ---------- */
+.contact__top {
+  align-items: start;
+}
+
+.contact__social {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 9px; /* names end at x=282, arrows at x=291 */
+  row-gap: 20px;   /* items 38 apart, 18 tall */
+  justify-self: start;
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+}
+
+.contact__social li {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+.social {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  color: var(--color-text);
+  transition: color 0.15s;
+}
+
+.social__arrow {
+  align-self: start;
+  margin: 14px 0 -6px; /* arrow y=76 inside the 62..80 text line; hangs below it without growing the row */
+}
+
+.social__arrow svg {
+  width: 10px;
+  height: 10px;
+}
+
+a.social:hover,
+a.social:focus-visible {
+  color: var(--color-accent); /* Figma shows INSTAGRAM + its arrow in accent orange */
+}
+
+/* ---------- title, box, illustrations ---------- */
+.contact__main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 135px; /* title y=329, social list ends 194 */
+}
+
+.contact__title .title-initial__cap {
+  line-height: 1.175; /* Rouge Script "normal": 188px at 160px */
+}
+
+.contact__stage {
+  position: relative;
+  width: 551px;
+  max-width: 100%;
+  margin-top: 49px; /* box y=566, title ends 517 */
+}
+
+.contact__down {
+  position: absolute;
+  display: block;
+  top: -76px; /* circle y=490 */
+  left: calc(50% - 25px);
+  width: 50px;
+  height: 50px;
+  color: var(--color-text);
+}
+
+.contact__down svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.contact__box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 48px 42px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-box);
+  text-align: center;
+}
+
+.contact__lead {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-light);
+  color: var(--color-border);
+}
+
+.contact__email {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.contact__email:hover {
+  color: var(--color-accent);
+}
+
+/* illustrations: --x/--y = top-left of the box relative to the stage (Figma px), --s box size,
+   --i artwork size inside the box, --r rotation */
+.contact__art {
+  display: contents;
+}
+
+.deco {
+  position: absolute;
+  left: calc(var(--ax, 0%) + var(--x) * var(--u)); /* --ax: 100% anchors to the box's right edge */
+  top: calc(var(--y) * var(--u));
+  display: grid;
+  width: calc(var(--s) * var(--u));
+  aspect-ratio: 1;
+  place-items: center;
+  pointer-events: none;
+}
+
+.deco > img {
+  width: var(--i, 100%);
+  height: auto;
+  max-width: none;
+  transform: rotate(var(--r, 0deg));
+}
+
+.deco--girl {
+  --x: -307.5; /* 377.5 - 685 */
+  --y: -99.5;  /* 466.5 - 566 */
+  --s: 320;
+}
+
+.deco--bubble {
+  --x: -137; /* 548 - 685 */
+  --y: -163; /* 403 - 566 */
+  --s: 117;
+}
+
+.deco--email {
+  --x: -383.85; /* 301.148 - 685 */
+  --y: -8.47;   /* 557.529 - 566 */
+  --s: 201.894;
+  --i: 81.5%;   /* 164.548 / 201.894 */
+  --r: -15.18deg;
+}
+
+.deco--click {
+  --ax: 100%;
+  --x: -2.08;  /* 1233.917 - 685 - 551 (from the box's right edge) */
+  --y: 84.73;  /* 650.728 - 566 */
+  --s: 151.183;
+  --i: 79.65%; /* 120.425 / 151.183 */
+  --r: -17.59deg;
+}
+
+/* ---------- footer ---------- */
+.contact__footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  margin-top: auto;
+  padding-bottom: 61px; /* text ends y=1019 of 1080 */
+}
+
+.contact__copy {
+  justify-self: start;
+  font-size: var(--fs-small);
+}
+
+.contact__clock {
+  font-size: var(--fs-h4);
+  white-space: nowrap;
+}
+
+.contact__available {
+  justify-self: end;
+  font-size: var(--fs-body);
+  color: var(--color-accent);
+}
+
+/* ---------- tablet + mobile ---------- */
+@media (max-width: 1279px) {
+  .contact {
+    --u: 1px;
+  }
+
+  .contact__main {
+    margin-top: 48px;
+    padding: 0 var(--gutter) 64px;
+  }
+
+  .contact__stage {
+    margin-top: 24px;
+    padding-bottom: 0;
+  }
+
+  .contact__down {
+    position: static;
+    margin: 0 auto 24px;
+  }
+
+  .contact__art {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px 24px;
+    margin-top: 40px;
+  }
+
+  .deco {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: calc(var(--s) * 0.5px);
+  }
+
+  .contact__footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 12px;
+    padding-bottom: 40px;
+    text-align: center;
+  }
+
+  .contact__copy,
+  .contact__available {
+    justify-self: center;
+  }
+
+  .contact__clock {
+    order: -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact__main {
+    margin-top: 40px;
+  }
+
+  .contact__box {
+    padding: 32px 16px;
+  }
+
+  .contact__email {
+    font-size: 17px; /* keeps the address on one line down to 375 */
+  }
+
+  .contact__art {
+    gap: 12px;
+  }
+
+  .deco {
+    width: calc(var(--s) * 0.32px);
+  }
+
+  .contact__footer {
+    padding-bottom: 32px;
+  }
+}
