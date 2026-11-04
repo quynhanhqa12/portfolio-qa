@@ -1,0 +1,1 @@
+{"version":"0.0.1","configurations":[{"name":"portfolio","runtimeExecutable":"python3","runtimeArgs":["-m","http.server","8080"],"port":8080},{"name":"portfolio-subpath","runtimeExecutable":"python3","runtimeArgs":["-m","http.server","8081","--directory",".."],"port":8081}]}

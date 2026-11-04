@@ -1,0 +1,218 @@
+/* Design tokens, reset and shared primitives.
+   Source: Figma file gXl7FNrqXRYnto6xjqxxif (Home 2796:61531, Works/About 2796:61567,
+   Contact 2796:61498, Project 2796:61649). Desktop design width 1920.
+
+   Fonts (all from Figma): Gilda Display, Rouge Script, Be Vietnam Pro.
+   Gilda Display and Rouge Script have NO Vietnamese subset on Google Fonts, so
+   Cormorant Garamond / Pinyon Script (both with Vietnamese) follow them in the
+   stacks: browsers use the Figma font where a glyph exists and fall back per glyph. */
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,700;1,700&family=Gilda+Display&family=Rouge+Script&family=Cormorant+Garamond:wght@400&family=Pinyon+Script&display=swap&subset=vietnamese");
+
+:root {
+  /* colors (Figma fills) */
+  --color-bg: #fffbf5;
+  --color-bg-contact: #fbf7f0;
+  --color-text: #1c1a17;
+  --color-accent: #f25c05;
+  --color-placeholder: #ece7e0;
+  --color-placeholder-alt: #dfdad3;
+  --color-muted: #dcd9d3;
+  --color-border: #000000;
+
+  /* font families */
+  --font-display: "Gilda Display", "Cormorant Garamond", Georgia, serif;
+  --font-script: "Rouge Script", "Pinyon Script", cursive;
+  --font-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* font weights (Be Vietnam Pro) */
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-bold: 700;
+
+  /* type scale, desktop 1920 (px values read from Figma) */
+  --fs-hero: 62.553px;          /* Home "Welcome to Art space of Quynh Anh" (Gilda Display, uppercase) */
+  --fs-hero-initial: 125.106px; /* Home script initials "A" (Rouge Script) */
+  --fs-title-initial: 160px;    /* Works/About/Contact script capital: W, A, C */
+  --fs-title: 80px;             /* Works/About/Contact rest of title (Gilda Display, uppercase) */
+  --fs-h3: 30px;                /* project name, email, ticker (Be Vietnam Pro Bold) */
+  --fs-h4: 20px;                /* tags, meta, section labels */
+  --fs-menu: 18px;              /* nav + Resume */
+  --fs-body: 16px;              /* paragraphs */
+  --fs-small: 14px;             /* footer copyright, social links */
+  --fs-logo-initial: 65.813px;  /* "Q" of the QA logo (Rouge Script) */
+  --fs-logo: 52.606px;          /* "A" of the QA logo (Gilda Display) */
+
+  /* tracking (Figma letter-spacing in em) */
+  --ls-script: 0.02em;          /* 2.5021 / 125.106, 3.2 / 160, 1.3163 / 65.813 */
+  --ls-ticker: 0.2em;           /* 6px at 30px */
+
+  /* line-heights: Figma uses "normal" everywhere */
+  --lh: normal;
+
+  /* shape */
+  --radius-card: 16px;
+  --radius-pill: 42px;
+  --radius-box: 32px;
+
+  /* layout */
+  --page-max: 1920px;
+  --gutter: clamp(80px, 10.4167vw, 200px); /* = 200px at 1920, scales down to 1280 */
+}
+
+/* tablet 481-1279 */
+@media (max-width: 1279px) {
+  :root {
+    --gutter: 48px;
+    --fs-hero: 44px;
+    --fs-hero-initial: 88px;
+    --fs-title-initial: 112px;
+    --fs-title: 56px;
+    --fs-h3: 24px;
+    --fs-h4: 18px;
+    --fs-menu: 16px;
+    --fs-logo-initial: 52px;
+    --fs-logo: 42px;
+  }
+}
+
+/* mobile <=480 */
+@media (max-width: 480px) {
+  :root {
+    --gutter: 20px;
+    --fs-hero: 32px;
+    --fs-hero-initial: 64px;
+    --fs-title-initial: 80px;
+    --fs-title: 40px;
+    --fs-h3: 20px;
+    --fs-h4: 16px;
+    --fs-menu: 16px;
+    --fs-body: 15px;
+    --fs-small: 13px;
+    --fs-logo-initial: 44px;
+    --fs-logo: 36px;
+  }
+}
+
+/* minimal reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: var(--fw-light);
+  font-size: var(--fs-body);
+  line-height: var(--lh);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* centered page container: max 1920, side margins = gutter */
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* grey image placeholder; real image fills it */
+.img-box {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-placeholder);
+}
+
+.img-box > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-box--contain > img {
+  object-fit: contain;
+}
+
+/* big script capital + uppercase serif remainder: "W|orks", "A|bout", "C|ontact", "A|rt", "A|nh".
+   Markup: <h1 class="title-initial"><span class="title-initial__cap">W</span><span class="title-initial__rest">orks</span></h1>
+   --ti-drop is how far the rest sits below the top of the capital (Figma: 61.3px at 160px, 41.7px at 125px). */
+.title-initial {
+  --ti-cap: var(--fs-title-initial);
+  --ti-rest: var(--fs-title);
+  --ti-drop: 0.383;
+  display: flex;
+  width: fit-content;
+  align-items: flex-start;
+  margin: 0;
+  font-weight: var(--fw-regular);
+  color: var(--color-text);
+}
+
+.title-initial__cap {
+  font-family: var(--font-script);
+  font-size: var(--ti-cap);
+  letter-spacing: var(--ls-script);
+  line-height: 1;
+}
+
+.title-initial__rest {
+  margin-top: calc(var(--ti-cap) * var(--ti-drop));
+  font-family: var(--font-display);
+  font-size: var(--ti-rest);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Home hero pair: 125px script cap + 62.5px serif rest */
+.title-initial--hero {
+  --ti-cap: var(--fs-hero-initial);
+  --ti-rest: var(--fs-hero);
+  --ti-drop: 0.333;
+}
+
+.title-initial--accent {
+  color: var(--color-accent);
+}
