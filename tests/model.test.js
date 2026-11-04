@@ -64,6 +64,13 @@ test('formatMeta joins year and company', () => {
   assert.equal(formatMeta({ year: 2025, company: 'Viettel Telecom' }), '2025 . Viettel Telecom');
 });
 
+test('formatMeta joins only the present parts', () => {
+  assert.equal(formatMeta({ year: 2025 }), '2025');
+  assert.equal(formatMeta({ company: 'X' }), 'X');
+  assert.equal(formatMeta({ year: 2025, company: '  ' }), '2025');
+  assert.equal(formatMeta({}), '');
+});
+
 test('resolveImage normalises paths', () => {
   assert.equal(resolveImage(''), null);
   assert.equal(resolveImage('  '), null);
@@ -101,4 +108,44 @@ test('validateData tolerates missing top-level sections', () => {
   assert.ok(warnings.some((w) => w.includes('projects')));
   assert.ok(warnings.some((w) => w.includes('categories')));
   assert.ok(warnings.some((w) => w.includes('site')));
+});
+
+test('validateData skips null and non-object entries with a Vietnamese warning', () => {
+  const data = makeData();
+  data.categories = [null, 'x', { id: 'photography', name: 'Photography' }];
+  data.projects = [null, 42, { id: 'ok', project: 'Ok', category: 'photography' }];
+  const { data: clean, warnings } = validateData(data);
+  assert.deepEqual(clean.categories.map((c) => c.id), ['photography']);
+  assert.deepEqual(clean.projects.map((p) => p.id), ['ok']);
+  assert.ok(warnings.includes('Có một mục trong "projects" không hợp lệ (vị trí 1) nên đã bị bỏ qua.'));
+  assert.ok(warnings.includes('Có một mục trong "projects" không hợp lệ (vị trí 2) nên đã bị bỏ qua.'));
+  assert.ok(warnings.includes('Có một mục trong "categories" không hợp lệ (vị trí 1) nên đã bị bỏ qua.'));
+  assert.ok(warnings.includes('Có một mục trong "categories" không hợp lệ (vị trí 2) nên đã bị bỏ qua.'));
+});
+
+test('validateData skips projects without a usable id', () => {
+  const data = makeData();
+  data.projects = [
+    { project: 'No id', category: 'photography' },
+    { id: '  ', project: 'Blank id', category: 'photography' },
+    { id: 7, project: 'Number id', category: 'photography' },
+    { id: 'ok', project: 'Ok', category: 'photography' },
+  ];
+  const { data: clean, warnings } = validateData(data);
+  assert.deepEqual(clean.projects.map((p) => p.id), ['ok']);
+  assert.ok(warnings.includes('Có một dự án thiếu "id" (vị trí 1) nên đã bị bỏ qua.'));
+  assert.ok(warnings.includes('Có một dự án thiếu "id" (vị trí 2) nên đã bị bỏ qua.'));
+  assert.ok(warnings.includes('Có một dự án thiếu "id" (vị trí 3) nên đã bị bỏ qua.'));
+  assert.ok(!warnings.some((w) => w.includes('undefined')));
+});
+
+test('validateData warning for a missing category never prints undefined', () => {
+  const data = makeData();
+  data.projects = [{ id: 'nocat', project: 'No cat' }];
+  const { data: clean, warnings } = validateData(data);
+  assert.equal(clean.projects.length, 0);
+  assert.equal(warnings.length, 1);
+  assert.ok(warnings[0].includes('nocat'));
+  assert.ok(!warnings[0].includes('undefined'));
+  assert.ok(warnings[0].includes('thiếu'));
 });

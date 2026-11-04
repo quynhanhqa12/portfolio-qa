@@ -25,7 +25,10 @@ export function cardShape(index) {
 }
 
 export function formatMeta(project) {
-  return `${project.year} . ${project.company}`;
+  const parts = [project.year, project.company]
+    .map((part) => (part === undefined || part === null ? '' : String(part).trim()))
+    .filter(Boolean);
+  return parts.join(' . ');
 }
 
 export function resolveImage(path) {
@@ -43,23 +46,44 @@ export function validateData(data) {
   if (!Array.isArray(src.categories)) warnings.push('Thiếu mục "categories" trong data.json; dùng danh sách rỗng.');
   if (!Array.isArray(src.projects)) warnings.push('Thiếu mục "projects" trong data.json; dùng danh sách rỗng.');
 
-  const categories = Array.isArray(src.categories) ? src.categories.slice() : [];
-  const categoryIds = new Set(categories.map((c) => c.id));
+  const isObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+  const skipInvalid = (list, name) =>
+    list.filter((item, i) => {
+      if (isObject(item)) return true;
+      warnings.push(`Có một mục trong "${name}" không hợp lệ (vị trí ${i + 1}) nên đã bị bỏ qua.`);
+      return false;
+    });
+
+  const categories = skipInvalid(Array.isArray(src.categories) ? src.categories : [], 'categories');
+  const categoryIds = new Set(categories.map((c) => c.id).filter((id) => typeof id === 'string'));
   const seen = new Set();
   const projects = [];
+  const rawProjects = Array.isArray(src.projects) ? src.projects : [];
 
-  for (const project of Array.isArray(src.projects) ? src.projects : []) {
+  rawProjects.forEach((project, i) => {
+    if (!isObject(project)) {
+      warnings.push(`Có một mục trong "projects" không hợp lệ (vị trí ${i + 1}) nên đã bị bỏ qua.`);
+      return;
+    }
+    if (typeof project.id !== 'string' || !project.id.trim()) {
+      warnings.push(`Có một dự án thiếu "id" (vị trí ${i + 1}) nên đã bị bỏ qua.`);
+      return;
+    }
     if (!categoryIds.has(project.category)) {
-      warnings.push(`Dự án "${project.id}" có mảng "${project.category}" không tồn tại; đã bỏ qua.`);
-      continue;
+      warnings.push(
+        typeof project.category === 'string' && project.category.trim()
+          ? `Dự án "${project.id}" có mảng "${project.category}" không tồn tại; đã bỏ qua.`
+          : `Dự án "${project.id}" thiếu "category" (mảng); đã bỏ qua.`
+      );
+      return;
     }
     if (seen.has(project.id)) {
       warnings.push(`Dự án "${project.id}" bị trùng id; chỉ giữ dự án đầu tiên.`);
-      continue;
+      return;
     }
     seen.add(project.id);
     projects.push(project);
-  }
+  });
 
   return {
     data: { ...src, site: src.site || {}, categories, projects },
