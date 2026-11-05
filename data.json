@@ -36,7 +36,7 @@
     "intro": "Below are selected projects I have worked on over the past few years, featuring both personal designs and corporate client work. Each project presents a unique challenge, yet they all share a consistent approach: trusting the process while staying creatively flexible. The goal is always to deliver optimal design solutions that fully satisfy the brief and meet the project timeline."
   },
   "about": {
-    "bio": "I am Quỳnh Anh, a Senior Graphic Designer and Visual Artist specializing in brand identity, social media design, print, digital illustration, and creative advertising. I believe every project has its own unique \"personality.\"\n\nWhether collaborating with corporate brands or individuals, I adapt flexibly while staying true to my signature style: modern, clean, and spacious. My design highlight is the balance between neat layouts and a playful approach to colors and patterns.\n\nEvery visual element I choose aims to guide the viewer's emotions, creating striking yet highly accessible designs that help the message connect naturally and memorably.",
+    "bio": "I am **Quỳnh Anh**, a Senior Graphic Designer and Visual Artist specializing in **brand identity, social media design, print, digital illustration**, and creative advertising. I believe every project has its own unique \"personality.\"\n\nWhether collaborating with corporate brands or individuals, I adapt flexibly while staying true to my signature style: modern, clean, and spacious. My design highlight is the balance between neat layouts and a playful approach to colors and patterns.\n\nEvery visual element I choose aims to guide the viewer's emotions, creating striking yet highly accessible designs that help the message connect naturally and memorably.",
     "photo": "images/about-photo.jpg",
     "services": [
       {
@@ -55,6 +55,13 @@
         "name": "Digital & Social Design",
         "description": "Crafting digital and social assets with clean, engaging layouts optimized for the best user experience."
       }
+    ],
+    "process": [
+      "The Brief & Keywords",
+      "Brainstorm & Moodboard",
+      "Design Exploration",
+      "Presentation & Feedback",
+      "Finalize & Delivery"
     ]
   },
   "categories": [

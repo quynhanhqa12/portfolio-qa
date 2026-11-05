@@ -1,44 +1,41 @@
-/* About (Figma 2796:61567, About part y=1516..3225 of the 1920x3225 frame).
-   Figma y minus 1516 gives the offsets used here, so the title sits at y=265 like the Works title.
-   Title y=265 (188 tall) · bio group starts y=466 (text x=615 w=685) · photo 677x389 at y=730 ·
-   services y=1276 (2 columns 487 wide) · say-hi girl 320x320 at x=800,y=1273.
+/* About (Figma 4007:2450, 1920x2160). Figma y values below are from the frame top; the header
+   ends at 158, so the title (y=233) starts 75px into the page.
+   Title 233 · bio 376 (677 wide, centred) · photo 607 (677x354) · arrow 997 (50) ·
+   services 1211 (2 columns 487 wide, 560 apart) with the say-hi girl 400x400 at 1166 ·
+   process heading 1646 · thumbs-up 200x200 at 1791 · ticker 2027 (24px) · frame ends 2160.
 
-   Desktop (>=1280): the stage scales with the page width. --u = one Figma pixel
-   (1px at 1920, 0.667px at 1280); illustration positions are Figma pixels times --u.
-   Tablet/mobile: the illustrations reflow into a small row so none covers the bio. */
+   Desktop (>=1280): the six illustrations sit around the bio at Figma positions scaled by
+   --u = one Figma pixel (1px at 1920, 0.667px at 1280), measured from the title top (y=233).
+   Tablet/mobile: they reflow into a row under the photo so none covers the text. */
 .about {
-  --u: calc(100cqw / 1920);
-  container-type: inline-size;
+  --u: calc(min(100vw, var(--page-max)) / 1920);
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-bottom: 116px; /* girl ends 3109, frame ends 3225 */
+  padding-bottom: 103px; /* ticker ends 2057, frame ends 2160 */
+  overflow-x: clip; /* tilted illustrations and the ticker never widen the page */
 }
 
-/* ---------- title ---------- */
+/* ---------- stage: title, bio, photo, arrow in flow; illustrations absolute ---------- */
+.about__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 75px;
+}
+
 .about__title {
-  margin: 90px auto 0; /* title at y=265, header ends at 175 */
+  --ti-overlap: -0.101; /* "BOUT" starts 81px after the A box (92px wide) */
 }
 
 .about__title .title-initial__cap {
-  line-height: 1.175; /* Rouge Script "normal": 188px at 160px */
-}
-
-/* ---------- stage: bio + photo in flow, illustrations absolute ---------- */
-.about__stage {
-  position: relative;
-  min-height: calc(671 * var(--u)); /* iPad illustration ends 2653 - bio top 1982 */
-  margin-top: 13px; /* bio at y=466, title ends 453 */
+  line-height: 1.175; /* Rouge Script "normal" */
 }
 
 .about__bio {
-  box-sizing: border-box;
-  width: max(480px, calc(685 * var(--u)));
-  min-height: calc(264 * var(--u)); /* photo top 2246 - bio top 1982 */
-  margin-inline: auto;
-  /* 64 at 1920 (text is ~200 tall in the 264 slot); grows when narrower so the chat bubble,
-     which pokes 68u above the photo, stays clear of the longer text */
-  padding-bottom: calc(64 * var(--u) + (1920px - 100cqw) * 0.04);
+  width: max(480px, calc(677 * var(--u)));
+  margin-top: 16px; /* bio y=376, title ends 360 */
   font-size: var(--fs-body);
   font-weight: var(--fw-light);
   text-align: justify;
@@ -48,111 +45,100 @@
   margin-top: 1lh; /* Figma separates paragraphs with an empty line */
 }
 
+.about__bio strong {
+  font-weight: var(--fw-bold);
+}
+
 .about__photo {
-  position: relative;
-  width: calc(677 * var(--u));
-  margin-inline: auto;
+  width: max(480px, calc(677 * var(--u)));
+  aspect-ratio: 677 / 354;
+  margin-top: 32px; /* photo y=607, bio ends 575 */
 }
 
-.about__photo-box {
-  aspect-ratio: 677 / 389;
-}
-
-.about__photo-box > img {
+.about__photo > img {
   object-position: bottom;
 }
 
+.about__down {
+  display: block;
+  width: 50px;
+  height: 50px;
+  margin-top: 36px; /* arrow y=997, photo ends 961 */
+  color: var(--color-text);
+}
+
+.about__down svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* the arrow bounces gently on hover */
+.about__down:hover svg,
+.about__down:focus-visible svg {
+  animation: bob 1s ease-in-out infinite;
+}
+
 /* ---------- illustrations ----------
-   --x/--y: top-left of the box (bbox of the rotated artwork) in Figma px, --s: box size,
-   --i: artwork size inside the box, --r: rotation. Figma stores rotated art in its rotated bbox. */
+   --x/--y: top-left of the rotated artwork's box (Figma px, y from the title top), --s: box size,
+   --i: artwork size inside the box, --r: tilt. */
 .about__art {
   display: contents; /* children position against .about__stage */
 }
 
 .deco {
   position: absolute;
-  left: calc(var(--x) * var(--u));
+  left: calc(50% + (var(--x) - 960) * var(--u)); /* from the centre: stays put on screens wider than 1920 */
   top: calc(var(--y) * var(--u));
   display: grid;
   width: calc(var(--s) * var(--u));
   aspect-ratio: 1;
   place-items: center;
-  pointer-events: none;
 }
 
-.deco > img {
-  width: var(--i, 100%);
-  height: auto;
-  max-width: none;
-  transform: rotate(var(--r, 0deg));
-}
+/* .deco__art / hover swap: shared, in base.css */
 
 .deco--poster {
-  --x: 257.01;
-  --y: -27;
-  --s: 277.014;
-  --i: 76.14%; /* 210.932 / 277.014 */
-  --r: -23.22deg;
-}
-
-.deco--macbook {
-  --x: 1453.59;
-  --y: 0;
-  --s: 173;
+  --x: 262.85;
+  --y: 72.85; /* 305.85 - 233 */
+  --s: 252.29;
+  --r: -18.12deg;
 }
 
 .deco--cube {
-  --x: 91;
-  --y: 222.01;
-  --s: 243.29;
-  --i: 75.32%; /* 183.257 / 243.29 */
-  --r: 24.84deg;
+  --x: 174.72;
+  --y: 328.82; /* 561.82 - 233 */
+  --s: 256.32;
+  --r: 19.95deg;
 }
 
 .deco--palette {
-  --x: 292.23;
-  --y: 491.85;
-  --s: 192.166;
-  --i: 83.78%; /* 161 / 192.166 */
-  --r: -12.56deg;
+  --x: 271.87;
+  --y: 567.71; /* 800.71 - 233 */
+  --s: 270.9;
+  --r: 28.2deg;
 }
 
-.deco--ipad {
-  --x: 1439;
-  --y: 468;
-  --s: 203;
+.deco--macbook {
+  --x: 1364.93;
+  --y: 84.52; /* 317.52 - 233 */
+  --s: 269.18;
+  --r: 27.07deg;
 }
 
 .deco--stars {
-  --x: 1508;
-  --y: 176;
-  --s: 329.695;
-  --i: 81.51%; /* 268.729 / 329.695 */
-  --r: -15.17deg;
+  --x: 1465.92;
+  --y: 321.26; /* 554.26 - 233 */
+  --s: 297.98;
+  --i: 240;
+  --r: -16.39deg;
 }
 
-/* cream patch drawn over the laptop screen (Figma "Vector 7945": 20x11.5 at 64.4,87 inside the 173 box) */
-.deco__patch {
-  position: absolute;
-  left: 37.23%;
-  top: 50.29%;
-  width: 11.56%;
-  height: 6.65%;
-  background: var(--color-bg);
-  clip-path: polygon(100% 0, 22.5% 21.74%, 0 100%, 72.5% 86.96%, 100% 60.87%);
-}
-
-/* sparkle (x=538,y=2281) and chat bubble (x=1028,y=2178) overlap the photo (x=623,y=2246) */
-.deco--sparkle {
-  --x: -85;
-  --y: 35;
-  --s: 170;
-}
-
-.deco--bubble {
-  --x: 405;
-  --y: -68;
-  --s: 169;
+.deco--ipad {
+  --x: 1359.55;
+  --y: 574.84; /* 807.84 - 233 */
+  --s: 256.32;
+  --r: 19.96deg;
 }
 
 /* ---------- services + say-hi girl ---------- */
@@ -160,10 +146,10 @@
   display: grid;
   grid-template-columns: minmax(0, 487fr) minmax(320px, 560fr) minmax(0, 487fr); /* 487 | 560 | 487 */
   align-items: start;
-  /* Figma block 193..1727 overhangs the 200px margins by 7px per side */
-  width: calc(100% - 2 * var(--gutter) + 14px);
+  width: calc(100% - 2 * var(--gutter) + 14px); /* Figma block 193..1727 overhangs the margins by 7px */
   max-width: 1534px;
-  margin: max(64px, calc(139 * var(--u))) auto 0; /* services y=2792, stage ends 2653 */
+  margin: 164px auto 0; /* services y=1211, arrow ends 1047 */
+  scroll-margin-top: 200px; /* the sticky header covers the top */
 }
 
 .about__col {
@@ -180,7 +166,7 @@
 }
 
 .service__name {
-  font-size: var(--fs-h4);
+  font-size: 20px;
   font-weight: var(--fw-bold);
   text-transform: uppercase;
 }
@@ -191,72 +177,123 @@
   font-weight: var(--fw-light);
 }
 
-/* girl: static in the services grid, centered in the middle column */
-.about__services > .deco {
-  position: static;
-  width: min(320px, 100%);
-  margin: -3px auto 0; /* girl y=2789, services y=2792 */
+.about__hi {
+  width: min(400px, 100%);
+  height: auto;
+  margin: -45px auto 0; /* girl y=1166, services y=1211 */
+}
+
+/* ---------- design approach process ---------- */
+.about__process {
+  margin-top: 80px; /* heading y=1646, girl ends 1566 */
+}
+
+.process__title {
+  font-size: 20px;
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+}
+
+.process__steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 24px 48px;
+  margin-top: 28px;
+}
+
+.process__step {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+}
+
+.process__num {
+  display: grid;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: #fff; /* Figma: white numbers */
+  font-size: 16px;
+}
+
+/* ---------- thumbs-up + ticker ---------- */
+.about__like {
+  width: 200px;
+  height: auto;
+  margin: 60px auto 0; /* y=1791, process ends 1731 */
+}
+
+.about__ticker {
+  overflow: hidden;
+  margin-top: 36px; /* ticker y=2027, thumbs-up ends 1991 */
+  color: var(--color-muted);
+  font-size: 24px; /* Quỳnh Anh's note */
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-ticker); /* 4.8px at 24px */
+  line-height: 1.25;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker 40s linear infinite;
+}
+
+.ticker__group {
+  display: flex;
+  flex: none;
+  gap: 96px;
+  padding-right: 96px; /* keeps the loop seamless: two equal groups, shift by 50% */
+}
+
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track {
+    animation: none;
+  }
 }
 
 /* ---------- tablet + mobile: illustrations reflow ---------- */
 @media (max-width: 1279px) {
-  .about__title {
-    margin-top: 48px;
-  }
-
   .about__stage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 0;
-    margin-top: 32px;
+    margin-top: 48px;
     padding-inline: var(--gutter);
   }
 
-  .about__bio {
-    width: 100%;
-    max-width: 685px;
-    min-height: 0;
-    padding-bottom: 40px;
-  }
-
+  .about__bio,
   .about__photo {
     width: 100%;
     max-width: 677px;
   }
 
-  /* row of small illustrations under the photo; sparkle + bubble stay on the photo corners, inside it */
+  /* row of small illustrations under the arrow */
   .about__art {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 16px 24px;
     width: 100%;
-    margin-top: 48px;
+    margin-top: 32px;
   }
 
-  .about__art .deco {
+  .deco {
     position: relative;
     left: auto;
     top: auto;
-    width: min(96px, calc((100% - 5 * 24px) / 6)); /* all six on one row */
-  }
-
-  .deco--sparkle,
-  .deco--bubble {
-    --s: 0;
-    width: 22%;
-  }
-
-  .deco--sparkle {
-    left: 3%;
-    top: 4%;
-  }
-
-  .deco--bubble {
-    left: auto;
-    right: 3%;
-    top: 4%;
+    width: min(110px, calc((100% - 5 * 24px) / 6)); /* all six on one row */
   }
 
   .about__services {
@@ -274,20 +311,32 @@
     min-height: 0;
   }
 
-  .about__services > .deco {
+  .about__hi {
     grid-column: 1 / -1;
     grid-row: 2;
-    width: min(240px, 60%);
+    width: min(280px, 60%);
     margin: 0 auto;
   }
 
+  .about__process {
+    margin-top: 64px;
+  }
+
+  .process__steps {
+    justify-content: flex-start;
+  }
+
   .about {
-    padding-bottom: 80px;
+    padding-bottom: 64px;
+  }
+
+  .about__ticker {
+    font-size: 18px;
   }
 }
 
 @media (max-width: 480px) {
-  .about__title {
+  .about__stage {
     margin-top: 32px;
   }
 
@@ -295,13 +344,12 @@
     text-align: left;
   }
 
-  .about__art .deco {
+  .deco {
     width: min(88px, calc((100% - 2 * 16px) / 3)); /* three per row */
   }
 
   .about__art {
     gap: 12px 16px;
-    margin-top: 40px;
   }
 
   .about__services {
@@ -310,13 +358,27 @@
     margin-top: 48px;
   }
 
-  .about__services > .deco {
+  .about__hi {
     grid-row: auto;
     order: 3;
-    width: min(200px, 60%);
+    width: min(220px, 60%);
   }
 
-  .about__col + .deco + .about__col {
+  .about__col + .about__hi + .about__col {
     order: 2;
+  }
+
+  .process__steps {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .about__like {
+    width: 140px;
+    margin-top: 48px;
+  }
+
+  .about__ticker {
+    font-size: 16px;
   }
 }

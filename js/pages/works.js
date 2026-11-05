@@ -3,8 +3,6 @@ import { filterProjects, normalizeCategory, getCategory, cardShape, formatMeta }
 import { getParam, worksUrl, projectUrl } from '../core/url.js';
 
 const EMPTY_TEXT = 'Chưa có dự án nào trong mảng này.';
-const TICKER_TEXT = "Got a project in mind? Let's talk.";
-const TICKER_REPEAT = 4; // per group: 4 x ~755px + gaps always exceeds the widest screens
 
 function renderTitle() {
   return el(
@@ -29,20 +27,6 @@ function renderCard(data, project, index) {
   );
 }
 
-function renderTicker() {
-  const group = (hidden) =>
-    el(
-      'div',
-      { className: 'ticker__group', 'aria-hidden': hidden ? 'true' : null },
-      Array.from({ length: TICKER_REPEAT }, () => el('span', { className: 'ticker__item' }, TICKER_TEXT))
-    );
-  return el(
-    'div',
-    { className: 'works__ticker ticker', role: 'img', 'aria-label': TICKER_TEXT },
-    el('div', { className: 'ticker__track', 'aria-hidden': 'true' }, group(true), group(true))
-  );
-}
-
 /** The page has no vertical scroll, so a plain mouse wheel over the row moves it sideways. */
 function scrollSidewaysOnWheel(row) {
   row.addEventListener(
@@ -57,13 +41,17 @@ function scrollSidewaysOnWheel(row) {
   );
 }
 
-const CHEVRON =
-  '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false">' +
-  '<path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+// Figma 4007:2439: three centred lines, 32 x 16 (+1px stroke overhang).
+const FILTER_ICON =
+  '<svg width="32" height="18" viewBox="0 0 32 18" fill="none" aria-hidden="true" focusable="false">' +
+  '<path d="M1 1H31M6.33333 9H25.6667M11.6667 17H20.3333" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 
-const ARROW = (dir) =>
-  '<svg width="24" height="24" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">' +
-  `<path d="${dir === 'prev' ? 'M12 4 6 10l6 6' : 'M8 4l6 6-6 6'}" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+// Figma 4007:2446: the 36px circle with the down arrow, turned to point sideways in CSS.
+const ROW_ARROW =
+  '<svg width="37.5" height="37.5" viewBox="0 0 37.5 37.5" fill="none" aria-hidden="true" focusable="false">' +
+  '<circle cx="18.75" cy="18.75" r="18" stroke="currentColor" stroke-width="1.5"/>' +
+  '<path d="M19.5 9.19531C19.5 8.7811 19.1642 8.44531 18.75 8.44531C18.3358 8.44531 18 8.7811 18 9.19531L18.75 9.19531L19.5 9.19531ZM18.75 9.19531L18 9.19531L18 28.4198L18.75 28.4198L19.5 28.4198L19.5 9.19531L18.75 9.19531ZM18.2197 28.9501C18.5126 29.243 18.9874 29.243 19.2803 28.9501L24.0533 24.1772C24.3462 23.8843 24.3462 23.4094 24.0533 23.1165C23.7604 22.8236 23.2855 22.8236 22.9926 23.1165L18.75 27.3591L14.5074 23.1165C14.2145 22.8236 13.7396 22.8236 13.4467 23.1165C13.1538 23.4094 13.1538 23.8843 13.4467 24.1772L18.2197 28.9501Z" fill="currentColor"/>' +
+  '</svg>';
 
 /** Category filter as one dropdown button. options: [{id, name}], id null = All. */
 function renderFilter(options, onSelect) {
@@ -76,10 +64,10 @@ function renderFilter(options, onSelect) {
       'aria-haspopup': 'listbox',
       'aria-expanded': 'false',
       'aria-controls': 'filter-list',
+      'aria-label': 'Lọc dự án theo mảng',
     },
-    el('span', { className: 'filter__caption' }, 'Filter:'),
-    label,
-    el('span', { className: 'filter__chevron', html: CHEVRON })
+    el('span', { className: 'filter__icon', html: FILTER_ICON }),
+    label
   );
   const items = options.map((opt) =>
     el('li', { role: 'option', className: 'filter__option', tabindex: '-1', dataset: { id: opt.id ?? '' } }, opt.name)
@@ -128,30 +116,27 @@ function renderFilter(options, onSelect) {
   };
 }
 
-/** Prev / next buttons that page the card row by one view; disabled at either end. */
-function renderArrows(row) {
+/** Figma shows one arrow pointing right (more projects that way); once the row has moved,
+ *  a left arrow appears next to it to go back. Each click pages the row by one view. */
+function renderArrows(row, wrap) {
   const button = (dir, label) =>
-    el('button', { className: `row-nav__btn row-nav__btn--${dir}`, type: 'button', 'aria-label': label, html: ARROW(dir) });
+    el('button', { className: `row-nav__btn row-nav__btn--${dir}`, type: 'button', 'aria-label': label, html: ROW_ARROW });
   const prev = button('prev', 'Dự án trước');
   const next = button('next', 'Dự án tiếp theo');
-  const page = (sign) => row.scrollBy({ left: sign * row.clientWidth, behavior: 'smooth' });
+  const page = (sign) => row.scrollBy({ left: sign * row.clientWidth * 0.9, behavior: 'smooth' });
   prev.addEventListener('click', () => page(-1));
   next.addEventListener('click', () => page(1));
+  const nav = el('div', { className: 'row-nav' }, prev, next);
 
   const update = () => {
     const max = row.scrollWidth - row.clientWidth;
-    prev.disabled = row.scrollLeft <= 1;
-    next.disabled = row.scrollLeft >= max - 1;
+    const atStart = row.scrollLeft <= 1;
+    const atEnd = row.scrollLeft >= max - 1;
+    prev.hidden = atStart;
+    next.disabled = atEnd;
     nav.hidden = max <= 1; // everything fits: no arrows
-    // centre the arrows on the first (square) image rather than the whole row
-    const image = row.querySelector('.card__image');
-    if (image && row.parentElement) {
-      const box = image.getBoundingClientRect();
-      const top = box.top + box.height / 2 - row.parentElement.getBoundingClientRect().top;
-      nav.style.setProperty('--nav-top', `${top}px`);
-    }
+    wrap.classList.toggle('is-end', atEnd); // the right-edge fade lifts off the last card
   };
-  const nav = el('div', { className: 'row-nav' }, prev, next);
   row.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
   return { node: nav, update };
@@ -171,7 +156,8 @@ function render(data, root) {
     [{ id: null, name: 'All' }, ...categories.map((c) => ({ id: c.id, name: c.name }))],
     (id) => select(id, true)
   );
-  const arrows = renderArrows(grid);
+  const rowWrap = el('div', { className: 'works__rowwrap' }, grid);
+  const arrows = renderArrows(grid, rowWrap);
 
   function renderGrid() {
     // filterProjects falls back to everything for a category without projects; show the empty text instead.
@@ -198,20 +184,12 @@ function render(data, root) {
     el(
       'div',
       { className: 'works' },
-      el(
-        'div',
-        { className: 'works__inner page' },
-        el('div', { className: 'works__head' }, renderTitle(), intro ? el('p', { className: 'works__intro' }, intro) : null),
-        el('div', { className: 'works__toolbar' }, filter.node),
-        el('div', { className: 'works__rowwrap' }, grid, arrows.node)
-      ),
-      renderTicker(),
+      el('div', { className: 'works__head page' }, renderTitle(), intro ? el('p', { className: 'works__intro' }, intro) : null),
+      el('div', { className: 'works__toolbar' }, filter.node, arrows.node),
+      rowWrap,
+      // Quỳnh Anh's note: the email button leads to the Contact page
       site.email
-        ? el(
-            'div',
-            { className: 'works__contact page' },
-            el('a', { className: 'email-box', href: `mailto:${site.email}` }, site.email)
-          )
+        ? el('div', { className: 'works__contact page' }, el('a', { className: 'email-box', href: 'contact.html' }, site.email))
         : null
     )
   );

@@ -90,3 +90,19 @@ export function validateData(data) {
     warnings,
   };
 }
+
+/** Split text into plain and **bold** runs (the only markup data.json supports).
+ *  An unmatched "**" stays as plain text. */
+export function parseEmphasis(text) {
+  const source = typeof text === 'string' ? text : '';
+  const runs = [];
+  const pattern = /\*\*(.+?)\*\*/g;
+  let last = 0;
+  for (const match of source.matchAll(pattern)) {
+    if (match.index > last) runs.push({ text: source.slice(last, match.index), bold: false });
+    runs.push({ text: match[1], bold: true });
+    last = match.index + match[0].length;
+  }
+  if (last < source.length) runs.push({ text: source.slice(last), bold: false });
+  return runs;
+}

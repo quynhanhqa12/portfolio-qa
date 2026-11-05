@@ -1,10 +1,10 @@
-/* Contact (Figma 2796:61498, 1920x1080, no site header: social links + logo form the top bar).
-   Top bar reuses .site-header__bar (grid 1fr auto 1fr) and .logo from base.css.
-   Social list x=200,y=62 (82 wide, items 38 apart, arrows at x=291) · logo x=928,y=62 ·
-   title y=329 · box 551x181 at x=685,y=566 · footer text baseline row ends y=1019 (61px above the bottom).
+/* Contact (Figma 4007:2348, 1920x1080, no site header: social links + logo form the top bar).
+   Top bar reuses .site-header__bar (grid 1fr auto 1fr), .logo and .social-list from base.css.
+   Social list x=200,y=62 (ends 188) · title y=337 (C 115px) · arrow 472 (50) ·
+   box 551 wide at x=684.5,y=558 · footer text row ends y=1019 (61px above the bottom).
 
    Desktop (>=1280): illustrations are positioned from the box (Figma px offsets times --u,
-   where --u = 1 Figma pixel = 1px at 1920, 0.667px at 1280) so the girl keeps overlapping the box edge.
+   where --u = 1 Figma pixel = 1px at 1920, 0.667px at 1280) so they keep their place around it.
    Tablet/mobile: illustrations reflow into a row under the box. */
 .page-contact {
   background: var(--color-bg-contact);
@@ -23,42 +23,7 @@
 }
 
 .contact__social {
-  display: grid;
-  grid-template-columns: max-content max-content;
-  column-gap: 9px; /* names end at x=282, arrows at x=291 */
-  row-gap: 20px;   /* items 38 apart, 18 tall */
   justify-self: start;
-  font-size: var(--fs-small);
-  text-transform: uppercase;
-}
-
-.contact__social li {
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-column: 1 / -1;
-}
-
-.social {
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-column: 1 / -1;
-  color: var(--color-text);
-  transition: color 0.15s;
-}
-
-.social__arrow {
-  align-self: start;
-  margin: 14px 0 -6px; /* arrow y=76 inside the 62..80 text line; hangs below it without growing the row */
-}
-
-.social__arrow svg {
-  width: 10px;
-  height: 10px;
-}
-
-a.social:hover,
-a.social:focus-visible {
-  color: var(--color-accent); /* Figma shows INSTAGRAM + its arrow in accent orange */
 }
 
 /* ---------- title, box, illustrations ---------- */
@@ -66,24 +31,30 @@ a.social:focus-visible {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 135px; /* title y=329, social list ends 194 */
+  margin-top: 149px; /* title y=337, social list ends 188 */
+}
+
+.contact__title {
+  --ti-cap: calc(var(--fs-title-initial) * 115 / 108.387); /* Figma: C is 115px, W/A are 108.4px */
+  --ti-drop: 0.372;     /* "ONTACT" box 37.3px below the C, + half its leading */
+  --ti-overlap: -0.061; /* "ONTACT" starts 59px after the C box (66px wide) */
 }
 
 .contact__title .title-initial__cap {
-  line-height: 1.175; /* Rouge Script "normal": 188px at 160px */
+  line-height: 1.175; /* Rouge Script "normal" */
 }
 
 .contact__stage {
   position: relative;
   width: 551px;
   max-width: 100%;
-  margin-top: 49px; /* box y=566, title ends 517 */
+  margin-top: 86px; /* box y=558, title ends 472 */
 }
 
 .contact__down {
   position: absolute;
   display: block;
-  top: -76px; /* circle y=490 */
+  top: -86px; /* circle y=472, right under the title */
   left: calc(50% - 25px);
   width: 50px;
   height: 50px;
@@ -96,84 +67,91 @@ a.social:focus-visible {
   overflow: visible;
 }
 
+/* Quỳnh Anh's note: the arrow floats gently on hover */
+.contact__down:hover svg {
+  animation: bob 1s ease-in-out infinite;
+}
+
 .contact__box {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 48px 42px;
+  gap: 16px;
+  padding: 42px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-box);
   text-align: center;
+  transition: border-color 0.2s;
 }
 
 .contact__lead {
-  font-size: var(--fs-h4);
+  font-size: var(--fs-body);
   font-weight: var(--fw-light);
   color: var(--color-border);
 }
 
 .contact__email {
-  font-size: var(--fs-h3);
+  font-size: 28px;
   font-weight: var(--fw-bold);
   color: var(--color-text);
   overflow-wrap: anywhere;
+  transition: color 0.2s;
 }
 
-.contact__email:hover {
+/* Quỳnh Anh's note: hovering the box turns its border and the address orange */
+a.contact__box:hover,
+a.contact__box:focus-visible {
+  border-color: var(--color-accent);
+}
+
+a.contact__box:hover .contact__email,
+a.contact__box:focus-visible .contact__email {
   color: var(--color-accent);
 }
 
-/* illustrations: --x/--y = top-left of the box relative to the stage (Figma px), --s box size,
-   --i artwork size inside the box, --r rotation */
+/* illustrations: --x/--y = top-left of the artwork's box relative to the box (Figma px; --ax: 100%
+   measures x from the box's right edge), --s box size, --i artwork size, --r tilt.
+   .deco__art + hover swap are shared (base.css). */
 .contact__art {
   display: contents;
 }
 
 .deco {
   position: absolute;
-  left: calc(var(--ax, 0%) + var(--x) * var(--u)); /* --ax: 100% anchors to the box's right edge */
+  left: calc(var(--ax, 0%) + var(--x) * var(--u));
   top: calc(var(--y) * var(--u));
   display: grid;
   width: calc(var(--s) * var(--u));
   aspect-ratio: 1;
   place-items: center;
-  pointer-events: none;
 }
 
-.deco > img {
-  width: var(--i, 100%);
-  height: auto;
-  max-width: none;
-  transform: rotate(var(--r, 0deg));
+.deco--girl-point {
+  --x: -424.5; /* 260 - 684.5 */
+  --y: -174;   /* 384 - 558 */
+  --s: 360;
+  --i: 360;
 }
 
-.deco--girl {
-  --x: -307.5; /* 377.5 - 685 */
-  --y: -99.5;  /* 466.5 - 566 */
-  --s: 320;
-}
-
-.deco--bubble {
-  --x: -137; /* 548 - 685 */
-  --y: -163; /* 403 - 566 */
-  --s: 117;
-}
-
-.deco--email {
-  --x: -383.85; /* 301.148 - 685 */
-  --y: -8.47;   /* 557.529 - 566 */
-  --s: 201.894;
-  --i: 81.5%;   /* 164.548 / 201.894 */
-  --r: -15.18deg;
+/* the drawing is 436 wide in a 360 box, hanging 76px out to the left, then mirrored:
+   it ends up covering 0..436 of the box */
+.deco--girl-thinking {
+  --ax: 100%;
+  --x: 77.5; /* 1313 - 1235.5 (from the box's right edge) */
+  --y: -174;
+  --s: 360;
+  --i: 436.417;
+  --ar: 436.417 / 360;
+  --flip: -1;
+  place-items: start;
 }
 
 .deco--click {
   --ax: 100%;
-  --x: -2.08;  /* 1233.917 - 685 - 551 (from the box's right edge) */
-  --y: 84.73;  /* 650.728 - 566 */
-  --s: 151.183;
-  --i: 79.65%; /* 120.425 / 151.183 */
-  --r: -17.59deg;
+  --x: -108.58; /* 1126.92 - 1235.5 */
+  --y: 138;     /* 696 - 558 */
+  --s: 159.087;
+  --i: 120;
+  --r: -24.63deg;
 }
 
 /* ---------- footer ---------- */

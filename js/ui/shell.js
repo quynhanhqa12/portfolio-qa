@@ -52,6 +52,54 @@ const MENU_ICON =
   '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">' +
   '<path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>';
 
+// Diagonal arrow after each social link (Figma "Arrow 3": a 12.7px arrow turned -45deg in a 9px box).
+const DIAGONAL_ARROW =
+  '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true" focusable="false">' +
+  '<path d="M0.146447 9.14645C-0.0488155 9.34171 -0.0488155 9.65829 0.146447 9.85355C0.341709 10.0488 0.658291 10.0488 0.853553 9.85355L0.5 9.5L0.146447 9.14645ZM0.5 9.5L0.853553 9.85355L9.85355 0.853554L9.5 0.5L9.14645 0.146447L0.146447 9.14645L0.5 9.5ZM10 0.5C10 0.223858 9.77614 1.13817e-07 9.5 -1.2624e-08L5 3.87771e-07C4.72386 2.19184e-07 4.5 0.223858 4.5 0.5C4.5 0.776143 4.72386 1 5 1L9 1L9 5C9 5.27614 9.22386 5.5 9.5 5.5C9.77614 5.5 10 5.27614 10 5L10 0.5Z" fill="currentColor"/>' +
+  '</svg>';
+
+/** Social links as on the Contact page (Figma 4007:2363): NAME + diagonal arrow, one per line.
+ *  Entries without a url render as plain text so Quỳnh Anh can fill them in later. */
+export function renderSocial(social, className = '') {
+  const items = (Array.isArray(social) ? social : []).filter((s) => s && s.name);
+  if (!items.length) return null;
+  return el(
+    'ul',
+    { className: ['social-list', className].filter(Boolean).join(' '), 'aria-label': 'Social' },
+    items.map((s) => {
+      const arrow = el('span', { className: 'social__arrow', 'aria-hidden': 'true', html: DIAGONAL_ARROW });
+      const label = el('span', { className: 'social__name', dataset: { text: s.name } }, s.name);
+      const url = typeof s.url === 'string' ? s.url.trim() : '';
+      return el(
+        'li',
+        null,
+        url
+          ? el('a', { className: 'social', href: url, target: '_blank', rel: 'noopener' }, label, arrow)
+          : el('span', { className: 'social', 'data-nolink': '' }, label, arrow)
+      );
+    })
+  );
+}
+
+// How close to the bottom of a scrolling page the header swaps its menu for the social links.
+const END_ZONE_PX = 160;
+
+/** Quỳnh Anh's note (all pages): the header stays on screen while scrolling; at the end of the
+ *  page it hides and the social links show instead, as on the Contact page. */
+function watchPageEnd(root) {
+  const update = () => {
+    const doc = document.documentElement;
+    const room = doc.scrollHeight - window.innerHeight;
+    const atEnd = room > 1 && window.scrollY >= room - END_ZONE_PX;
+    if (atEnd && root.classList.contains('is-menu-open')) root.querySelector('.site-header__toggle')?.click();
+    root.classList.toggle('is-at-end', atEnd);
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  if ('ResizeObserver' in window) new ResizeObserver(update).observe(document.body);
+  update();
+}
+
 const MENU = [
   { page: 'works', label: 'Works', href: 'works.html' },
   { page: 'about', label: 'About', href: 'about.html' },
@@ -107,11 +155,12 @@ export function renderHeader(root, site, activePage) {
     el(
       'div',
       { className: 'site-header__bar page' },
-      el('div', { className: 'site-header__left' }, toggle, nav),
+      el('div', { className: 'site-header__left' }, toggle, nav, renderSocial(s.social, 'site-header__social')),
       logo,
       el('div', { className: 'site-header__right' }, resume)
     )
   );
+  watchPageEnd(root);
 }
 
 /** Replace #app with a centered Vietnamese message panel. */

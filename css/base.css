@@ -10,7 +10,7 @@
 
 :root {
   /* colors (Figma fills) */
-  --color-bg: #fffbf5;
+  --color-bg: #fbf7f0;           /* Quỳnh Anh's note (all pages): background FBF7F0 */
   --color-bg-contact: #fbf7f0;
   --color-text: #1c1a17;
   --color-accent: #f25c05;
@@ -32,11 +32,11 @@
   /* type scale, desktop 1920 (px values read from Figma) */
   --fs-hero: 62.553px;          /* Home "Welcome to Art space of Quynh Anh" (Gilda Display, uppercase) */
   --fs-hero-initial: 125.106px; /* Home script initials "A" (Rouge Script) */
-  --fs-title-initial: 160px;    /* Works/About/Contact script capital: W, A, C */
-  --fs-title: 80px;             /* Works/About/Contact rest of title (Gilda Display, uppercase) */
+  --fs-title-initial: 108.387px; /* Works/About script capital: W, A (Figma 4007:2390 / 4007:2450) */
+  --fs-title: 60px;             /* Works/About/Contact rest of title (Gilda Display, uppercase) */
   --fs-h3: 30px;                /* project name, email, ticker (Be Vietnam Pro Bold) */
   --fs-h4: 20px;                /* tags, meta, section labels */
-  --fs-menu: 16px;              /* nav + Resume (Figma 18px, reduced on request) */
+  --fs-menu: 16px;              /* nav + Resume: 16 on web, 14 on mobile (Quỳnh Anh's note) */
   --fs-body: 16px;              /* paragraphs */
   --fs-small: 14px;             /* footer copyright, social links */
   --fs-logo-initial: 65.813px;  /* "Q" of the QA logo (Rouge Script) */
@@ -67,11 +67,10 @@
     --header-top: 32px;
     --fs-hero: 44px;
     --fs-hero-initial: 88px;
-    --fs-title-initial: 112px;
-    --fs-title: 56px;
+    --fs-title-initial: 86px;
+    --fs-title: 48px;
     --fs-h3: 24px;
     --fs-h4: 18px;
-    --fs-menu: 14px;
     --fs-logo-initial: 52px;
     --fs-logo: 42px;
   }
@@ -84,12 +83,11 @@
     --header-top: 16px;
     --fs-hero: 32px;
     --fs-hero-initial: 64px;
-    --fs-title-initial: 80px;
-    --fs-title: 40px;
+    --fs-title-initial: 68px;
+    --fs-title: 38px;
     --fs-h3: 20px;
     --fs-h4: 16px;
     --fs-menu: 14px;
-    --fs-body: 15px;
     --fs-small: 13px;
     --fs-logo-initial: 44px;
     --fs-logo: 36px;
@@ -193,7 +191,7 @@ button {
 .title-initial {
   --ti-cap: var(--fs-title-initial);
   --ti-rest: var(--fs-title);
-  --ti-drop: 0.383;
+  --ti-drop: 0.395; /* Figma 4007:2390: "orks" box 37.3px below "W" (108.4px), + half its 1.183 leading */
   --ti-overlap: 0; /* negative: pulls the rest under the capital's swash, in cap-em */
   display: flex;
   width: fit-content;
@@ -230,6 +228,71 @@ button {
   color: var(--color-accent);
 }
 
+/* gentle bounce / float used on hover (Home + About + Contact arrows, illustrations).
+   --bob: how far it travels (positive = down). */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(calc(var(--bob, 6px) * var(--motion, 1)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion: 0; /* bob stays put */
+  }
+}
+
+/* ---------- line illustrations (About, Contact) ----------
+   .deco > .deco__art > img.deco__ink + img.deco__accent (orange twin).
+   Quỳnh Anh's note: on hover the illustration turns orange and floats gently. */
+.deco__art {
+  position: relative;
+  display: grid;
+  width: calc(var(--i, 200) / var(--s) * 100%); /* --i: artwork size, --s: its rotated box (Figma px) */
+  aspect-ratio: var(--ar, 1);
+  transform: scaleX(var(--flip, 1)) rotate(var(--r, 0deg)); /* --flip: -1 mirrors the drawing */
+}
+
+.deco__art > img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  transition: opacity 0.3s;
+}
+
+.deco__accent {
+  opacity: 0;
+}
+
+.deco:hover .deco__accent {
+  opacity: 1;
+}
+
+.deco:hover .deco__ink {
+  opacity: 0;
+}
+
+.deco:hover .deco__art {
+  animation: deco-float 1.6s ease-in-out infinite;
+}
+
+@keyframes deco-float {
+  0%,
+  100% {
+    transform: scaleX(var(--flip, 1)) rotate(var(--r, 0deg)) translateY(0);
+  }
+
+  50% {
+    transform: scaleX(var(--flip, 1)) rotate(var(--r, 0deg)) translateY(calc(-8px * var(--motion, 1)));
+  }
+}
+
 /* keyboard focus */
 a:focus-visible,
 button:focus-visible {
@@ -239,8 +302,10 @@ button:focus-visible {
 
 /* ---------- shared shell: header ---------- */
 .site-header {
-  position: relative;
+  position: sticky; /* Quỳnh Anh's note: the header stays while scrolling */
+  top: 0;
   z-index: 10;
+  background: var(--color-bg);
 }
 
 /* Figma: menu x=200,y=62 · logo centered y=62 · Resume right edge at 1720 (all page frames) */
@@ -252,7 +317,122 @@ button:focus-visible {
 }
 
 .site-header__left {
+  position: relative;
   justify-self: start;
+}
+
+/* end of a scrolling page: menu + Resume fade out, the social links take the menu's place */
+.site-header__nav,
+.site-header__toggle,
+.site-header__right,
+.site-header__social {
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.site-header__social {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* the social list (126px) is taller than the menu (96px): the header's backdrop grows to match,
+   across the full width, so content scrolls under a clean edge */
+.site-header::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 46px;
+  background: var(--color-bg);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.is-at-end.site-header::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.is-at-end .site-header__social {
+  opacity: 1;
+  visibility: visible;
+}
+
+.is-at-end .site-header__nav,
+.is-at-end .site-header__toggle,
+.is-at-end .site-header__right {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ---------- social links (Contact top bar, header at the end of a page) ----------
+   Figma 4007:2363: 14px uppercase, 18px apart, names 82 wide then the arrow 8px after.
+   Hover: orange + bold + a small lift. */
+.social-list {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 8px;
+  row-gap: 18px;
+  font-size: var(--fs-small);
+  line-height: 18px; /* Figma rows are 18 tall */
+  text-transform: uppercase;
+}
+
+.social-list li {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+.social {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: center;
+  color: var(--color-text);
+  transition: color 0.2s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.social__name {
+  display: inline-grid;
+  min-width: 82px;
+}
+
+/* bold copy reserves the bold width so hover doesn't push the arrow */
+.social__name::after {
+  content: attr(data-text);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: var(--fw-bold);
+}
+
+.social__arrow svg {
+  width: 9px;
+  height: 9px;
+}
+
+a.social:hover,
+a.social:focus-visible {
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social {
+    transition: color 0.2s;
+  }
+
+  a.social:hover,
+  a.social:focus-visible {
+    transform: none;
+  }
 }
 
 .site-header__right {
@@ -262,10 +442,10 @@ button:focus-visible {
 .site-header__nav {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 18px; /* Quỳnh Anh's note: 18px between Works / About / Contact */
   font-size: var(--fs-menu);
   font-weight: var(--fw-light);
-  line-height: 1.2778; /* 23px at 18px, as in Figma */
+  line-height: 1.25; /* 20px at 16px, as in Figma */
 }
 
 .site-header__nav a[aria-current="page"] {
@@ -328,8 +508,8 @@ button:focus-visible {
 
 .resume__icon {
   display: block;
-  width: 24px;
-  height: 24px;
+  width: 28px; /* Figma Home/Works: 28px circle */
+  height: 28px;
   transition: color 0.2s;
 }
 
@@ -350,6 +530,11 @@ button:focus-visible {
 .resume:hover .resume__label,
 .resume:focus-visible .resume__label {
   font-weight: var(--fw-bold);
+}
+
+.resume__icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .resume:hover .resume__icon,
@@ -389,6 +574,16 @@ button:focus-visible {
 @media (max-width: 480px) {
   .site-header__toggle {
     display: grid;
+  }
+
+  /* the dropdown menu below positions against the whole header, not the left cell */
+  .site-header__left {
+    position: static;
+  }
+
+  .site-header__social {
+    top: var(--header-top);
+    left: var(--gutter);
   }
 
   .site-header__nav {

@@ -1,7 +1,7 @@
 /* Home (Figma 2796:61531, 1920x1080) always fits one screen: the page is a column of
    header + .home, and .home is a size container, so everything below the header is laid
    out in --u = one Figma pixel scaled to whichever of width / height runs out first.
-   Coordinates are Figma values minus the 175px header height. */
+   Coordinates are Figma values minus the 158px header height. */
 .page-home {
   display: flex;
   flex-direction: column;
@@ -110,7 +110,6 @@
   place-items: center;
   transform: translate(-50%, -50%);
   color: var(--color-text);
-  transition: color 0.2s, transform 0.2s;
 }
 
 .hero__go svg {
@@ -118,9 +117,10 @@
   height: 0.82em;
 }
 
-.hero__go:hover {
-  color: var(--color-accent);
-  transform: translate(-50%, -50%) translateY(0.12em);
+/* Quỳnh Anh's note: no orange on hover, a gentle bounce instead so the eye stays on the name */
+.hero__go:hover svg,
+.hero__go:focus-visible svg {
+  animation: bob 1s ease-in-out infinite;
 }
 
 /* ---------- illustrations cluster (children positioned in % of the 469.4 x 357.2 cluster) ---------- */
@@ -185,13 +185,13 @@
 /* ---------- landscape: Figma composition scaled by --u ---------- */
 @container home (min-aspect-ratio: 11 / 10) {
   .home__stage {
-    --u: min(100cqw / 1920, 100cqh / 905);
+    --u: min(100cqw / 1920, 100cqh / 922); /* 922 = 1080 - the 158px header */
     --fs-hero: calc(62.553 * var(--u));
     --fs-hero-initial: calc(125.106 * var(--u));
     --fs-h4: max(12px, calc(20 * var(--u)));
     --x0: calc((100cqw - 1920 * var(--u)) / 2);
-    /* composition (403u tall) sits centred in the room left above the titles */
-    --y0: max(12px, calc((100cqh - 190 * var(--u) - 403 * var(--u)) / 2));
+    /* composition top at Figma y=356 (198 below the header); spare height is split above/below */
+    --y0: calc(198 * var(--u) + (100cqh - 922 * var(--u)) / 2);
     position: absolute;
     inset: 0;
   }
@@ -333,33 +333,8 @@
   transform: none;
 }
 
-.intro__loading {
-  position: absolute;
-  right: -8%;
-  bottom: -14%;
-  margin: 0;
-  font-size: var(--fs-small);
-  font-weight: var(--fw-light);
-  white-space: nowrap;
-  transition: opacity 0.3s;
-}
-
-.intro__dots::after {
-  content: "...";
-  display: inline-block;
-  width: 1.2em;
-  overflow: hidden;
-  vertical-align: bottom;
-  animation: intro-dots 1.2s steps(4) infinite;
-}
-
 .intro.is-leaving {
   pointer-events: none;
-}
-
-@keyframes intro-dots {
-  from { width: 0; }
-  to { width: 1.2em; }
 }
 
 @keyframes intro-failsafe-show {

@@ -1,5 +1,5 @@
-// Home intro, modelled on the reference video: a "Loading…" scene with the girl
-// illustration and cycling thought icons; the scene fades out, then the page fades in
+// Home intro, modelled on the reference video: a splash scene with the girl
+// illustration and cycling thought icons (no "Loading…" text, per Quỳnh Anh's note); the scene fades out, then the page fades in
 // with the same character appearing together with the hero lines.
 
 const MIN_LOADING_MS = 1800;
@@ -29,7 +29,6 @@ export function skipIntro() {
 
 function startLoadingScene(intro) {
   const icons = [...intro.querySelectorAll('.intro__thought img')];
-  const count = intro.querySelector('.intro__count');
   let icon = 0;
   icons[0]?.classList.add('is-on');
   const cycle = setInterval(() => {
@@ -38,20 +37,7 @@ function startLoadingScene(intro) {
     icons[icon]?.classList.add('is-on');
   }, THOUGHT_EVERY_MS);
 
-  const started = performance.now();
-  let frame = 0;
-  const tick = (now) => {
-    const p = Math.min((now - started) / MIN_LOADING_MS, 1);
-    if (count) count.textContent = `(${Math.round((1 - (1 - p) ** 3) * 100)})`;
-    if (p < 1) frame = requestAnimationFrame(tick);
-  };
-  frame = requestAnimationFrame(tick);
-
-  return () => {
-    clearInterval(cycle);
-    cancelAnimationFrame(frame);
-    if (count) count.textContent = '(100)';
-  };
+  return () => clearInterval(cycle);
 }
 
 /** Resolves once fonts and the illustration are ready, never before MIN or after MAX. */
