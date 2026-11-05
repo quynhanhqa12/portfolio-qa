@@ -1,5 +1,5 @@
 import { bootPage, el, imageBox } from '../ui/shell.js';
-import { filterProjects, normalizeCategory, getCategory, cardShape, formatMeta } from '../core/model.js';
+import { filterProjects, normalizeCategory, cardShape, formatMeta, mixCategories } from '../core/model.js';
 import { getParam, worksUrl, projectUrl } from '../core/url.js';
 
 const EMPTY_TEXT = 'Chưa có dự án nào trong mảng này.';
@@ -13,12 +13,11 @@ function renderTitle() {
   );
 }
 
-function renderCard(data, project, index) {
-  const category = getCategory(data, project.category);
+// Quỳnh Anh's note: no category name above the thumbnails
+function renderCard(project, index) {
   return el(
     'a',
     { className: 'card', href: projectUrl(project.id) },
-    el('p', { className: 'card__label' }, `. ${category?.name || ''}`.trimEnd()),
     imageBox(project.cover, project.project || '', {
       className: `card__image card__image--${cardShape(index)}`,
     }),
@@ -81,10 +80,10 @@ function renderFilter(options, onSelect) {
     list.hidden = true;
     if (focusButton) button.focus();
   };
-  const open = () => {
+  const open = (moveFocus = true) => {
     button.setAttribute('aria-expanded', 'true');
     list.hidden = false;
-    (items.find((li) => li.getAttribute('aria-selected') === 'true') || items[0])?.focus();
+    if (moveFocus) (items.find((li) => li.getAttribute('aria-selected') === 'true') || items[0])?.focus();
   };
   const choose = (li) => {
     onSelect(li.dataset.id || null);
@@ -92,6 +91,18 @@ function renderFilter(options, onSelect) {
   };
 
   button.addEventListener('click', () => (isOpen() ? close() : open()));
+  // Quỳnh Anh's note: pointing at the filter icon opens the list; it closes shortly after the
+  // pointer leaves (the delay lets it travel from the button down to the list)
+  let leaveTimer = 0;
+  root.addEventListener('pointerenter', (event) => {
+    if (event.pointerType === 'touch') return;
+    clearTimeout(leaveTimer);
+    if (!isOpen()) open(false);
+  });
+  root.addEventListener('pointerleave', (event) => {
+    if (event.pointerType === 'touch') return;
+    leaveTimer = setTimeout(() => isOpen() && close(), 250);
+  });
   items.forEach((li) => li.addEventListener('click', () => choose(li)));
   list.addEventListener('keydown', (event) => {
     const i = items.indexOf(document.activeElement);
@@ -149,6 +160,9 @@ function render(data, root) {
   document.title = `Works — ${site.name || 'Portfolio'}`;
 
   let current = normalizeCategory(data, getParam(location.search, 'category')); // null = All
+  // "All" shows every project in a fresh random order on each visit, never two of one category
+  // side by side (Quỳnh Anh's note); a single category keeps the order of data.json
+  const mixed = mixCategories(projects);
 
   const grid = el('div', { className: 'works__row', tabindex: '0', 'aria-label': 'Danh sách dự án, cuộn ngang' });
   scrollSidewaysOnWheel(grid);
@@ -162,11 +176,11 @@ function render(data, root) {
   function renderGrid() {
     // filterProjects falls back to everything for a category without projects; show the empty text instead.
     const empty = current && !projects.some((p) => p.category === current);
-    const list = empty ? [] : filterProjects(projects, current);
+    const list = empty ? [] : current ? filterProjects(projects, current) : mixed;
     if (!list.length) {
       grid.replaceChildren(el('p', { className: 'works__empty', role: 'status' }, EMPTY_TEXT));
     } else {
-      grid.replaceChildren(...list.map((p, i) => renderCard(data, p, i)));
+      grid.replaceChildren(...list.map((p, i) => renderCard(p, i)));
     }
     grid.scrollLeft = 0;
     arrows.update();

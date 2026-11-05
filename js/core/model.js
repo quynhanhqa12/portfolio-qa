@@ -106,3 +106,53 @@ export function parseEmphasis(text) {
   if (last < source.length) runs.push({ text: source.slice(last), bold: false });
   return runs;
 }
+
+/** Random order for the "All" view of Works, never two projects of the same category side by
+ *  side when that can be avoided (Quỳnh Anh's note). random() returns [0, 1) like Math.random. */
+export function mixCategories(projects, random = Math.random) {
+  const groups = new Map();
+  for (const p of Array.isArray(projects) ? projects : []) {
+    if (!groups.has(p.category)) groups.set(p.category, []);
+    groups.get(p.category).push(p);
+  }
+  // shuffle inside each category (Fisher-Yates)
+  for (const list of groups.values()) {
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+  }
+
+  const out = [];
+  let left = [...groups.values()].reduce((n, list) => n + list.length, 0);
+  let prev;
+  while (left > 0) {
+    const open = [...groups.entries()].filter(([cat, list]) => list.length && cat !== prev);
+    let pick;
+    if (!open.length) {
+      pick = prev; // only the previous category is left: a clash cannot be avoided
+    } else {
+      // a category holding more than half of what is left must go now, or it can't be spread out
+      const [bigCat, bigList] = [...groups.entries()].reduce((a, b) => (b[1].length > a[1].length ? b : a));
+      if (bigCat !== prev && bigList.length * 2 > left) {
+        pick = bigCat;
+      } else {
+        // otherwise any other category, weighted by how many it still has
+        const total = open.reduce((n, [, list]) => n + list.length, 0);
+        let r = random() * total;
+        pick = open[open.length - 1][0];
+        for (const [cat, list] of open) {
+          r -= list.length;
+          if (r < 0) {
+            pick = cat;
+            break;
+          }
+        }
+      }
+    }
+    out.push(groups.get(pick).pop());
+    prev = pick;
+    left -= 1;
+  }
+  return out;
+}

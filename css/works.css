@@ -1,7 +1,8 @@
 /* Works (Figma 4007:2390, 1920x1080). The page always fits one screen: header, title + intro,
    filter + arrows, ONE row of cards that scrolls sideways, then the email button.
    The row starts at the left margin and runs to the right edge of the screen, where a soft
-   fade covers the last visible card (Figma "Rectangle 34624759"). Cards keep Figma's
+   fade covers the last visible card (Figma "Rectangle 34624759"). The left margin stays empty
+   while scrolling: cards disappear at the margin line, never under it (Quỳnh Anh's note). Cards keep Figma's
    proportions (400 wide; image 400x400 or 400x260): on short screens the whole card shrinks
    so the row fits the room left, nothing is stretched.
 
@@ -188,6 +189,7 @@
   flex: 1 1 auto;
   min-height: 0;
   margin-top: clamp(8px, 1.5svh, 16px); /* cards y=417, filter row ends 401 */
+  margin-left: var(--gutter); /* the row is clipped at the margin line */
 }
 
 /* soft fade over the card at the right edge: solid page colour at the edge, 60% at its left,
@@ -216,7 +218,7 @@
 
 .works__row {
   --gap: max(16px, calc(32 * var(--w)));
-  --card-text: 101px; /* label 20 + 16 gap, 16 gap, name 25 + 4 + meta 20 */
+  --card-text: 65px; /* 16 gap, name 25 + 4 + meta 20 */
   --card-w: min(calc(400 * var(--w)), 100cqh - var(--card-text));
   container-type: size;
   display: flex;
@@ -225,11 +227,10 @@
   gap: var(--gap);
   min-width: 0;
   min-height: 0;
-  padding-inline: var(--gutter);
+  padding-right: var(--gutter); /* the last card can scroll clear of the right-edge fade */
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
-  scroll-padding-inline: var(--gutter);
   scroll-snap-type: x proximity;
   scrollbar-width: none; /* Quỳnh Anh's note: no scroll line under the cards */
 }
@@ -251,8 +252,7 @@
   scroll-snap-align: start;
 }
 
-/* label, name and meta keep their size on hover; a bold copy reserves the bold width */
-.card__label,
+/* name and meta keep their size on hover */
 .card__meta {
   font-size: 16px;
   font-weight: var(--fw-light);
@@ -264,7 +264,7 @@
 
 .card__image {
   width: 100%;
-  margin-block: 16px;
+  margin-bottom: 16px;
   border-radius: var(--radius-card);
 }
 
@@ -288,9 +288,7 @@
   transition: color 0.2s;
 }
 
-/* Quỳnh Anh's note: category + year/company turn bold, the project name bold italic orange */
-.card:hover .card__label,
-.card:focus-visible .card__label,
+/* Quỳnh Anh's note: year/company turn bold, the project name bold italic orange */
 .card:hover .card__meta,
 .card:focus-visible .card__meta {
   font-weight: var(--fw-bold);
@@ -337,11 +335,12 @@
   line-height: 1.25;
   text-align: center;
   overflow-wrap: anywhere;
-  transition: opacity 0.2s;
+  transition: background-color 0.2s;
 }
 
-.email-box:hover {
-  opacity: 0.9;
+.email-box:hover,
+.email-box:focus-visible {
+  background: var(--color-accent-hover);
 }
 
 /* ---------- tablet ---------- */
@@ -363,7 +362,7 @@
   }
 
   .works__row {
-    --card-w: min((100cqw - var(--gutter) - 2 * var(--gap)) / 2.4, 100cqh - var(--card-text));
+    --card-w: min((100cqw - var(--gutter) - 2 * var(--gap)) / 2.4, 100cqh - var(--card-text)); /* cqw: row from the margin to the edge */
   }
 }
 
@@ -387,7 +386,6 @@
     --card-w: min((100cqw - var(--gutter) - var(--gap)) / 1.4, 100cqh - var(--card-text)); /* a peek of the next card */
   }
 
-  .card__label,
   .card__meta {
     font-size: 14px;
   }

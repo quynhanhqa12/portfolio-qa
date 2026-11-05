@@ -83,6 +83,7 @@ export function renderSocial(social, className = '') {
 
 // How close to the bottom of a scrolling page the header swaps its menu for the social links.
 const END_ZONE_PX = 160;
+const ONE_SCREEN_PAGES = new Set(['home', 'works']);
 
 /** Quỳnh Anh's note (all pages): the header stays on screen while scrolling; at the end of the
  *  page it hides and the social links show instead, as on the Contact page. */
@@ -160,7 +161,9 @@ export function renderHeader(root, site, activePage) {
       el('div', { className: 'site-header__right' }, resume)
     )
   );
-  watchPageEnd(root);
+  // Home and Works always fit one screen: nothing to scroll to, so the menu never swaps there
+  // (a brief overflow while fonts load must not leave the social links showing)
+  if (!ONE_SCREEN_PAGES.has(activePage)) watchPageEnd(root);
 }
 
 /** Replace #app with a centered Vietnamese message panel. */

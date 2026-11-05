@@ -54,7 +54,7 @@ Các mục lớn trong `data.json` và chúng điều khiển gì:
 - **`resume`**: đường dẫn file CV cho nút **Resume** ở thanh trên cùng. Hiện tại là `files/cv.pdf`. **Để trống `""` thì nút Resume biến mất.** Cách thay file CV: xem mục 6.
 - **`location`**: hiện ở trang Contact cùng đồng hồ ("Hanoi, VN — 08:32 AM"). Giờ luôn là giờ Hà Nội.
 - **`availableForWork`**: `true` thì trang Contact hiện dòng **"Available for work"** với chấm tròn màu cam phía trước. Đổi thành `false` thì dòng đó ẩn đi. Chỉ gõ `true` hoặc `false`, **không** có ngoặc kép, viết thường.
-- **`social`**: các mạng xã hội ở góc trên trang Contact. Chúng cũng hiện thay cho menu ở đầu trang khi người xem cuộn xuống cuối các trang dài (About, trang dự án).
+- **`social`**: các mạng xã hội ở góc trên trang Contact (dòng "Works ←" phía trên chúng là cố định, để quay lại trang Works). Chúng cũng hiện thay cho menu ở đầu trang khi người xem cuộn xuống cuối các trang dài (About, trang dự án).
   - Có link: `{ "name": "Behance", "url": "https://www.behance.net/ten-cua-ban" }` thì chữ Behance bấm được và mở tab mới.
   - **Để `"url": ""` (trống) thì chữ vẫn hiện nhưng chỉ là chữ thường, không bấm được.** Hiện tại cả 4 mạng đều đang để trống; khi có link, dán vào giữa 2 dấu ngoặc kép.
   - Muốn bớt một mạng xã hội: xóa cả khối `{ "name": ..., "url": ... }` của nó (nhớ xử lý dấu phẩy, xem mục 8).
@@ -70,7 +70,7 @@ Các mục lớn trong `data.json` và chúng điều khiển gì:
   "bio": "Đoạn 1...\n\nĐoạn 2...\n\nĐoạn 3...",
   "photo": "images/about-photo.jpg",
   "services": [
-    { "name": "Digital Illustration", "description": "..." }
+    { "name": "Digital Illustration", "description": "...", "icon": "assets/illustrations/service-digital-illustration.svg" }
   ],
   "process": ["The Brief & Keywords", "Brainstorm & Moodboard", "..."]
 }
@@ -87,7 +87,7 @@ Các mục lớn trong `data.json` và chúng điều khiển gì:
   Trên website, mỗi đoạn sẽ nằm riêng với một khoảng cách ở giữa. Muốn thêm đoạn thứ tư: thêm `\n\n` rồi viết tiếp trước dấu ngoặc kép cuối.
 
   **In đậm một cụm chữ:** đặt cụm đó giữa hai cặp dấu sao `**`, viết liền, không có khoảng trắng giữa dấu sao và chữ. Ví dụ `"I am **Quỳnh Anh**, a Senior..."` sẽ hiện "Quỳnh Anh" in đậm. Thiếu một cặp `**` thì dấu sao hiện ra nguyên văn, không có gì hỏng.
-- **`about.services`**: các mảng dịch vụ, mỗi mảng gồm `name` (tên) và `description` (mô tả ngắn). Các mảng tự chia thành hai cột. Muốn thêm một mảng: sao chép cả một khối `{ "name": ..., "description": ... }`, dán nối tiếp (cách nhau bằng dấu phẩy) rồi sửa chữ.
+- **`about.services`**: các thẻ dịch vụ, mỗi thẻ gồm `name` (tên), `description` (mô tả ngắn) và `icon` (đường dẫn tới hình vẽ nhỏ bên trái thẻ; để `""` thì thẻ không có hình). Các thẻ tự chia thành hai cột hai bên hình cô gái. Muốn thêm một thẻ: sao chép cả một khối `{ "name": ..., "description": ..., "icon": ... }`, dán nối tiếp (cách nhau bằng dấu phẩy) rồi sửa chữ.
 - **`about.process`**: các bước trong mục "Design Approach Process" ở trang About. Mỗi bước là một chuỗi trong ngoặc kép, cách nhau dấu phẩy; số thứ tự 1, 2, 3… trong vòng tròn cam được tự đánh theo thứ tự.
 
 ---

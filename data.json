@@ -41,19 +41,23 @@
     "services": [
       {
         "name": "Digital Illustration",
-        "description": "Delivering digital illustration projects with a distinct personal touch through unique color palettes and pattern play."
+        "description": "Delivering digital illustration projects with a distinct personal touch through unique color palettes and pattern play.",
+        "icon": "assets/illustrations/service-digital-illustration.svg"
       },
       {
         "name": "Brand Identity",
-        "description": "Delivering digital illustration projects with a distinct personal touch through unique color palettes and pattern play."
+        "description": "Delivering digital illustration projects with a distinct personal touch through unique color palettes and pattern play.",
+        "icon": "assets/illustrations/service-brand-identity.svg"
       },
       {
         "name": "Print & Creative Ads",
-        "description": "Designing print and creative ads that balance visual appeal with communication goals."
+        "description": "Designing print and creative ads that balance visual appeal with communication goals.",
+        "icon": "assets/illustrations/service-print-creative-ads.svg"
       },
       {
         "name": "Digital & Social Design",
-        "description": "Crafting digital and social assets with clean, engaging layouts optimized for the best user experience."
+        "description": "Crafting digital and social assets with clean, engaging layouts optimized for the best user experience.",
+        "icon": "assets/illustrations/service-digital-social-design.svg"
       }
     ],
     "process": [

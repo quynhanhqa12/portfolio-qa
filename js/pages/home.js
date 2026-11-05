@@ -53,16 +53,22 @@ function renderHero(site) {
   );
 }
 
+// Figma 4007:2649: girl, cube and eye, each turning orange and floating on its own when hovered
+// (Quỳnh Anh's note). Positions live in css/home.css (.art__girl / .art__cube / .art__eye).
 function renderArt() {
-  const img = (cls, file) =>
-    el('img', { className: `art__item ${cls}`, src: `assets/illustrations/${file}`, alt: '', 'aria-hidden': 'true' });
-  return el(
-    'div',
-    { className: 'home__art art', 'aria-hidden': 'true' },
-    img('art__cube', '03-khoi-cube.png'),
-    img('art__girl', '01-co-gai-cam-ipad.png'),
-    img('art__eye', '02-con-mat-viewfinder.png')
-  );
+  const piece = (name) => {
+    const img = (suffix, cls) => {
+      const node = el('img', { className: cls, src: `assets/illustrations/home-${name}${suffix}.svg`, alt: '' });
+      node.addEventListener('error', () => node.remove());
+      return node;
+    };
+    return el(
+      'div',
+      { className: `art__item art__${name} deco` },
+      el('div', { className: 'deco__art' }, img('', 'deco__ink'), img('-orange', 'deco__accent'))
+    );
+  };
+  return el('div', { className: 'home__art art', 'aria-hidden': 'true' }, piece('cube'), piece('girl'), piece('eye'));
 }
 
 function renderTitles(site) {

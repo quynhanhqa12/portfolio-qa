@@ -31,7 +31,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 149px; /* title y=337, social list ends 188 */
+  margin-top: 113px; /* title y=337; the list (social 62..188) has one extra 36px line: Works */
 }
 
 .contact__title {
@@ -69,7 +69,7 @@
 
 /* Quỳnh Anh's note: the arrow floats gently on hover */
 .contact__down:hover svg {
-  animation: bob 1s ease-in-out infinite;
+  animation: bob 2s ease-in-out infinite;
 }
 
 .contact__box {
@@ -101,6 +101,7 @@
 a.contact__box:hover,
 a.contact__box:focus-visible {
   border-color: var(--color-accent);
+  animation: float-soft 3s ease-in-out infinite; /* very light, slow float */
 }
 
 a.contact__box:hover .contact__email,

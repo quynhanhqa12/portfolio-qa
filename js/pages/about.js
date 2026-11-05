@@ -62,12 +62,19 @@ function renderBio(bio) {
   );
 }
 
+/** Service card (Figma 4010:2688): line icon on the left, name + description on the right.
+ *  Hover: a very light float, no colour change (Quỳnh Anh's note). */
 function renderService(service) {
   return el(
     'li',
     { className: 'service' },
-    el('h2', { className: 'service__name' }, service.name),
-    service.description ? el('p', { className: 'service__text' }, service.description) : null
+    service.icon ? imageBox(service.icon, '', { className: 'service__icon', fit: 'contain' }) : null,
+    el(
+      'div',
+      { className: 'service__body' },
+      el('h2', { className: 'service__name' }, service.name),
+      service.description ? el('p', { className: 'service__text' }, service.description) : null
+    )
   );
 }
 
@@ -122,24 +129,28 @@ function render(data, root) {
         imageBox(about.photo, site.name ? `Photo of ${site.name}` : '', { className: 'about__photo' }),
         el('a', {
           className: 'about__down',
-          href: services.length ? '#about-services' : null,
-          'aria-label': 'Xem các mảng thiết kế',
+          href: '#about-more',
+          'aria-label': 'Xem tiếp',
           html: DOWN_CIRCLE,
         }),
         el('div', { className: 'about__art' }, ART.map(deco))
       ),
-      services.length
-        ? el(
-            'section',
-            { className: 'about__services', id: 'about-services', 'aria-label': 'Services' },
-            el('ul', { className: 'about__col' }, services.slice(0, half).map(renderService)),
-            picture('about-say-hi.svg', 'about__hi'),
-            el('ul', { className: 'about__col' }, services.slice(half).map(renderService))
-          )
-        : null,
-      renderProcess(about.process),
-      picture('about-like.svg', 'about__like'),
-      renderTicker()
+      // second screen (Quỳnh Anh's note): process, service cards and the ticker fit one screen
+      el(
+        'div',
+        { className: 'about__more', id: 'about-more' },
+        renderProcess(about.process),
+        services.length
+          ? el(
+              'section',
+              { className: 'about__services', 'aria-label': 'Services' },
+              el('ul', { className: 'about__col' }, services.slice(0, half).map(renderService)),
+              picture('about-say-hi.svg', 'about__hi'),
+              el('ul', { className: 'about__col' }, services.slice(half).map(renderService))
+            )
+          : null,
+        renderTicker()
+      )
     )
   );
 }

@@ -107,6 +107,7 @@
   display: grid;
   width: max(0.8em, 44px);
   height: max(0.8em, 44px);
+  overflow: visible;
   place-items: center;
   transform: translate(-50%, -50%);
   color: var(--color-text);
@@ -115,46 +116,60 @@
 .hero__go svg {
   width: 0.82em;
   height: 0.82em;
+  max-width: none;
+  overflow: visible; /* the ring's stroke sits on the viewBox edge: never clip it */
 }
 
 /* Quỳnh Anh's note: no orange on hover, a gentle bounce instead so the eye stays on the name */
 .hero__go:hover svg,
 .hero__go:focus-visible svg {
-  animation: bob 1s ease-in-out infinite;
+  animation: bob 2s ease-in-out infinite;
 }
 
-/* ---------- illustrations cluster (children positioned in % of the 469.4 x 357.2 cluster) ---------- */
+/* ---------- illustrations cluster (Figma 4007:2649, 500 x 418 at x=1261.5, y=356) ----------
+   Children in % of the cluster. The girl and the cube come from one Figma drawing, split so
+   each can turn orange on its own; each file is cropped to its drawing so hovers don't overlap.
+   .deco__art + the orange swap on hover are shared (base.css). */
 .art {
   position: relative;
-  aspect-ratio: 469.44 / 357.2;
+  aspect-ratio: 500 / 418;
 }
 
 .art__item {
   position: absolute;
-  height: auto;
-  max-width: none;
+  display: grid;
+  place-items: center;
 }
 
 .art__cube {
-  top: 0;
-  left: 0;
-  width: 33.62%;
-  transform: rotate(-17.34deg);
-  scale: 0.798; /* 125.988 / 157.825: image sits inside the rotated 157.8px box */
+  --i: 1;
+  --s: 1;
+  --ar: 87 / 97;
+  top: 6.938%;  /* 29 / 418 */
+  left: 4.2%;   /* 21 / 500 */
+  width: 17.4%; /* 87 / 500 */
+  z-index: 1;
 }
 
 .art__girl {
-  top: 1.173%;
-  left: 6.446%;
-  width: 75.2%;
+  --i: 1;
+  --s: 1;
+  --ar: 286 / 347;
+  top: 8.612%;  /* 36 / 418 */
+  left: 17.6%;  /* 88 / 500 */
+  width: 57.2%; /* 286 / 500 */
 }
 
+/* eye: 177px drawing tilted 21.36deg in a 229.35px box at 335.1, 112.9 */
 .art__eye {
-  top: 26.9%;
-  left: 60.79%;
-  width: 39.21%;
-  transform: rotate(15.56deg);
-  scale: 0.812; /* 149.429 / 184.054 */
+  --i: 177.024;
+  --s: 229.349;
+  --r: 21.36deg;
+  top: 27%;
+  left: 67.03%;
+  width: 45.87%;
+  aspect-ratio: 1;
+  z-index: 1;
 }
 
 /* ---------- bottom line ---------- */
@@ -214,9 +229,9 @@
   }
 
   .home__art {
-    top: calc(var(--y0) + 47.8 * var(--u));
-    left: calc(var(--x0) + 1269.7 * var(--u));
-    width: calc(469.4 * var(--u));
+    top: var(--y0); /* cluster y=356, same as the hero */
+    left: calc(var(--x0) + 1261.47 * var(--u));
+    width: calc(500 * var(--u));
   }
 
   /* bottom line sits on the bottom edge, 78px up as in Figma (never closer than 28px) */

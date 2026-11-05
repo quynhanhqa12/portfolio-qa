@@ -14,6 +14,7 @@
   --color-bg-contact: #fbf7f0;
   --color-text: #1c1a17;
   --color-accent: #f25c05;
+  --color-accent-hover: #ff8742; /* Quỳnh Anh's note: email button on hover */
   --color-placeholder: #ece7e0;
   --color-placeholder-alt: #dfdad3;
   --color-muted: #dcd9d3;
@@ -228,8 +229,8 @@ button {
   color: var(--color-accent);
 }
 
-/* gentle bounce / float used on hover (Home + About + Contact arrows, illustrations).
-   --bob: how far it travels (positive = down). */
+/* gentle bounce used on hover by the round arrows (Home, About, Contact): 4px down, 2s a beat,
+   per Quỳnh Anh's note that it was too quick. --bob: how far it travels (positive = down). */
 @keyframes bob {
   0%,
   100% {
@@ -237,7 +238,19 @@ button {
   }
 
   50% {
-    transform: translateY(calc(var(--bob, 6px) * var(--motion, 1)));
+    transform: translateY(calc(var(--bob, 4px) * var(--motion, 1)));
+  }
+}
+
+/* soft float for whole blocks (logo, cards, email box): small and slow */
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(calc(-4px * var(--motion, 1)));
   }
 }
 
@@ -279,7 +292,7 @@ button {
 }
 
 .deco:hover .deco__art {
-  animation: deco-float 1.6s ease-in-out infinite;
+  animation: deco-float 3s ease-in-out infinite; /* slow, light float */
 }
 
 @keyframes deco-float {
@@ -289,7 +302,7 @@ button {
   }
 
   50% {
-    transform: scaleX(var(--flip, 1)) rotate(var(--r, 0deg)) translateY(calc(-8px * var(--motion, 1)));
+    transform: scaleX(var(--flip, 1)) rotate(var(--r, 0deg)) translateY(calc(-5px * var(--motion, 1)));
   }
 }
 
@@ -417,7 +430,13 @@ button:focus-visible {
   height: 9px;
 }
 
-a.social:hover,
+/* the "Works" line on Contact points back (left) instead of out */
+.social--back .social__arrow svg {
+  width: 12px;
+  height: 7px;
+}
+
+.social:hover,
 a.social:focus-visible {
   color: var(--color-accent);
   font-weight: var(--fw-bold);
@@ -429,7 +448,7 @@ a.social:focus-visible {
     transition: color 0.2s;
   }
 
-  a.social:hover,
+  .social:hover,
   a.social:focus-visible {
     transform: none;
   }
@@ -542,32 +561,16 @@ a.social:focus-visible {
   color: var(--color-accent);
 }
 
-/* logo hover: the whole "QA" turns accent, Q tilts and A steps aside */
-.logo__q,
-.logo__a {
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s;
-}
-
+/* Quỳnh Anh's note: on hover the whole "QA" turns orange and floats gently as one piece */
 .logo:hover,
 .logo:focus-visible {
   color: var(--color-accent);
+  animation: float-soft 2.4s ease-in-out infinite;
 }
 
-.logo:hover .logo__q,
-.logo:focus-visible .logo__q {
-  transform: rotate(-10deg) scale(1.08);
-}
-
-.logo:hover .logo__a,
-.logo:focus-visible .logo__a {
-  transform: translateX(6px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo__q,
-  .logo__a {
-    transition: none;
-  }
+.logo__q,
+.logo__a {
+  transition: color 0.3s;
 }
 
 /* mobile header: menu collapses into a toggle */

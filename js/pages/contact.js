@@ -33,11 +33,35 @@ function deco(name) {
   );
 }
 
+// Figma "Arrow 3" (a 13.7px arrow), turned to point left: the way back to Works.
+const BACK_ARROW =
+  '<svg width="13.7279" height="7.36396" viewBox="0 0 13.7279 7.36396" fill="none" aria-hidden="true" focusable="false" style="transform: scaleX(-1)">' +
+  '<path d="M0.5 3.18198C0.223858 3.18198 0 3.40584 0 3.68198C0 3.95812 0.223858 4.18198 0.5 4.18198V3.68198V3.18198ZM0.5 3.68198V4.18198H13.2279V3.68198V3.18198H0.5V3.68198ZM13.5815 4.03553C13.7767 3.84027 13.7767 3.52369 13.5815 3.32843L10.3995 0.146447C10.2042 -0.0488155 9.88765 -0.0488155 9.69239 0.146447C9.49713 0.341709 9.49713 0.658291 9.69239 0.853554L12.5208 3.68198L9.69239 6.51041C9.49713 6.70567 9.49713 7.02225 9.69239 7.21751C9.88765 7.41278 10.2042 7.41278 10.3995 7.21751L13.5815 4.03553Z" fill="currentColor"/>' +
+  '</svg>';
+
+/** Social links with a "Works" line on top, so visitors can go back to the projects. */
+function renderLinks(site) {
+  const back = el(
+    'li',
+    null,
+    el(
+      'a',
+      { className: 'social social--back', href: 'works.html' },
+      el('span', { className: 'social__name', dataset: { text: 'Works' } }, 'Works'),
+      el('span', { className: 'social__arrow', 'aria-hidden': 'true', html: BACK_ARROW })
+    )
+  );
+  const list = renderSocial(site.social, 'contact__social') || el('ul', { className: 'social-list contact__social' });
+  list.setAttribute('aria-label', 'Links');
+  list.prepend(back);
+  return list;
+}
+
 function renderTopBar(site) {
   return el(
     'div',
     { className: 'site-header__bar page contact__top' },
-    renderSocial(site.social, 'contact__social') || el('div'),
+    renderLinks(site),
     el(
       'a',
       { className: 'logo', href: 'index.html', 'aria-label': 'QA — trang chủ' },
