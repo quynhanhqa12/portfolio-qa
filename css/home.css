@@ -203,7 +203,9 @@
 /* ---------- landscape: Figma composition scaled by --u ---------- */
 @container home (min-aspect-ratio: 11 / 10) {
   .home__stage {
-    --u: min(100cqw / 1920, 100cqh / 922); /* 922 = 1080 - the 158px header */
+    /* full size whenever the composition + titles fit (they need ~700 of the 922 below the header);
+       the spare height is shared out above / below, see --y0 */
+    --u: min(100cqw / 1920, 100cqh / 700);
     --fs-hero: calc(62.553 * var(--u));
     --fs-hero-initial: calc(125.106 * var(--u));
     --fs-h4: max(12px, calc(20 * var(--u)));

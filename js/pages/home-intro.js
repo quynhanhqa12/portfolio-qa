@@ -41,12 +41,17 @@ function startLoadingScene(intro) {
 }
 
 /** Resolves once fonts and the illustration are ready, never before MIN or after MAX. */
+// The fonts the hero needs. Asked for by name: document.fonts.ready alone can resolve before the
+// page has even requested them, and the hero then appeared in a fallback font for a moment
+// (its script "A" sits higher, so the A of "Anh" looked pushed up).
+const HERO_FONTS = ['125px "Rouge Script"', '62px "Gilda Display"', '300 16px "Be Vietnam Pro"'];
+
 function loadingDone(intro) {
   const girl = intro.querySelector('.intro__girl');
-  const ready = Promise.all([
-    document.fonts?.ready ?? Promise.resolve(),
-    girl?.decode ? girl.decode().catch(() => {}) : Promise.resolve(),
-  ]);
+  const fonts = document.fonts
+    ? Promise.all(HERO_FONTS.map((font) => document.fonts.load(font, 'A').catch(() => {}))).then(() => document.fonts.ready)
+    : Promise.resolve();
+  const ready = Promise.all([fonts, girl?.decode ? girl.decode().catch(() => {}) : Promise.resolve()]);
   return Promise.race([Promise.all([ready, wait(MIN_LOADING_MS)]), wait(MAX_LOADING_MS)]);
 }
 

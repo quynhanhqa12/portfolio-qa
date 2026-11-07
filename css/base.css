@@ -6,7 +6,7 @@
    Gilda Display and Rouge Script have NO Vietnamese subset on Google Fonts, so
    Cormorant Garamond / Pinyon Script (both with Vietnamese) follow them in the
    stacks: browsers use the Figma font where a glyph exists and fall back per glyph. */
-@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,700;1,700&family=Gilda+Display&family=Rouge+Script&family=Cormorant+Garamond:wght@400&family=Pinyon+Script&display=swap&subset=vietnamese");
+/* Fonts are linked in each page's <head> (faster than @import): see index.html. */
 
 :root {
   /* Page units used instead of vw / svh everywhere (1% of the page width / height).
