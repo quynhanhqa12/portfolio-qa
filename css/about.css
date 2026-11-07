@@ -222,7 +222,7 @@
   gap: 16px;
   margin-top: 28px;
   overflow-x: auto;
-  font-size: clamp(12px, (100cqi - 64px) / 72, 16px);
+  font-size: clamp(12px, (calc(100cqi * var(--cqk)) - 64px) / 72, 16px);
   scrollbar-width: none;
 }
 
@@ -275,8 +275,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: min(207px, 39.4cqi);
-  padding: min(28px, 5.33cqi);
+  min-height: min(207px, calc(39.4cqi * var(--cqk)));
+  padding: min(28px, calc(5.33cqi * var(--cqk)));
   border: 0.5px solid var(--color-border);
   border-radius: 30px;
 }
@@ -292,8 +292,8 @@
 
 .service__icon {
   flex: none;
-  width: min(150px, 28.57cqi);
-  height: min(150px, 28.57cqi);
+  width: min(150px, calc(28.57cqi * var(--cqk)));
+  height: min(150px, calc(28.57cqi * var(--cqk)));
   background: none;
 }
 
@@ -307,14 +307,14 @@
 }
 
 .service__name {
-  font-size: min(20px, 4.34cqi - 0.57px); /* title column (60.8% of the card - 8px) / 14 */
+  font-size: min(20px, calc(4.34cqi * var(--cqk)) - 0.57px); /* title column (60.8% of the card - 8px) / 14 */
   font-weight: var(--fw-bold);
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .service__text {
-  font-size: clamp(13px, 3.05cqi, 16px);
+  font-size: clamp(13px, calc(3.05cqi * var(--cqk)), 16px);
   font-weight: var(--fw-light);
 }
 
@@ -428,7 +428,7 @@
 
   /* stacked card: the title has the card width minus the 24px padding on each side */
   .service__name {
-    font-size: min(20px, (100cqi - 48px) / 14);
+    font-size: min(20px, (calc(100cqi * var(--cqk)) - 48px) / 14);
   }
 
   .service__text {

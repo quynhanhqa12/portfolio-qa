@@ -169,8 +169,8 @@ function measureBio() {
   document.fonts?.ready.then(update);
 }
 
-/** About and Contact share one page: the menu marks "Contact" while the contact section fills
- *  most of the screen, "About" otherwise. */
+/** About and Contact share one page: while the contact section fills most of the screen the menu
+ *  marks "Contact" and the header shows the social links instead of Resume (Contact frame). */
 function trackContactInMenu() {
   const section = document.getElementById('contact');
   const about = document.querySelector('.site-header__nav a[href="about.html"]');
@@ -181,6 +181,7 @@ function trackContactInMenu() {
     const [on, off] = inContact ? [contact, about] : [about, contact];
     on.setAttribute('aria-current', 'page');
     off.removeAttribute('aria-current');
+    document.getElementById('site-header')?.classList.toggle('is-contact', inContact);
   };
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);

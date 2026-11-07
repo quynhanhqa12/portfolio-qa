@@ -205,13 +205,13 @@
   .home__stage {
     /* full size whenever the composition + titles fit (they need ~700 of the 922 below the header);
        the spare height is shared out above / below, see --y0 */
-    --u: min(100cqw / 1920, 100cqh / 700);
+    --u: min(calc(100cqw * var(--cqk)) / 1920, calc(100cqh * var(--cqk)) / 700);
     --fs-hero: calc(62.553 * var(--u));
     --fs-hero-initial: calc(125.106 * var(--u));
     --fs-h4: max(12px, calc(20 * var(--u)));
-    --x0: calc((100cqw - 1920 * var(--u)) / 2);
+    --x0: calc((calc(100cqw * var(--cqk)) - 1920 * var(--u)) / 2);
     /* composition top at Figma y=356 (198 below the header); spare height is split above/below */
-    --y0: calc(198 * var(--u) + (100cqh - 922 * var(--u)) / 2);
+    --y0: calc(198 * var(--u) + (calc(100cqh * var(--cqk)) - 922 * var(--u)) / 2);
     position: absolute;
     inset: 0;
   }
@@ -250,13 +250,13 @@
 /* ---------- portrait (phones, tablets upright): stacked, still one screen ---------- */
 @container home (max-aspect-ratio: 11 / 10) {
   .home__stage {
-    --fs-hero: min(calc((100cqw - 2 * var(--gutter)) / 8.2), 6.2cqh);
+    --fs-hero: min(calc((calc(100cqw * var(--cqk)) - 2 * var(--gutter)) / 8.2), calc(6.2cqh * var(--cqk)));
     --fs-hero-initial: calc(var(--fs-hero) * 2);
-    --fs-h4: clamp(12px, 3.6cqw, 18px);
+    --fs-h4: clamp(12px, calc(3.6cqw * var(--cqk)), 18px);
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 2cqh var(--gutter) max(24px, 4cqh);
+    padding: calc(2cqh * var(--cqk)) var(--gutter) max(24px, calc(4cqh * var(--cqk)));
   }
 
   .home__comp {
@@ -266,7 +266,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-content: safe center;
     align-items: center;
-    gap: 4cqh 20px;
+    gap: calc(4cqh * var(--cqk)) 20px;
   }
 
   .home__hero {
@@ -276,13 +276,13 @@
   }
 
   .home__portrait {
-    width: min(100%, 38cqh);
+    width: min(100%, calc(38cqh * var(--cqk)));
     justify-self: end;
     aspect-ratio: 386 / 222;
   }
 
   .home__art {
-    width: min(100%, 30cqh);
+    width: min(100%, calc(30cqh * var(--cqk)));
     justify-self: start;
   }
 

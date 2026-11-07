@@ -31,6 +31,7 @@
       root.style.zoom = '';
       root.style.removeProperty('--vw');
       root.style.removeProperty('--vh');
+      root.style.removeProperty('--cqk');
       return;
     }
     var zoom = Math.min(width / 1920, height / 800);
@@ -38,6 +39,21 @@
     // the page is laid out at width / zoom x height / zoom CSS pixels (>= 1920 wide, >= 800 tall)
     root.style.setProperty('--vw', width / zoom / 100 + 'px');
     root.style.setProperty('--vh', height / zoom / 100 + 'px');
+    root.style.setProperty('--cqk', String(containerUnitFix()));
+  }
+
+  // Safari (WebKit) applies the page zoom to container-query units a second time (Chrome doesn't):
+  // 100cqw of a 100px box comes out as 100 x zoom. Measure it and return the factor that undoes it.
+  function containerUnitFix() {
+    var box = document.createElement('div');
+    var inner = document.createElement('div');
+    box.style.cssText = 'position:absolute;left:0;top:0;width:100px;height:1px;visibility:hidden;pointer-events:none;container-type:inline-size';
+    inner.style.cssText = 'width:100cqw;height:1px';
+    box.appendChild(inner);
+    root.appendChild(box);
+    var ratio = inner.getBoundingClientRect().width / box.getBoundingClientRect().width;
+    root.removeChild(box);
+    return ratio > 0.05 && Math.abs(ratio - 1) > 0.01 ? 1 / ratio : 1;
   }
 
   fit();

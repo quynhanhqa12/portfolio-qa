@@ -253,7 +253,7 @@
 .works__row {
   --gap: max(16px, calc(32 * var(--w)));
   --card-text: 65px; /* 16 gap, name 25 + 4 + meta 20 */
-  --card-w: min(calc(400 * var(--w)), 100cqh - var(--card-text));
+  --card-w: min(calc(400 * var(--w)), calc(100cqh * var(--cqk)) - var(--card-text));
   container-type: size;
   display: flex;
   flex: 1 1 auto;
@@ -391,7 +391,7 @@
   }
 
   .works__row {
-    --card-w: min((100cqw - var(--gutter) - 2 * var(--gap)) / 2.4, 100cqh - var(--card-text)); /* cqw: row from the margin to the edge */
+    --card-w: min((calc(100cqw * var(--cqk)) - var(--gutter) - 2 * var(--gap)) / 2.4, calc(100cqh * var(--cqk)) - var(--card-text)); /* cqw: row from the margin to the edge */
   }
 }
 
@@ -426,7 +426,7 @@
 
   .works__row {
     --gap: 16px;
-    --card-w: min((100cqw - var(--gutter) - var(--gap)) / 1.4, 100cqh - var(--card-text)); /* a peek of the next card */
+    --card-w: min((calc(100cqw * var(--cqk)) - var(--gutter) - var(--gap)) / 1.4, calc(100cqh * var(--cqk)) - var(--card-text)); /* a peek of the next card */
   }
 
   .card__meta {

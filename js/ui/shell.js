@@ -150,7 +150,14 @@ export function renderHeader(root, site, activePage) {
       { className: 'site-header__bar page' },
       el('div', { className: 'site-header__left' }, toggle, nav),
       logo,
-      el('div', { className: 'site-header__right' }, resume)
+      // About + Contact page: while the contact section fills the screen, Resume gives way to the
+      // social links, as in the Contact frame (Figma 4007:2348); about.js sets .is-contact
+      el(
+        'div',
+        { className: 'site-header__right' },
+        resume,
+        activePage === 'about' ? renderSocial(s.social, 'site-header__social') : null
+      )
     )
   );
 }

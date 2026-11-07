@@ -16,6 +16,9 @@
      units would be zoomed twice. Breakpoints in every stylesheet only apply to touch devices. */
   --vw: 1vw;
   --vh: 1svh;
+  /* container-query units (cqw/cqh/cqi) are multiplied by this: 1, except in browsers that zoom
+     them a second time under the page zoom (Safari / WebKit), where js/fit.js measures and undoes it */
+  --cqk: 1;
 
   /* colors (Figma fills) */
   --color-bg: #fbf7f0;           /* Quỳnh Anh's note (all pages): background FBF7F0 */
@@ -455,7 +458,52 @@ a.social:focus-visible {
 }
 
 .site-header__right {
+  position: relative;
   justify-self: end;
+}
+
+/* About + Contact page: Resume and the social links share the top-right corner and cross-fade
+   when the contact section comes into view (.is-contact, set by about.js). Figma 4007:2348:
+   the list's right edge is the page margin (x=1720), its top the header top (y=62). */
+.site-header__right > .resume,
+.site-header__social {
+  transition:
+    opacity var(--t-hover) var(--ease-soft),
+    visibility 0s linear var(--t-hover);
+}
+
+.site-header__social {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.is-contact .site-header__social,
+.site-header:not(.is-contact) .site-header__right > .resume {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--t-hover) var(--ease-soft),
+    visibility 0s;
+}
+
+.is-contact .site-header__right > .resume {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* phones / tablets: the header is too tight for the list, it stays in the contact section */
+@media (max-width: 1279px) and (hover: none), (max-width: 1279px) and (pointer: coarse), (max-width: 1279px) and (pointer: none) {
+  .site-header__social {
+    display: none;
+  }
+
+  .is-contact .site-header__right > .resume {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 .site-header__nav {
