@@ -68,8 +68,12 @@
 }
 
 /* Quỳnh Anh's note: the arrow floats gently on hover */
+.contact__down svg {
+  --drift-time: 2s;
+}
+
 .contact__down:hover svg {
-  animation: bob 2s ease-in-out infinite;
+  --lift: -4px;
 }
 
 .contact__box {
@@ -80,7 +84,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-box);
   text-align: center;
-  transition: border-color 0.2s;
+  transition: border-color var(--t-hover) var(--ease-soft), --lift 0.7s var(--ease-soft); /* keep the drift ease */
 }
 
 .contact__lead {
@@ -94,14 +98,14 @@
   font-weight: var(--fw-bold);
   color: var(--color-text);
   overflow-wrap: anywhere;
-  transition: color 0.2s;
+  transition: color var(--t-hover) var(--ease-soft);
 }
 
 /* Quỳnh Anh's note: hovering the box turns its border and the address orange */
 a.contact__box:hover,
 a.contact__box:focus-visible {
+  --lift: 7px; /* very light, slow float (3s a beat) */
   border-color: var(--color-accent);
-  animation: float-soft 3s ease-in-out infinite; /* very light, slow float */
 }
 
 a.contact__box:hover .contact__email,

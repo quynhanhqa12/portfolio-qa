@@ -90,7 +90,7 @@
   font-weight: var(--fw-light);
   line-height: 1.25;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: color var(--t-hover) var(--ease-soft);
 }
 
 .filter__icon {
@@ -116,6 +116,23 @@
   border-radius: 16px;
   background: var(--color-bg);
   box-shadow: 0 12px 32px rgb(0 0 0 / 0.08);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 -6px;
+  transition:
+    opacity var(--t-hover) var(--ease-soft),
+    translate var(--t-hover) var(--ease-soft),
+    visibility 0s linear var(--t-hover); /* stays reachable until it has faded out */
+}
+
+.filter.is-open .filter__list {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition:
+    opacity var(--t-hover) var(--ease-soft),
+    translate var(--t-hover) var(--ease-soft),
+    visibility 0s;
 }
 
 .filter__option {
@@ -125,6 +142,7 @@
   font-weight: var(--fw-light);
   white-space: nowrap;
   cursor: pointer;
+  transition: color var(--t-hover) var(--ease-soft), background-color var(--t-hover) var(--ease-soft);
 }
 
 .filter__option:hover,
@@ -155,7 +173,7 @@
   background: transparent;
   color: var(--color-text);
   cursor: pointer;
-  transition: color 0.2s, opacity 0.2s;
+  transition: color var(--t-hover) var(--ease-soft), opacity var(--t-hover) var(--ease-soft);
 }
 
 .row-nav__btn svg {
@@ -214,7 +232,7 @@
     transparent 100%
   );
   pointer-events: none;
-  transition: opacity 0.3s;
+  transition: opacity var(--t-hover) var(--ease-soft);
 }
 
 .works__rowwrap.is-end::after {
@@ -290,23 +308,18 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: color 0.2s;
+  transition: color var(--t-hover) var(--ease-soft);
 }
 
-/* Quỳnh Anh's note: year/company turn bold, the project name bold italic orange */
-.card:hover .card__meta,
-.card:focus-visible .card__meta {
-  font-weight: var(--fw-bold);
-}
-
+/* Quỳnh Anh's note: year/company turn bold, the project name bold italic orange.
+   Bold / italic cross-fade through .swap (base.css); the colour eases here. */
 .card:hover .card__name,
 .card:focus-visible .card__name {
   color: var(--color-accent);
-  font-style: italic;
 }
 
 .card__image > img {
-  transition: transform 0.4s;
+  transition: transform 0.6s var(--ease-soft);
 }
 
 .card:hover .card__image > img {
@@ -340,7 +353,7 @@
   line-height: 1.25;
   text-align: center;
   overflow-wrap: anywhere;
-  transition: background-color 0.2s;
+  transition: background-color var(--t-hover) var(--ease-soft);
 }
 
 .email-box:hover,

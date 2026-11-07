@@ -77,9 +77,13 @@
 }
 
 /* the arrow bounces gently on hover */
+.about__down svg {
+  --drift-time: 2s;
+}
+
 .about__down:hover svg,
 .about__down:focus-visible svg {
-  animation: bob 2s ease-in-out infinite;
+  --lift: -4px;
 }
 
 /* ---------- illustrations ----------
@@ -257,8 +261,12 @@
 }
 
 /* Quỳnh Anh's note: a very light float on hover, no colour change */
+.service {
+  --drift-time: 2.6s;
+}
+
 .service:hover {
-  animation: float-soft 2.6s ease-in-out infinite;
+  --lift: 7px;
 }
 
 .service__icon {

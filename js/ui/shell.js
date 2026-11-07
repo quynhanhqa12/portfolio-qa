@@ -42,6 +42,17 @@ export function imageBox(path, alt, { className = '', fit = 'cover', loading = '
   return box;
 }
 
+/** Text that turns bold (or italic) on hover without a jump: two copies cross-fade (base.css
+ *  .swap). The hovered ancestor needs the class "swap-host". style: 'bold' | 'italic'. */
+export function swapText(text, style = 'bold', className = '') {
+  return el(
+    'span',
+    { className: ['swap', `swap--${style}`, className].filter(Boolean).join(' ') },
+    el('span', { className: 'swap__rest' }, text),
+    el('span', { className: 'swap__hover', 'aria-hidden': 'true' }, text)
+  );
+}
+
 const DOWNLOAD_ICON =
   '<svg width="24" height="24" viewBox="0 0 25 25" fill="none" aria-hidden="true" focusable="false">' +
   '<circle cx="12.5" cy="12.5" r="12" stroke="currentColor"/>' +
@@ -68,14 +79,14 @@ export function renderSocial(social, className = '') {
     { className: ['social-list', className].filter(Boolean).join(' '), 'aria-label': 'Social' },
     items.map((s) => {
       const arrow = el('span', { className: 'social__arrow', 'aria-hidden': 'true', html: DIAGONAL_ARROW });
-      const label = el('span', { className: 'social__name', dataset: { text: s.name } }, s.name);
+      const label = swapText(s.name, 'bold', 'social__name');
       const url = typeof s.url === 'string' ? s.url.trim() : '';
       return el(
         'li',
         null,
         url
-          ? el('a', { className: 'social', href: url, target: '_blank', rel: 'noopener' }, label, arrow)
-          : el('span', { className: 'social', 'data-nolink': '' }, label, arrow)
+          ? el('a', { className: 'social swap-host', href: url, target: '_blank', rel: 'noopener' }, label, arrow)
+          : el('span', { className: 'social swap-host', 'data-nolink': '' }, label, arrow)
       );
     })
   );
@@ -98,7 +109,7 @@ export function renderHeader(root, site, activePage) {
     'nav',
     { className: 'site-header__nav', id: 'site-nav', 'aria-label': 'Menu chính' },
     MENU.map((item) =>
-      el('a', { href: item.href, 'aria-current': item.page === activePage ? 'page' : null }, item.label)
+      el('a', { className: 'swap-host', href: item.href, 'aria-current': item.page === activePage ? 'page' : null }, swapText(item.label))
     )
   );
 
@@ -127,9 +138,9 @@ export function renderHeader(root, site, activePage) {
   const resume = resumeHref
     ? el(
         'a',
-        { className: 'resume', href: resumeHref, download: true },
+        { className: 'resume swap-host', href: resumeHref, download: true },
         el('span', { className: 'resume__icon', html: DOWNLOAD_ICON }),
-        el('span', { className: 'resume__label', dataset: { text: 'Resume' } }, 'Resume')
+        swapText('Resume', 'bold', 'resume__label')
       )
     : null;
 

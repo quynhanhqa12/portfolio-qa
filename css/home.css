@@ -121,9 +121,13 @@
 }
 
 /* Quỳnh Anh's note: no orange on hover, a gentle bounce instead so the eye stays on the name */
+.hero__go svg {
+  --drift-time: 2s;
+}
+
 .hero__go:hover svg,
 .hero__go:focus-visible svg {
-  animation: bob 2s ease-in-out infinite;
+  --lift: -4px; /* 4px down, 2s a beat */
 }
 
 /* ---------- illustrations cluster (Figma 4007:2649, 500 x 418 at x=1261.5, y=356) ----------

@@ -1,4 +1,4 @@
-import { bootPage, el, imageBox } from '../ui/shell.js';
+import { bootPage, el, imageBox, swapText } from '../ui/shell.js';
 import { filterProjects, normalizeCategory, cardShape, formatMeta, mixCategories } from '../core/model.js';
 import { getParam, worksUrl, projectUrl } from '../core/url.js';
 
@@ -17,12 +17,13 @@ function renderTitle() {
 function renderCard(project, index) {
   return el(
     'a',
-    { className: 'card', href: projectUrl(project.id) },
+    { className: 'card swap-host', href: projectUrl(project.id) },
     imageBox(project.cover, project.project || '', {
       className: `card__image card__image--${cardShape(index)}`,
     }),
-    el('h3', { className: 'card__name' }, project.project),
-    el('p', { className: 'card__meta' }, formatMeta(project))
+    // hover: the name turns italic (and orange), year / company bold, both cross-faded
+    el('h3', { className: 'card__name' }, swapText(project.project || '', 'italic', 'swap--line')),
+    el('p', { className: 'card__meta' }, swapText(formatMeta(project), 'bold', 'swap--line'))
   );
 }
 
@@ -71,18 +72,19 @@ function renderFilter(options, onSelect) {
   const items = options.map((opt) =>
     el('li', { role: 'option', className: 'filter__option', tabindex: '-1', dataset: { id: opt.id ?? '' } }, opt.name)
   );
-  const list = el('ul', { className: 'filter__list', id: 'filter-list', role: 'listbox', 'aria-label': 'Lọc dự án theo mảng', hidden: true }, items);
+  // closed = faded out and unreachable (visibility: hidden), so it can ease in and out (works.css)
+  const list = el('ul', { className: 'filter__list', id: 'filter-list', role: 'listbox', 'aria-label': 'Lọc dự án theo mảng' }, items);
   const root = el('div', { className: 'filter' }, button, list);
 
   const isOpen = () => button.getAttribute('aria-expanded') === 'true';
   const close = (focusButton = false) => {
     button.setAttribute('aria-expanded', 'false');
-    list.hidden = true;
+    root.classList.remove('is-open');
     if (focusButton) button.focus();
   };
   const open = (moveFocus = true) => {
     button.setAttribute('aria-expanded', 'true');
-    list.hidden = false;
+    root.classList.add('is-open');
     if (moveFocus) (items.find((li) => li.getAttribute('aria-selected') === 'true') || items[0])?.focus();
   };
   const choose = (li) => {
