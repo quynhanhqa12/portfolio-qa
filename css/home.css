@@ -319,7 +319,7 @@
 
 .intro__scene {
   position: relative;
-  width: min(46vmin, 440px);
+  width: min(46 * var(--vw), 46 * var(--vh), 440px); /* page units: see base.css :root */
 }
 
 .intro__girl {
@@ -328,13 +328,17 @@
   height: auto;
 }
 
-/* thought icons pop in turn above her head, like the icons over the character in the video */
+/* thought icons pop in turn above her head, like the icons over the character in the video.
+   Centred on her head (the head spans 27%..74% of the drawing, centre 50%; its top is at 8.6%).
+   The icon files carry ~20% empty margin on each side, so the box is 34% wide for the drawing
+   inside to read at about a fifth of her width, just above the top of her head. */
 .intro__thought {
   position: absolute;
-  top: -24%;
-  left: 30%;
-  width: 22%;
+  top: -23%;
+  left: 50%;
+  width: 34%;
   aspect-ratio: 1;
+  translate: -50% 0;
 }
 
 .intro__thought img {
