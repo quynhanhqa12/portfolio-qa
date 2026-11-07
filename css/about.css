@@ -11,7 +11,7 @@
    --u = one Figma pixel (1px at 1920, 0.667px at 1280), measured from the title top (y=233).
    Tablet/mobile: they reflow into a row under the photo so none covers the text. */
 .about {
-  --u: calc(min(100vw, var(--page-max)) / 1920);
+  --u: calc(min(calc(100 * var(--vw)), var(--page-max)) / 1920);
   --v: var(--u); /* vertical Figma pixel; desktop shrinks it to fit short screens */
   width: 100%;
   max-width: var(--page-max);
@@ -152,9 +152,9 @@
    Scaled parts (Figma px): top gap 75, title 127, gaps 16 + 32, photo 354, arrow gap 25 = 629.
    Not scaled: header 158, bio text (--bio-h, measured in about.js), arrow 50, 12 to spare.
    --v = min(1 Figma px across, what fits) -> 1px on a 1920x1080 screen, less on shorter ones. */
-@media (min-width: 1280px) {
+@media (min-width: 1280px), (hover: hover) and (pointer: fine) {
   .about {
-    --v: min(var(--u), (100svh - 220px - var(--bio-h, 199px)) / 629);
+    --v: min(var(--u), (calc(100 * var(--vh)) - 220px - var(--bio-h, 199px)) / 629);
   }
 
   .about__stage {
@@ -195,9 +195,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: calc(100svh - 158px);
+  min-height: calc(calc(100 * var(--vh)) - 158px);
   margin-top: 129px; /* process frame y=1165, arrow ends 1036 */
-  padding-block: min(40px, 3svh);
+  padding-block: min(40px, calc(3 * var(--vh)));
   scroll-margin-top: 158px;
 }
 
@@ -258,7 +258,7 @@
   align-items: center;
   width: calc(100% - 2 * var(--gutter) - 8px); /* x=204..1716 */
   max-width: 1512px;
-  margin: min(80px, 5.5svh) auto 0; /* cards y=1386, process ends 1306; less on short screens */
+  margin: min(80px, calc(5.5 * var(--vh))) auto 0; /* cards y=1386, process ends 1306; less on short screens */
 }
 
 /* A card's insides scale with its width (Figma: 525 wide = 28 padding, 150 icon, 20px title), so
@@ -327,7 +327,7 @@
 /* ---------- ticker ---------- */
 .about__ticker {
   overflow: hidden;
-  margin-top: min(103px, 7svh); /* ticker y=1951, cards end 1848; less on short screens */
+  margin-top: min(103px, calc(7 * var(--vh))); /* ticker y=1951, cards end 1848; less on short screens */
   color: var(--color-muted);
   font-size: 24px; /* Quỳnh Anh's note */
   font-weight: var(--fw-regular);
@@ -363,7 +363,7 @@
 }
 
 /* ---------- tablet + mobile: illustrations reflow ---------- */
-@media (max-width: 1279px) {
+@media (max-width: 1279px) and (hover: none), (max-width: 1279px) and (pointer: coarse), (max-width: 1279px) and (pointer: none) {
   .about__stage {
     margin-top: 48px;
     padding-inline: var(--gutter);
@@ -454,7 +454,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) and (hover: none), (max-width: 480px) and (pointer: coarse), (max-width: 480px) and (pointer: none) {
   .about__stage {
     margin-top: 32px;
   }

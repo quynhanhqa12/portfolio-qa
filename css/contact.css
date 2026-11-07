@@ -10,8 +10,7 @@
   display: flex;
   background: var(--color-bg-contact);
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: calc(100 * var(--vh));
 }
 
 .page-contact #app {
@@ -21,7 +20,7 @@
 }
 
 .contact {
-  --u: calc(min(100vw, var(--page-max)) / 1920);
+  --u: calc(min(calc(100 * var(--vw)), var(--page-max)) / 1920);
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -205,7 +204,7 @@ a.contact__box:focus-visible .contact__email {
 }
 
 /* ---------- tablet + mobile ---------- */
-@media (max-width: 1279px) {
+@media (max-width: 1279px) and (hover: none), (max-width: 1279px) and (pointer: coarse), (max-width: 1279px) and (pointer: none) {
   .contact {
     --u: 1px;
   }
@@ -259,7 +258,7 @@ a.contact__box:focus-visible .contact__email {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) and (hover: none), (max-width: 480px) and (pointer: coarse), (max-width: 480px) and (pointer: none) {
   .contact__main {
     margin-top: 40px;
   }

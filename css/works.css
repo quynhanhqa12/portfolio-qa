@@ -8,14 +8,13 @@
 
    --w: one Figma pixel along the width (1px at 1920). */
 .page-works {
-  --w: calc(min(100vw, var(--page-max)) / 1920);
+  --w: calc(min(calc(100 * var(--vw)), var(--page-max)) / 1920);
   /* the title shrinks on short screens (full size from 985px tall up) so the cards keep room */
-  --fs-title-initial: min(108.387px, 11svh);
+  --fs-title-initial: min(108.387px, calc(11 * var(--vh)));
   --fs-title: calc(var(--fs-title-initial) * 60 / 108.387);
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  height: 100svh;
+  height: calc(100 * var(--vh));
 }
 
 .page-works #app {
@@ -30,7 +29,7 @@
   height: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-bottom: clamp(16px, 3.6svh, 39px); /* button ends y=1041 of 1080 (Figma, Nov 7) */
+  padding-bottom: clamp(16px, calc(3.6 * var(--vh)), 39px); /* button ends y=1041 of 1080 (Figma, Nov 7) */
 }
 
 /* ---------- title + intro ---------- */
@@ -40,7 +39,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 40px;
-  margin-top: min(75px, max(8px, 14svh - 76px)); /* title y=233, header ends 158: 75px at 1080, 25px at 720 */
+  margin-top: min(75px, max(8px, calc(14 * var(--vh)) - 76px)); /* title y=233, header ends 158: 75px at 1080, 25px at 720 */
 }
 
 .works__title {
@@ -68,7 +67,7 @@
   justify-content: space-between;
   gap: 16px;
   width: 100%;
-  margin-top: clamp(4px, 0.5svh, 5px); /* arrow y=365, title ends 360 */
+  margin-top: clamp(4px, calc(0.5 * var(--vh)), 5px); /* arrow y=365, title ends 360 */
   padding-left: var(--gutter);
   padding-right: max(12px, calc(52 * var(--w))); /* arrow ends x=1868 */
 }
@@ -206,7 +205,7 @@
   display: flex;
   flex: 1 1 auto;
   min-height: 0;
-  margin-top: clamp(8px, 1.5svh, 16px); /* cards y=417, filter row ends 401 */
+  margin-top: clamp(8px, calc(1.5 * var(--vh)), 16px); /* cards y=417, filter row ends 401 */
   margin-left: var(--gutter); /* the row is clipped at the margin line */
 }
 
@@ -337,18 +336,18 @@
   display: flex;
   flex: none;
   justify-content: center;
-  margin-top: clamp(16px, 4.4svh, 47px); /* button y=972, card row ends 925 (Figma, Nov 7) */
+  margin-top: clamp(16px, calc(4.4 * var(--vh)), 47px); /* button y=972, card row ends 925 (Figma, Nov 7) */
 }
 
 .email-box {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(8px, 2.06svh, 22.3px) clamp(20px, 2.39svh, 25.8px); /* 348 x 69 at 1080 */
+  padding: clamp(8px, calc(2.06 * var(--vh)), 22.3px) clamp(20px, calc(2.39 * var(--vh)), 25.8px); /* 348 x 69 at 1080 */
   border-radius: var(--radius-pill);
   background: var(--color-accent);
   color: var(--color-bg);
-  font-size: clamp(14px, 1.79svh, 19.355px);
+  font-size: clamp(14px, calc(1.79 * var(--vh)), 19.355px);
   font-weight: var(--fw-bold);
   line-height: 1.25;
   text-align: center;
@@ -362,9 +361,9 @@
 }
 
 /* ---------- tablet ---------- */
-@media (max-width: 1279px) {
+@media (max-width: 1279px) and (hover: none), (max-width: 1279px) and (pointer: coarse), (max-width: 1279px) and (pointer: none) {
   .page-works {
-    --fs-title-initial: min(86px, 9svh);
+    --fs-title-initial: min(86px, calc(9 * var(--vh)));
   }
 
   .works__head {
@@ -385,9 +384,9 @@
 }
 
 /* ---------- mobile ---------- */
-@media (max-width: 480px) {
+@media (max-width: 480px) and (hover: none), (max-width: 480px) and (pointer: coarse), (max-width: 480px) and (pointer: none) {
   .page-works {
-    --fs-title-initial: min(68px, 9svh);
+    --fs-title-initial: min(68px, calc(9 * var(--vh)));
   }
 
   .works__intro {
@@ -414,6 +413,6 @@
 
   .email-box {
     padding-inline: 20px;
-    font-size: min(14px, 3.8vw); /* keeps the address on one line */
+    font-size: min(14px, calc(3.8 * var(--vw))); /* keeps the address on one line */
   }
 }

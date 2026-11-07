@@ -18,6 +18,11 @@
   display: block;
 }
 
+/* same "Works" title as the Works page: "orks" tucks under the W's swash */
+.project__works-link .title-initial {
+  --ti-overlap: -0.111;
+}
+
 .project__works-link .title-initial__cap {
   line-height: 1.175; /* Rouge Script "normal": 188px at 160px */
 }
@@ -74,7 +79,7 @@
 .project__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2.0833vw, 40px); /* 40 at 1920 */
+  gap: clamp(16px, calc(2.0833 * var(--vw)), 40px); /* 40 at 1920 */
 }
 
 .project__image {
@@ -97,7 +102,7 @@
 .project__pair {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(12px, 1.25vw, 24px); /* 24 at 1920 */
+  gap: clamp(12px, calc(1.25 * var(--vw)), 24px); /* 24 at 1920 */
   margin-top: 42px; /* images y=1607, text ends ~1565 */
 }
 
@@ -111,7 +116,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
-  min-height: 50vh;
+  min-height: calc(50 * var(--vh));
   padding-top: 138px;
 }
 
@@ -128,7 +133,7 @@
 }
 
 /* ---------- stacked name/intro above the image grid below 1024 ---------- */
-@media (max-width: 1023px) {
+@media (max-width: 1023px) and (hover: none), (max-width: 1023px) and (pointer: coarse), (max-width: 1023px) and (pointer: none) {
   .project__top {
     grid-template-columns: minmax(0, 1fr);
     gap: 32px;
@@ -140,7 +145,7 @@
 }
 
 /* ---------- tablet ---------- */
-@media (max-width: 1279px) {
+@media (max-width: 1279px) and (hover: none), (max-width: 1279px) and (pointer: coarse), (max-width: 1279px) and (pointer: none) {
   .project {
     padding-bottom: 80px;
   }
@@ -174,7 +179,7 @@
 }
 
 /* ---------- single column below 768 ---------- */
-@media (max-width: 767px) {
+@media (max-width: 767px) and (hover: none), (max-width: 767px) and (pointer: coarse), (max-width: 767px) and (pointer: none) {
   .project__head {
     flex-direction: column;
     gap: 16px;
@@ -187,7 +192,7 @@
 
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) and (hover: none), (max-width: 480px) and (pointer: coarse), (max-width: 480px) and (pointer: none) {
   .project__intro,
   .project__text {
     text-align: left;

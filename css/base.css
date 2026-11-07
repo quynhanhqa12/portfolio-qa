@@ -9,6 +9,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,700;1,700&family=Gilda+Display&family=Rouge+Script&family=Cormorant+Garamond:wght@400&family=Pinyon+Script&display=swap&subset=vietnamese");
 
 :root {
+  /* Page units used instead of vw / svh everywhere (1% of the page width / height).
+     Touch devices: plain 1vw / 1svh, with the tablet / phone layouts below.
+     Mouse screens: js/fit.js zooms the whole page so the 1920 x 1080 Figma design fits the window
+     (browser zoom included) and overrides these with the matching px, because real viewport
+     units would be zoomed twice. Breakpoints in every stylesheet only apply to touch devices. */
+  --vw: 1vw;
+  --vh: 1svh;
+
   /* colors (Figma fills) */
   --color-bg: #fbf7f0;           /* Quỳnh Anh's note (all pages): background FBF7F0 */
   --color-bg-contact: #fbf7f0;
@@ -57,12 +65,12 @@
 
   /* layout */
   --page-max: 1920px;
-  --gutter: clamp(80px, 10.4167vw, 200px); /* = 200px at 1920, scales down to 1280 */
+  --gutter: clamp(80px, calc(10.4167 * var(--vw)), 200px); /* = 200px at 1920, scales down to 1280 */
   --header-top: 62px;           /* header content starts 62px below the top edge */
 }
 
 /* tablet 481-1279 */
-@media (max-width: 1279px) {
+@media (max-width: 1279px) and (hover: none), (max-width: 1279px) and (pointer: coarse), (max-width: 1279px) and (pointer: none) {
   :root {
     --gutter: 48px;
     --header-top: 32px;
@@ -78,7 +86,7 @@
 }
 
 /* mobile <=480 */
-@media (max-width: 480px) {
+@media (max-width: 480px) and (hover: none), (max-width: 480px) and (pointer: coarse), (max-width: 480px) and (pointer: none) {
   :root {
     --gutter: 20px;
     --header-top: 16px;
@@ -560,7 +568,7 @@ a.social:focus-visible {
 }
 
 /* mobile header: menu collapses into a toggle */
-@media (max-width: 480px) {
+@media (max-width: 480px) and (hover: none), (max-width: 480px) and (pointer: coarse), (max-width: 480px) and (pointer: none) {
   .site-header__toggle {
     display: grid;
   }
@@ -636,7 +644,7 @@ a.social:focus-visible {
 
 .fatal {
   display: grid;
-  min-height: 60vh;
+  min-height: calc(60 * var(--vh));
   padding: 48px var(--gutter);
   place-items: center;
 }
