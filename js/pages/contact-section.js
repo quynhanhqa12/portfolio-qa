@@ -1,7 +1,12 @@
-import { bootPage, el } from '../ui/shell.js';
+import { el, renderSocial } from '../ui/shell.js';
 import { formatHanoiTime, msUntilNextMinute } from '../core/clock.js';
 
 const ILLUSTRATIONS = 'assets/illustrations/';
+
+// Contact section (Figma 4007:2348), shown at the end of the About page: About and Contact are one
+// scrolling page (Quỳnh Anh's note, Nov 7). It fills one screen under the sticky header; the
+// header itself never changes, so the social links (top right of the Contact frame) sit in the
+// section, level with the title.
 
 // Line illustrations around the box (Figma 4007:2349, 4007:2384, 4007:2388). Each girl and the
 // prop next to her (chat bubble, envelope) were one drawing in Figma; they are split so every
@@ -37,7 +42,7 @@ function deco(name) {
 
 function renderTitle() {
   return el(
-    'h1',
+    'h2',
     { className: 'title-initial contact__title' },
     el('span', { className: 'title-initial__cap' }, 'C'),
     el('span', { className: 'title-initial__rest' }, 'ontact')
@@ -91,13 +96,14 @@ function renderFooter(site) {
   );
 }
 
-function render(data, root) {
-  const site = data.site || {};
-  document.title = `Contact — ${site.name || 'Portfolio'}`;
-  root.replaceChildren(
-    el('div', { className: 'contact' }, el('div', { className: 'contact__main' }, renderTitle(), renderStage(site)), renderFooter(site))
+/** The whole contact section; id="contact" so the menu's Contact link lands here. */
+export function renderContactSection(site) {
+  const social = renderSocial(site.social, 'contact__social');
+  return el(
+    'section',
+    { className: 'contact', id: 'contact', 'aria-label': 'Contact' },
+    social ? el('div', { className: 'contact__links page' }, social) : null,
+    el('div', { className: 'contact__main' }, renderTitle(), renderStage(site)),
+    renderFooter(site)
   );
 }
-
-// Figma 4007:2348 (Nov 7): the same header as Home, social links on the right
-bootPage('contact', render);

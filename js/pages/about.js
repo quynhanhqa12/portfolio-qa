@@ -1,5 +1,6 @@
 import { bootPage, el, imageBox } from '../ui/shell.js';
 import { parseEmphasis } from '../core/model.js';
+import { renderContactSection } from './contact-section.js';
 
 const ILLUSTRATIONS = 'assets/illustrations/';
 const PROCESS_TITLE = 'Design Approach process';
@@ -167,61 +168,29 @@ function measureBio() {
   document.fonts?.ready.then(update);
 }
 
-/** Quỳnh Anh's note (Nov 7): About runs on into Contact. Scrolling on past the end of the page
- *  (mouse wheel, swipe up, arrow / page-down keys) fades the page out and opens Contact. */
-function continueToContact() {
-  const PULL_PX = 360; // extra scrolling at the bottom that counts as "keep going" (above trackpad coasting)
-  let pull = 0;
-  let idle = 0;
-  let leaving = false;
-  const atBottom = () =>
-    window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-  const go = () => {
-    if (leaving) return;
-    leaving = true;
-    document.body.classList.add('is-leaving');
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    setTimeout(() => location.assign('contact.html'), reduced ? 0 : 450);
+/** About and Contact share one page: the menu marks "Contact" while the contact section fills
+ *  most of the screen, "About" otherwise. */
+function trackContactInMenu() {
+  const section = document.getElementById('contact');
+  const about = document.querySelector('.site-header__nav a[href="about.html"]');
+  const contact = document.querySelector('.site-header__nav a[href="about.html#contact"]');
+  if (!section || !about || !contact) return;
+  const update = () => {
+    const inContact = section.getBoundingClientRect().top < window.innerHeight / 2;
+    const [on, off] = inContact ? [contact, about] : [about, contact];
+    on.setAttribute('aria-current', 'page');
+    off.removeAttribute('aria-current');
   };
-  const push = (amount) => {
-    if (!atBottom()) {
-      pull = 0;
-      return;
-    }
-    pull += amount;
-    clearTimeout(idle);
-    idle = setTimeout(() => (pull = 0), 800);
-    if (pull > PULL_PX) go();
-  };
-
-  window.addEventListener('wheel', (event) => {
-    if (event.deltaY > 0) push(event.deltaY);
-    else pull = 0;
-  }, { passive: true });
-
-  let touchY = null;
-  window.addEventListener('touchstart', (event) => (touchY = event.touches[0].clientY), { passive: true });
-  window.addEventListener('touchmove', (event) => {
-    if (touchY === null) return;
-    const y = event.touches[0].clientY;
-    if (y < touchY) push(touchY - y);
-    touchY = y;
-  }, { passive: true });
-
-  // coming back with the browser's Back button restores this page from cache: undo the fade
-  window.addEventListener('pageshow', () => {
-    leaving = false;
-    pull = 0;
-    document.body.classList.remove('is-leaving');
-  });
-
-  window.addEventListener('keydown', (event) => {
-    if (['ArrowDown', 'PageDown', 'End', ' '].includes(event.key) && atBottom()) push(PULL_PX + 1);
-  });
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
 }
 
 bootPage('about', (data, root) => {
   render(data, root);
+  root.append(renderContactSection(data.site || {}));
   measureBio();
-  continueToContact();
+  // arriving from another page's Contact link: the section exists only now, so scroll to it
+  if (location.hash === '#contact') document.getElementById('contact')?.scrollIntoView();
+  trackContactInMenu();
 });

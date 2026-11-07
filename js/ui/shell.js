@@ -95,10 +95,10 @@ export function renderSocial(social, className = '') {
 const MENU = [
   { page: 'works', label: 'Works', href: 'works.html' },
   { page: 'about', label: 'About', href: 'about.html' },
-  { page: 'contact', label: 'Contact', href: 'contact.html' },
+  { page: 'contact', label: 'Contact', href: 'about.html#contact' }, // About and Contact are one page
 ];
 
-/** Header: menu (left), "QA" logo (center), Resume download (right; social links on Contact).
+/** Header: menu (left), "QA" logo (center), Resume download (right).
  *  It stays the same while scrolling (Quỳnh Anh's note, Nov 7: no swap at the end of a page). */
 export function renderHeader(root, site, activePage) {
   if (!root) return;
@@ -150,8 +150,7 @@ export function renderHeader(root, site, activePage) {
       { className: 'site-header__bar page' },
       el('div', { className: 'site-header__left' }, toggle, nav),
       logo,
-      // Contact (Figma 4007:2348, Nov 7): social links take Resume's place on the right
-      el('div', { className: 'site-header__right' }, activePage === 'contact' ? renderSocial(s.social, 'site-header__social') : resume)
+      el('div', { className: 'site-header__right' }, resume)
     )
   );
 }

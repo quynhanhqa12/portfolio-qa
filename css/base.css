@@ -368,15 +368,6 @@ button {
   --lift: 9px; /* slow float, 3s a beat (Nov 7 note: a bit stronger) */
 }
 
-/* leaving the page (About -> Contact): a short fade before the next page loads */
-body {
-  transition: opacity 0.45s ease;
-}
-
-body.is-leaving {
-  opacity: 0;
-}
-
 /* keyboard focus */
 a:focus-visible,
 button:focus-visible {

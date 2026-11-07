@@ -1,36 +1,40 @@
-/* Contact (Figma 4007:2348, 1920x1080, revised Nov 7): the shared header (menu left, logo centre)
-   with the social links on the right (x=1621, y=62..188) instead of Resume.
-   Title y=337 (C 115px) · arrow 472 (50) ·
-   box 551 wide at x=684.5,y=558 · footer text row ends y=1019 (61px above the bottom).
+/* Contact section (Figma 4007:2348, 1920x1080), at the end of the About page: About and Contact
+   are one scrolling page (Quỳnh Anh's note, Nov 7). The section fills one screen under the
+   sticky 158px header, so when it is scrolled to (menu "Contact" -> about.html#contact) it looks
+   like the Contact frame: title y=337 (C 115px) · arrow 472 (50) · box 551 wide at x=684.5,
+   y=558 · footer text row ends 61px above the bottom. The header doesn't change, so the social
+   links (top right of the frame) sit in the section, right-aligned, level with the title.
 
-   Desktop (>=1280): illustrations are positioned from the box (Figma px offsets times --u,
-   where --u = 1 Figma pixel = 1px at 1920, 0.667px at 1280) so they keep their place around it.
+   Illustrations are positioned from the box (Figma px offsets times --u, 1px at 1920).
    Tablet/mobile: illustrations reflow into a row under the box. */
-.page-contact {
-  display: flex;
-  background: var(--color-bg-contact);
-  flex-direction: column;
-  min-height: calc(100 * var(--vh));
-}
-
-.page-contact #app {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-}
-
 .contact {
   --u: calc(min(calc(100 * var(--vw)), var(--page-max)) / 1920);
+  position: relative;
   display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
+  min-height: calc(100 * var(--vh) - 158px);
+  scroll-margin-top: 158px; /* the sticky header */
+}
+
+.contact__links {
+  position: absolute;
+  top: 179px; /* level with the title (y=337 = 158 + 179) */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.contact__links .social-list {
+  pointer-events: auto;
 }
 
 .contact__main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 149px; /* title y=337; the header ends at 188 (social list 62..188) */
+  margin-top: 179px; /* title y=337, under the 158px header */
 }
 
 .contact__title {
@@ -120,7 +124,7 @@ a.contact__box:focus-visible .contact__email {
   display: contents;
 }
 
-.deco {
+.contact__art .deco {
   position: absolute;
   left: calc(var(--ax, 0%) + var(--x) * var(--u));
   top: calc(var(--y) * var(--u));
@@ -207,6 +211,21 @@ a.contact__box:focus-visible .contact__email {
 @media (max-width: 1279px) and (hover: none), (max-width: 1279px) and (pointer: coarse), (max-width: 1279px) and (pointer: none) {
   .contact {
     --u: 1px;
+    min-height: 0;
+    padding-top: 32px;
+    scroll-margin-top: 72px;
+  }
+
+  /* social links: a centred row under the title instead of the top-right corner */
+  .contact__links {
+    position: static;
+    order: 2;
+    justify-content: center;
+    margin: -24px 0 48px; /* tucks under the illustrations (main ends with 64px padding) */
+  }
+
+  .contact__footer {
+    order: 3;
   }
 
   .contact__main {
@@ -233,7 +252,7 @@ a.contact__box:focus-visible .contact__email {
     margin-top: 40px;
   }
 
-  .deco {
+  .contact__art .deco {
     position: relative;
     left: auto;
     top: auto;
@@ -275,7 +294,7 @@ a.contact__box:focus-visible .contact__email {
     gap: 12px;
   }
 
-  .deco {
+  .contact__art .deco {
     width: calc(var(--s) * 0.32px);
   }
 
