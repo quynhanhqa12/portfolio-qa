@@ -270,7 +270,9 @@ button {
   }
 }
 
-/* everything that floats or bounces on hover (rules for each page set the hover --lift) */
+/* everything that floats or bounces on hover (rules for each page set the hover --lift).
+   will-change gives each its own layer: the slow drift then moves by fractions of a pixel instead
+   of snapping text and borders from one pixel row to the next (that read as a judder). */
 .deco__art,
 .logo,
 .service,
@@ -280,6 +282,24 @@ button {
 .contact__down svg {
   animation: drift var(--drift-time, 3s) ease-in-out infinite;
   transition: --lift 0.7s var(--ease-soft);
+  will-change: translate;
+}
+
+/* Blocks that float while they are the hovered element: an invisible margin around them keeps
+   the pointer "inside" while the block rises, so a pointer near the edge doesn't lose and regain
+   the hover over and over (another source of judder). */
+.logo,
+.service,
+.contact__box {
+  position: relative;
+}
+
+.logo::after,
+.service::after,
+.contact__box::after {
+  content: "";
+  position: absolute;
+  inset: -12px -6px;
 }
 
 @media (prefers-reduced-motion: reduce) {
