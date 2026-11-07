@@ -191,6 +191,7 @@ bootPage('about', (data, root) => {
   root.append(renderContactSection(data.site || {}));
   measureBio();
   // arriving from another page's Contact link: the section exists only now, so scroll to it
-  if (location.hash === '#contact') document.getElementById('contact')?.scrollIntoView();
+  // (straight there: gliding down the whole page on arrival would only make the visitor wait)
+  if (location.hash === '#contact') document.getElementById('contact')?.scrollIntoView({ behavior: 'instant' });
   trackContactInMenu();
 });

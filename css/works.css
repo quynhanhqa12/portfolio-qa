@@ -59,17 +59,15 @@
   text-align: justify;
 }
 
-/* ---------- toolbar: filter (left margin) + arrows (right edge) ---------- */
+/* ---------- toolbar: filter (left margin) ---------- */
 .works__toolbar {
   display: flex;
   flex: none;
-  align-items: flex-end; /* "All" and the arrow share their bottom edge (y=401) */
-  justify-content: space-between;
-  gap: 16px;
+  align-items: flex-end;
   width: 100%;
-  margin-top: clamp(4px, calc(0.5 * var(--vh)), 5px); /* arrow y=365, title ends 360 */
-  padding-left: var(--gutter);
-  padding-right: max(12px, calc(52 * var(--w))); /* arrow ends x=1868 */
+  min-height: 36px; /* "All" ends at y=401, as when the Figma arrow (365..401) sat in this row */
+  margin-top: clamp(4px, calc(0.5 * var(--vh)), 5px);
+  padding-inline: var(--gutter);
 }
 
 .filter {
@@ -156,23 +154,37 @@
   font-weight: var(--fw-bold);
 }
 
+/* prev / next on either side of the row, level with the middle of the pictures (--nav-top from
+   works.js): prev centred in the left margin, next over the fade at the right edge. 48px, on the
+   page colour so they stay clear over pictures; above the fade. */
 .row-nav {
-  display: flex;
-  gap: 12px;
+  display: contents;
 }
 
 .row-nav__btn {
+  position: absolute;
+  top: var(--nav-top, 200px);
+  z-index: 3;
   display: grid;
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   padding: 0;
   place-items: center;
   border: 0;
   border-radius: 50%;
-  background: transparent;
+  background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
+  translate: -50% -50%;
   transition: color var(--t-hover) var(--ease-soft), opacity var(--t-hover) var(--ease-soft);
+}
+
+.row-nav__btn--prev {
+  left: calc(var(--gutter) / -2); /* middle of the left margin */
+}
+
+.row-nav__btn--next {
+  left: calc(100% - max(36px, 70 * var(--w))); /* 70px from the right edge, over the fade */
 }
 
 .row-nav__btn svg {
@@ -195,7 +207,7 @@
 }
 
 .row-nav__btn:disabled {
-  opacity: 0.25;
+  opacity: 0.2;
   cursor: default;
 }
 
@@ -385,6 +397,20 @@
 
 /* ---------- mobile ---------- */
 @media (max-width: 480px) and (hover: none), (max-width: 480px) and (pointer: coarse), (max-width: 480px) and (pointer: none) {
+  /* the 20px margin is too narrow: smaller arrows just inside the row's edges */
+  .row-nav__btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .row-nav__btn--prev {
+    left: 20px;
+  }
+
+  .row-nav__btn--next {
+    left: calc(100% - 20px);
+  }
+
   .page-works {
     --fs-title-initial: min(68px, calc(9 * var(--vh)));
   }

@@ -129,8 +129,9 @@ function renderFilter(options, onSelect) {
   };
 }
 
-/** Figma shows one arrow pointing right (more projects that way); once the row has moved,
- *  a left arrow appears next to it to go back. Each click pages the row by one view. */
+/** Prev / next on either side of the row, level with the middle of the pictures (Quỳnh Anh
+ *  chose this layout, Nov 7: "phương án B"). Both always show; the one that can't go further
+ *  fades. Each click pages the row by most of a view. */
 function renderArrows(row, wrap) {
   const button = (dir, label) =>
     el('button', { className: `row-nav__btn row-nav__btn--${dir}`, type: 'button', 'aria-label': label, html: ROW_ARROW });
@@ -141,17 +142,30 @@ function renderArrows(row, wrap) {
   next.addEventListener('click', () => page(1));
   const nav = el('div', { className: 'row-nav' }, prev, next);
 
+  // level with the middle of the first (square) picture; measured, because the card size depends
+  // on the room the row gets. Rects are in screen pixels, styles in page pixels: divide by the
+  // page zoom (js/fit.js), read off the wrapper's own size so any zoom implementation works.
+  const place = () => {
+    const image = row.querySelector('.card__image');
+    if (!image || !wrap.offsetHeight) return;
+    const box = wrap.getBoundingClientRect();
+    const scale = box.height / wrap.offsetHeight || 1;
+    const img = image.getBoundingClientRect();
+    nav.style.setProperty('--nav-top', `${(img.top + img.height / 2 - box.top) / scale}px`);
+  };
+
   const update = () => {
     const max = row.scrollWidth - row.clientWidth;
-    const atStart = row.scrollLeft <= 1;
     const atEnd = row.scrollLeft >= max - 1;
-    prev.hidden = atStart;
+    prev.disabled = row.scrollLeft <= 1;
     next.disabled = atEnd;
     nav.hidden = max <= 1; // everything fits: no arrows
     wrap.classList.toggle('is-end', atEnd); // the right-edge fade lifts off the last card
+    place();
   };
   row.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
+  if ('ResizeObserver' in window) new ResizeObserver(update).observe(wrap);
   return { node: nav, update };
 }
 
@@ -174,6 +188,7 @@ function render(data, root) {
   );
   const rowWrap = el('div', { className: 'works__rowwrap' }, grid);
   const arrows = renderArrows(grid, rowWrap);
+  rowWrap.append(arrows.node);
 
   function renderGrid() {
     // filterProjects falls back to everything for a category without projects; show the empty text instead.
@@ -201,7 +216,7 @@ function render(data, root) {
       'div',
       { className: 'works' },
       el('div', { className: 'works__head page' }, renderTitle(), intro ? el('p', { className: 'works__intro' }, intro) : null),
-      el('div', { className: 'works__toolbar' }, filter.node, arrows.node),
+      el('div', { className: 'works__toolbar' }, filter.node),
       rowWrap,
       // Quỳnh Anh's note (Nov 7): the email button opens a new mail straight away
       site.email
