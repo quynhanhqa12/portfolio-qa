@@ -30,7 +30,7 @@
   height: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-bottom: clamp(16px, 5svh, 54px); /* button ends y=1026 of 1080 */
+  padding-bottom: clamp(16px, 3.6svh, 39px); /* button ends y=1041 of 1080 (Figma, Nov 7) */
 }
 
 /* ---------- title + intro ---------- */
@@ -201,13 +201,18 @@
   right: 0;
   bottom: 0;
   z-index: 2;
-  width: max(40px, calc(133 * var(--w)));
+  /* Quỳnh Anh's note: the fade was too sharp. A wider ramp that ends fully transparent,
+     with several stops so the cards melt into the page colour instead of being cut */
+  width: max(72px, calc(240 * var(--w)));
   background: linear-gradient(
     to left,
-    var(--color-bg) 46%,
-    color-mix(in srgb, var(--color-bg) 60%, transparent) 100%
+    var(--color-bg) 0%,
+    var(--color-bg) 18%,
+    color-mix(in srgb, var(--color-bg) 85%, transparent) 38%,
+    color-mix(in srgb, var(--color-bg) 55%, transparent) 62%,
+    color-mix(in srgb, var(--color-bg) 22%, transparent) 84%,
+    transparent 100%
   );
-  filter: blur(2px);
   pointer-events: none;
   transition: opacity 0.3s;
 }
@@ -319,7 +324,7 @@
   display: flex;
   flex: none;
   justify-content: center;
-  margin-top: clamp(12px, 3svh, 32px); /* button y=957, cards end 925 */
+  margin-top: clamp(16px, 4.4svh, 47px); /* button y=972, card row ends 925 (Figma, Nov 7) */
 }
 
 .email-box {

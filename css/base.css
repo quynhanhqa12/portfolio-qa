@@ -242,7 +242,7 @@ button {
   }
 }
 
-/* soft float for whole blocks (logo, cards, email box): small and slow */
+/* soft float for whole blocks (logo, cards, email box): slow */
 @keyframes float-soft {
   0%,
   100% {
@@ -250,7 +250,7 @@ button {
   }
 
   50% {
-    transform: translateY(calc(-4px * var(--motion, 1)));
+    transform: translateY(calc(-7px * var(--motion, 1))); /* stronger (Nov 7 note), same speed */
   }
 }
 
@@ -302,8 +302,17 @@ button {
   }
 
   50% {
-    transform: scaleX(var(--flip, 1)) rotate(var(--r, 0deg)) translateY(calc(-5px * var(--motion, 1)));
+    transform: scaleX(var(--flip, 1)) rotate(var(--r, 0deg)) translateY(calc(-9px * var(--motion, 1))); /* stronger (Nov 7 note), same speed */
   }
+}
+
+/* leaving the page (About -> Contact): a short fade before the next page loads */
+body {
+  transition: opacity 0.45s ease;
+}
+
+body.is-leaving {
+  opacity: 0;
 }
 
 /* keyboard focus */
@@ -334,56 +343,7 @@ button:focus-visible {
   justify-self: start;
 }
 
-/* end of a scrolling page: menu + Resume fade out, the social links take the menu's place */
-.site-header__nav,
-.site-header__toggle,
-.site-header__right,
-.site-header__social {
-  transition: opacity 0.3s, visibility 0.3s;
-}
-
-.site-header__social {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* the social list (126px) is taller than the menu (96px): the header's backdrop grows to match,
-   across the full width, so content scrolls under a clean edge */
-.site-header::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  height: 46px;
-  background: var(--color-bg);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.3s, visibility 0.3s;
-}
-
-.is-at-end.site-header::after {
-  opacity: 1;
-  visibility: visible;
-}
-
-.is-at-end .site-header__social {
-  opacity: 1;
-  visibility: visible;
-}
-
-.is-at-end .site-header__nav,
-.is-at-end .site-header__toggle,
-.is-at-end .site-header__right {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* ---------- social links (Contact top bar, header at the end of a page) ----------
+/* ---------- social links (Contact header, right side) ----------
    Figma 4007:2363: 14px uppercase, 18px apart, names 82 wide then the arrow 8px after.
    Hover: orange + bold + a small lift. */
 .social-list {
@@ -430,11 +390,6 @@ button:focus-visible {
   height: 9px;
 }
 
-/* the "Works" line on Contact points back (left) instead of out */
-.social--back .social__arrow svg {
-  width: 12px;
-  height: 7px;
-}
 
 .social:hover,
 a.social:focus-visible {
@@ -582,11 +537,6 @@ a.social:focus-visible {
   /* the dropdown menu below positions against the whole header, not the left cell */
   .site-header__left {
     position: static;
-  }
-
-  .site-header__social {
-    top: var(--header-top);
-    left: var(--gutter);
   }
 
   .site-header__nav {

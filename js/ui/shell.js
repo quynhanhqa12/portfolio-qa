@@ -81,33 +81,14 @@ export function renderSocial(social, className = '') {
   );
 }
 
-// How close to the bottom of a scrolling page the header swaps its menu for the social links.
-const END_ZONE_PX = 160;
-const ONE_SCREEN_PAGES = new Set(['home', 'works']);
-
-/** Quỳnh Anh's note (all pages): the header stays on screen while scrolling; at the end of the
- *  page it hides and the social links show instead, as on the Contact page. */
-function watchPageEnd(root) {
-  const update = () => {
-    const doc = document.documentElement;
-    const room = doc.scrollHeight - window.innerHeight;
-    const atEnd = room > 1 && window.scrollY >= room - END_ZONE_PX;
-    if (atEnd && root.classList.contains('is-menu-open')) root.querySelector('.site-header__toggle')?.click();
-    root.classList.toggle('is-at-end', atEnd);
-  };
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
-  if ('ResizeObserver' in window) new ResizeObserver(update).observe(document.body);
-  update();
-}
-
 const MENU = [
   { page: 'works', label: 'Works', href: 'works.html' },
   { page: 'about', label: 'About', href: 'about.html' },
   { page: 'contact', label: 'Contact', href: 'contact.html' },
 ];
 
-/** Header: menu (left), "QA" logo (center), Resume download (right). */
+/** Header: menu (left), "QA" logo (center), Resume download (right; social links on Contact).
+ *  It stays the same while scrolling (Quỳnh Anh's note, Nov 7: no swap at the end of a page). */
 export function renderHeader(root, site, activePage) {
   if (!root) return;
   const s = site || {};
@@ -156,14 +137,12 @@ export function renderHeader(root, site, activePage) {
     el(
       'div',
       { className: 'site-header__bar page' },
-      el('div', { className: 'site-header__left' }, toggle, nav, renderSocial(s.social, 'site-header__social')),
+      el('div', { className: 'site-header__left' }, toggle, nav),
       logo,
-      el('div', { className: 'site-header__right' }, resume)
+      // Contact (Figma 4007:2348, Nov 7): social links take Resume's place on the right
+      el('div', { className: 'site-header__right' }, activePage === 'contact' ? renderSocial(s.social, 'site-header__social') : resume)
     )
   );
-  // Home and Works always fit one screen: nothing to scroll to, so the menu never swaps there
-  // (a brief overflow while fonts load must not leave the social links showing)
-  if (!ONE_SCREEN_PAGES.has(activePage)) watchPageEnd(root);
 }
 
 /** Replace #app with a centered Vietnamese message panel. */

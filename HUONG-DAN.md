@@ -54,7 +54,7 @@ Các mục lớn trong `data.json` và chúng điều khiển gì:
 - **`resume`**: đường dẫn file CV cho nút **Resume** ở thanh trên cùng. Hiện tại là `files/cv.pdf`. **Để trống `""` thì nút Resume biến mất.** Cách thay file CV: xem mục 6.
 - **`location`**: hiện ở trang Contact cùng đồng hồ ("Hanoi, VN — 08:32 AM"). Giờ luôn là giờ Hà Nội.
 - **`availableForWork`**: `true` thì trang Contact hiện dòng **"Available for work"** với chấm tròn màu cam phía trước. Đổi thành `false` thì dòng đó ẩn đi. Chỉ gõ `true` hoặc `false`, **không** có ngoặc kép, viết thường.
-- **`social`**: các mạng xã hội ở góc trên trang Contact (dòng "Works ←" phía trên chúng là cố định, để quay lại trang Works). Chúng cũng hiện thay cho menu ở đầu trang khi người xem cuộn xuống cuối các trang dài (About, trang dự án).
+- **`social`**: các mạng xã hội ở góc trên bên phải trang Contact (chỗ nút Resume ở các trang khác).
   - Có link: `{ "name": "Behance", "url": "https://www.behance.net/ten-cua-ban" }` thì chữ Behance bấm được và mở tab mới.
   - **Để `"url": ""` (trống) thì chữ vẫn hiện nhưng chỉ là chữ thường, không bấm được.** Hiện tại cả 4 mạng đều đang để trống; khi có link, dán vào giữa 2 dấu ngoặc kép.
   - Muốn bớt một mạng xã hội: xóa cả khối `{ "name": ..., "url": ... }` của nó (nhớ xử lý dấu phẩy, xem mục 8).

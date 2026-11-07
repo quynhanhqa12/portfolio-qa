@@ -155,4 +155,72 @@ function render(data, root) {
   );
 }
 
-bootPage('about', render);
+/** The first screen shrinks to fit the window; CSS needs the bio's height for that (about.css). */
+function measureBio() {
+  const about = document.querySelector('.about');
+  const bio = document.querySelector('.about__bio');
+  if (!about || !bio) return;
+  const update = () => about.style.setProperty('--bio-h', `${Math.ceil(bio.offsetHeight)}px`);
+  update();
+  if ('ResizeObserver' in window) new ResizeObserver(update).observe(bio);
+  document.fonts?.ready.then(update);
+}
+
+/** Quỳnh Anh's note (Nov 7): About runs on into Contact. Scrolling on past the end of the page
+ *  (mouse wheel, swipe up, arrow / page-down keys) fades the page out and opens Contact. */
+function continueToContact() {
+  const PULL_PX = 360; // extra scrolling at the bottom that counts as "keep going" (above trackpad coasting)
+  let pull = 0;
+  let idle = 0;
+  let leaving = false;
+  const atBottom = () =>
+    window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  const go = () => {
+    if (leaving) return;
+    leaving = true;
+    document.body.classList.add('is-leaving');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(() => location.assign('contact.html'), reduced ? 0 : 450);
+  };
+  const push = (amount) => {
+    if (!atBottom()) {
+      pull = 0;
+      return;
+    }
+    pull += amount;
+    clearTimeout(idle);
+    idle = setTimeout(() => (pull = 0), 800);
+    if (pull > PULL_PX) go();
+  };
+
+  window.addEventListener('wheel', (event) => {
+    if (event.deltaY > 0) push(event.deltaY);
+    else pull = 0;
+  }, { passive: true });
+
+  let touchY = null;
+  window.addEventListener('touchstart', (event) => (touchY = event.touches[0].clientY), { passive: true });
+  window.addEventListener('touchmove', (event) => {
+    if (touchY === null) return;
+    const y = event.touches[0].clientY;
+    if (y < touchY) push(touchY - y);
+    touchY = y;
+  }, { passive: true });
+
+  // coming back with the browser's Back button restores this page from cache: undo the fade
+  window.addEventListener('pageshow', () => {
+    leaving = false;
+    pull = 0;
+    document.body.classList.remove('is-leaving');
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (['ArrowDown', 'PageDown', 'End', ' '].includes(event.key) && atBottom()) push(PULL_PX + 1);
+  });
+}
+
+bootPage('about', (data, root) => {
+  render(data, root);
+  measureBio();
+  continueToContact();
+});

@@ -1,6 +1,8 @@
 /* About (Figma 4007:2450, 1920x2160, revised). Figma y values below are from the frame top; the
    header ends at 158, so the title (y=233) starts 75px into the page.
-   First screen: title 233 · bio 376 (677 wide, centred) · photo 607 (677x354) · arrow 997 (50).
+   First screen: title 233 · bio 376 (677 wide, centred) · photo 607 (677x354) · arrow 986 (50).
+   It always fits the screen (Quỳnh Anh's note, Nov 7: no cropping on shorter laptop screens):
+   on desktop everything but the bio text shrinks by --v (see the media query below).
    Second screen (Quỳnh Anh's note: process to ticker fit one 1920x1080 screen): process heading
    1193 · service cards 1386 (525 wide, 207 tall, 48 apart; columns 462 apart) with the say-hi
    girl 420x420 at 1409 · ticker 1951 (24px).
@@ -10,6 +12,7 @@
    Tablet/mobile: they reflow into a row under the photo so none covers the text. */
 .about {
   --u: calc(min(100vw, var(--page-max)) / 1920);
+  --v: var(--u); /* vertical Figma pixel; desktop shrinks it to fit short screens */
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
@@ -63,7 +66,7 @@
   display: block;
   width: 50px;
   height: 50px;
-  margin-top: 36px; /* arrow y=997, photo ends 961 */
+  margin-top: 25px; /* arrow y=986, photo ends 961 */
   color: var(--color-text);
 }
 
@@ -141,6 +144,43 @@
   --r: 19.96deg;
 }
 
+/* ---------- desktop: the first screen fits the window ----------
+   Scaled parts (Figma px): top gap 75, title 127, gaps 16 + 32, photo 354, arrow gap 25 = 629.
+   Not scaled: header 158, bio text (--bio-h, measured in about.js), arrow 50, 12 to spare.
+   --v = min(1 Figma px across, what fits) -> 1px on a 1920x1080 screen, less on shorter ones. */
+@media (min-width: 1280px) {
+  .about {
+    --v: min(var(--u), (100svh - 220px - var(--bio-h, 199px)) / 629);
+  }
+
+  .about__stage {
+    margin-top: calc(75 * var(--v));
+  }
+
+  .about__title {
+    --ti-cap: calc(108.387 * var(--v));
+    --ti-rest: calc(60 * var(--v));
+  }
+
+  .about__bio {
+    margin-top: calc(16 * var(--v));
+  }
+
+  .about__photo {
+    width: calc(677 * var(--v));
+    margin-top: calc(32 * var(--v));
+  }
+
+  .about__down {
+    margin-top: calc(25 * var(--v));
+  }
+
+  .deco {
+    top: calc(var(--y) * var(--v));
+    width: calc(var(--s) * var(--v));
+  }
+}
+
 /* ---------- second screen: process, service cards, ticker ----------
    Exactly one screen under the sticky header (158px), content centred in it; the arrow above
    scrolls here. */
@@ -149,8 +189,8 @@
   flex-direction: column;
   justify-content: center;
   min-height: calc(100svh - 158px);
-  margin-top: 118px; /* process frame y=1165, arrow ends 1047 */
-  padding-block: 40px;
+  margin-top: 129px; /* process frame y=1165, arrow ends 1036 */
+  padding-block: min(40px, 3svh);
   scroll-margin-top: 158px;
 }
 
@@ -197,7 +237,7 @@
   align-items: center;
   width: calc(100% - 2 * var(--gutter) - 8px); /* x=204..1716 */
   max-width: 1512px;
-  margin: 80px auto 0; /* cards y=1386, process ends 1306 */
+  margin: min(80px, 5.5svh) auto 0; /* cards y=1386, process ends 1306; less on short screens */
 }
 
 .about__col {
@@ -257,7 +297,7 @@
 /* ---------- ticker ---------- */
 .about__ticker {
   overflow: hidden;
-  margin-top: 103px; /* ticker y=1951, cards end 1848 */
+  margin-top: min(103px, 7svh); /* ticker y=1951, cards end 1848; less on short screens */
   color: var(--color-muted);
   font-size: 24px; /* Quỳnh Anh's note */
   font-weight: var(--fw-regular);

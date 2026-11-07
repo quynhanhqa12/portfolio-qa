@@ -201,9 +201,9 @@ function render(data, root) {
       el('div', { className: 'works__head page' }, renderTitle(), intro ? el('p', { className: 'works__intro' }, intro) : null),
       el('div', { className: 'works__toolbar' }, filter.node, arrows.node),
       rowWrap,
-      // Quỳnh Anh's note: the email button leads to the Contact page
+      // Quỳnh Anh's note (Nov 7): the email button opens a new mail straight away
       site.email
-        ? el('div', { className: 'works__contact page' }, el('a', { className: 'email-box', href: 'contact.html' }, site.email))
+        ? el('div', { className: 'works__contact page' }, el('a', { className: 'email-box', href: `mailto:${site.email}` }, site.email))
         : null
     )
   );
