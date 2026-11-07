@@ -1,6 +1,7 @@
 import { bootPage, el, imageBox } from '../ui/shell.js';
 import { parseEmphasis } from '../core/model.js';
 import { renderContactSection } from './contact-section.js';
+import { glideLinks, glideTo } from '../ui/glide.js';
 
 const ILLUSTRATIONS = 'assets/illustrations/';
 const PROCESS_TITLE = 'Design Approach process';
@@ -192,6 +193,8 @@ bootPage('about', (data, root) => {
   measureBio();
   // arriving from another page's Contact link: the section exists only now, so scroll to it
   // (straight there: gliding down the whole page on arrival would only make the visitor wait)
-  if (location.hash === '#contact') document.getElementById('contact')?.scrollIntoView({ behavior: 'instant' });
+  if (location.hash === '#contact') glideTo(document.getElementById('contact'), { instant: true });
   trackContactInMenu();
+  // the down arrow and the menu's Contact link glide on this page (js/ui/glide.js)
+  glideLinks('a[href^="#"], a[href^="about.html#"]');
 });

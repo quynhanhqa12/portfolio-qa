@@ -114,13 +114,8 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-/* in-page links (About's down arrow, the menu's Contact on the About page) glide instead of
-   jumping (Quỳnh Anh's note) */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
+/* In-page links glide via js/ui/glide.js (not scroll-behavior: smooth, which browsers apply
+   inconsistently on a zoomed page). */
 
 body {
   margin: 0;
