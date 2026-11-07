@@ -170,8 +170,11 @@
     margin-top: calc(16 * var(--v));
   }
 
+  /* always exactly as wide as the bio (its width comes from the base rule); on short screens
+     only the height gives, the picture is cropped from the top (object-position: bottom) */
   .about__photo {
-    width: calc(677 * var(--v));
+    height: calc(354 * var(--v));
+    aspect-ratio: auto;
     margin-top: calc(32 * var(--v));
   }
 
@@ -205,38 +208,52 @@
   text-transform: uppercase;
 }
 
+/* The five steps always stay on one line (Quỳnh Anh's note): text and circles shrink
+   with the width (16px down to 12px; all five need ~71.5px per px of font size, plus 4 x 16px
+   gaps). Where even 12px can't fit (tablet, phone) the line scrolls sideways, never wraps. */
+.about__process {
+  container-type: inline-size;
+}
+
 .process__steps {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: space-between;
-  gap: 24px 48px;
+  gap: 16px;
   margin-top: 28px;
+  overflow-x: auto;
+  font-size: clamp(12px, (100cqi - 64px) / 72, 16px);
+  scrollbar-width: none;
+}
+
+.process__steps::-webkit-scrollbar {
+  display: none;
 }
 
 .process__step {
   display: flex;
+  flex: none;
   align-items: center;
-  gap: 20px;
-  font-size: var(--fs-body);
+  gap: 1.25em; /* 20px at 16px */
   font-weight: var(--fw-bold);
+  white-space: nowrap;
 }
 
 .process__num {
   display: grid;
   flex: none;
-  width: 32px;
-  height: 32px;
+  width: 2em; /* 32px at 16px */
+  height: 2em;
   place-items: center;
   border-radius: 50%;
   background: var(--color-accent);
   color: #fff; /* Figma: white numbers */
-  font-size: 16px;
 }
 
 /* ---------- service cards + say-hi girl ---------- */
 .about__services {
   display: grid;
-  grid-template-columns: minmax(0, 525px) minmax(320px, 462px) minmax(0, 525px); /* 525 | 462 | 525 */
+  grid-template-columns: minmax(0, 525fr) minmax(280px, 462fr) minmax(0, 525fr); /* 525 | 462 | 525, kept in proportion */
   justify-content: space-between;
   align-items: center;
   width: calc(100% - 2 * var(--gutter) - 8px); /* x=204..1716 */
@@ -244,18 +261,22 @@
   margin: min(80px, 5.5svh) auto 0; /* cards y=1386, process ends 1306; less on short screens */
 }
 
+/* A card's insides scale with its width (Figma: 525 wide = 28 padding, 150 icon, 20px title), so
+   the title always fits on one line (Quỳnh Anh's note): the longest, "Digital & Social Design",
+   is 13.5em wide; the title column gets 14em of room or the font shrinks. cqi = card width. */
 .about__col {
   display: flex;
   flex-direction: column;
   gap: 48px;
+  container-type: inline-size;
 }
 
 .service {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 207px;
-  padding: 28px;
+  min-height: min(207px, 39.4cqi);
+  padding: min(28px, 5.33cqi);
   border: 0.5px solid var(--color-border);
   border-radius: 30px;
 }
@@ -271,8 +292,8 @@
 
 .service__icon {
   flex: none;
-  width: 150px;
-  height: 150px;
+  width: min(150px, 28.57cqi);
+  height: min(150px, 28.57cqi);
   background: none;
 }
 
@@ -286,13 +307,14 @@
 }
 
 .service__name {
-  font-size: 20px;
+  font-size: min(20px, 4.34cqi - 0.57px); /* title column (60.8% of the card - 8px) / 14 */
   font-weight: var(--fw-bold);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .service__text {
-  font-size: var(--fs-body);
+  font-size: clamp(13px, 3.05cqi, 16px);
   font-weight: var(--fw-light);
 }
 
@@ -404,6 +426,15 @@
     gap: 12px;
   }
 
+  /* stacked card: the title has the card width minus the 24px padding on each side */
+  .service__name {
+    font-size: min(20px, (100cqi - 48px) / 14);
+  }
+
+  .service__text {
+    font-size: 15px;
+  }
+
   .about__hi {
     grid-column: 1 / -1;
     grid-row: 2;
@@ -411,13 +442,15 @@
     margin: 0 auto;
   }
 
-  .process__steps {
-    justify-content: flex-start;
-  }
-
   .about__ticker {
     margin-top: 56px;
     font-size: 18px;
+  }
+
+  /* the one-line steps scroll sideways here: the right edge fades to show there is more */
+  .process__steps {
+    padding-right: 32px;
+    mask-image: linear-gradient(to right, #000 calc(100% - 56px), transparent);
   }
 }
 
@@ -452,11 +485,6 @@
 
   .about__col + .about__hi + .about__col {
     order: 2;
-  }
-
-  .process__steps {
-    flex-direction: column;
-    gap: 16px;
   }
 
   .about__ticker {

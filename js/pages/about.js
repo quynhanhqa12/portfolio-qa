@@ -163,6 +163,7 @@ function measureBio() {
   const update = () => about.style.setProperty('--bio-h', `${Math.ceil(bio.offsetHeight)}px`);
   update();
   if ('ResizeObserver' in window) new ResizeObserver(update).observe(bio);
+  window.addEventListener('resize', update);
   document.fonts?.ready.then(update);
 }
 
