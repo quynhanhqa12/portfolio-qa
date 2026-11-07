@@ -329,13 +329,14 @@
 }
 
 /* thought icons pop in turn above her head, like the icons over the character in the video.
-   Centred on her head (the head spans 27%..74% of the drawing, centre 50%; its top is at 8.6%).
+   Centred on the crown of her head (the topmost point of her hair is at 52.3% of the drawing's
+   width, 8.6% of its height), per Quỳnh Anh's note: on top of her head.
    The icon files carry ~20% empty margin on each side, so the box is 34% wide for the drawing
    inside to read at about a fifth of her width, just above the top of her head. */
 .intro__thought {
   position: absolute;
   top: -23%;
-  left: 50%;
+  left: 52.3%;
   width: 34%;
   aspect-ratio: 1;
   translate: -50% 0;
