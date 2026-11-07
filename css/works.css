@@ -29,7 +29,7 @@
   height: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-bottom: clamp(16px, calc(3.6 * var(--vh)), 39px); /* button ends y=1041 of 1080 (Figma, Nov 7) */
+  padding-bottom: clamp(16px, calc(9.44 * var(--vh)), 102px); /* button ends y=978 of 1080 (Figma, horizontal menu) */
 }
 
 /* ---------- title + intro ---------- */
@@ -39,7 +39,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 40px;
-  margin-top: min(75px, max(8px, calc(14 * var(--vh)) - 76px)); /* title y=233, header ends 158: 75px at 1080, 25px at 720 */
+  margin-top: min(27px, max(8px, calc(14 * var(--vh)) - 124px)); /* title y=166, header ends 139: 27px at 1080 */
 }
 
 .works__title {
@@ -53,7 +53,7 @@
 
 .works__intro {
   flex: 0 1 877px; /* x=843..1720; takes what the title leaves on narrower screens */
-  margin-top: calc(var(--fs-title-initial) * 0.314); /* intro y=267, title y=233 */
+  margin-top: calc(var(--fs-title-initial) * 0.314); /* intro 34px below the title top (200 / 166) */
   font-size: var(--fs-body);
   font-weight: var(--fw-light);
   text-align: justify;
@@ -217,7 +217,7 @@
   display: flex;
   flex: 1 1 auto;
   min-height: 0;
-  margin-top: clamp(8px, calc(1.5 * var(--vh)), 16px); /* cards y=417, filter row ends 401 */
+  margin-top: clamp(8px, calc(2.13 * var(--vh)), 23px); /* cards y=357, filter row ends 334 */
   margin-left: var(--gutter); /* the row is clipped at the margin line */
 }
 
@@ -348,7 +348,7 @@
   display: flex;
   flex: none;
   justify-content: center;
-  margin-top: clamp(16px, calc(4.4 * var(--vh)), 47px); /* button y=972, card row ends 925 (Figma, Nov 7) */
+  margin-top: clamp(16px, calc(4.07 * var(--vh)), 44px); /* button y=909, card row ends 865 */
 }
 
 .email-box {

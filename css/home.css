@@ -1,7 +1,7 @@
 /* Home (Figma 2796:61531, 1920x1080) always fits one screen: the page is a column of
    header + .home, and .home is a size container, so everything below the header is laid
    out in --u = one Figma pixel scaled to whichever of width / height runs out first.
-   Coordinates are Figma values minus the 158px header height. */
+   Coordinates are Figma values minus the 139px header height (62 + the 77px logo). */
 .page-home {
   display: flex;
   flex-direction: column;
@@ -203,15 +203,15 @@
 /* ---------- landscape: Figma composition scaled by --u ---------- */
 @container home (min-aspect-ratio: 11 / 10) {
   .home__stage {
-    /* full size whenever the composition + titles fit (they need ~700 of the 922 below the header);
+    /* full size whenever the composition + titles fit (they need ~700 of the 941 below the header);
        the spare height is shared out above / below, see --y0 */
     --u: min(calc(100cqw * var(--cqk)) / 1920, calc(100cqh * var(--cqk)) / 700);
     --fs-hero: calc(62.553 * var(--u));
     --fs-hero-initial: calc(125.106 * var(--u));
     --fs-h4: max(12px, calc(20 * var(--u)));
     --x0: calc((calc(100cqw * var(--cqk)) - 1920 * var(--u)) / 2);
-    /* composition top at Figma y=356 (198 below the header); spare height is split above/below */
-    --y0: calc(198 * var(--u) + (calc(100cqh * var(--cqk)) - 922 * var(--u)) / 2);
+    /* composition top at Figma y=356 (217 below the header); spare height is split above/below */
+    --y0: calc(217 * var(--u) + (calc(100cqh * var(--cqk)) - 941 * var(--u)) / 2); /* 356 - 139 */
     position: absolute;
     inset: 0;
   }
@@ -329,14 +329,14 @@
 }
 
 /* thought icons pop in turn above her head, like the icons over the character in the video.
-   Centred on the crown of her head (the topmost point of her hair is at 52.3% of the drawing's
-   width, 8.6% of its height), per Quỳnh Anh's note: on top of her head.
+   Over the left half of her head (centre at 41% of the drawing's width; the crown is at 52.3%,
+   the top of her hair at 8.6% of its height), as Quỳnh Anh asked after trying the crown.
    The icon files carry ~20% empty margin on each side, so the box is 34% wide for the drawing
    inside to read at about a fifth of her width, just above the top of her head. */
 .intro__thought {
   position: absolute;
   top: -23%;
-  left: 51.2%; /* a touch left of the crown, per Quỳnh Anh (Nov 7) */
+  left: 41%; /* over the left half of her head, where it first was (Quỳnh Anh, Nov 7) */
   width: 34%;
   aspect-ratio: 1;
   translate: -50% 0;

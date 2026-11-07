@@ -48,7 +48,7 @@
   --fs-title: 60px;             /* Works/About/Contact rest of title (Gilda Display, uppercase) */
   --fs-h3: 30px;                /* project name, email, ticker (Be Vietnam Pro Bold) */
   --fs-h4: 20px;                /* tags, meta, section labels */
-  --fs-menu: 16px;              /* nav + Resume: 16 on web, 14 on mobile (Quỳnh Anh's note) */
+  --fs-menu: 18px;              /* nav + Resume: 18 (Quỳnh Anh's note, Nov 7); 14 on phones */
   --fs-body: 16px;              /* paragraphs */
   --fs-small: 14px;             /* footer copyright, social links */
   --fs-logo-initial: 65.813px;  /* "Q" of the QA logo (Rouge Script) */
@@ -508,11 +508,17 @@ a.social:focus-visible {
 
 .site-header__nav {
   display: flex;
-  flex-direction: column;
-  gap: 18px; /* Quỳnh Anh's note: 18px between Works / About / Contact */
+  gap: 20px; /* Quỳnh Anh's note (Nov 7): Works / About / Contact in a row, 20px apart */
   font-size: var(--fs-menu);
   font-weight: var(--fw-light);
-  line-height: 1.25; /* 20px at 16px, as in Figma */
+  line-height: 1.2778; /* 23px at 18px, as in Figma 4007:2390 */
+}
+
+/* in the row each item is as wide as its normal text (Figma: Works 0, About 74, Contact 148);
+   the bold copy shown on hover spills a little into the 20px gap instead of pushing the others */
+.site-header__nav .swap__hover {
+  width: 0;
+  white-space: nowrap;
 }
 
 .site-header__nav a[aria-current="page"] {
@@ -622,6 +628,7 @@ a.social:focus-visible {
 
   .site-header__nav {
     position: absolute;
+    flex-direction: column;
     top: 100%;
     left: 0;
     right: 0;

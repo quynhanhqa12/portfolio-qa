@@ -1,4 +1,4 @@
-/* Project detail (Figma 2796:61649, 1920 wide; Figma y minus the 175px header gives the offsets here).
+/* Project detail (Figma 2796:61649, 1920 wide; Figma y minus the 139px header gives the offsets here).
    Title y=313, tags y=471 (right edge 1720), name+meta y=543 (x=200, 440 wide), intro paragraphs y=724 / 868 (417 wide),
    intro grid x=780 y=543 (2x2, 450 squares, 40 gap), section text y=1525 then 748 squares x=200 / x=972 (24 gap), next text y=2397. */
 .project {
@@ -11,7 +11,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 40px;
-  margin-top: 138px; /* title y=313, header ends 175 */
+  margin-top: 174px; /* title y=313, header ends 139 */
 }
 
 .project__works-link {
