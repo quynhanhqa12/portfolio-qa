@@ -336,7 +336,7 @@
 .intro__thought {
   position: absolute;
   top: -23%;
-  left: 52.3%;
+  left: 51.2%; /* a touch left of the crown, per Quỳnh Anh (Nov 7) */
   width: 34%;
   aspect-ratio: 1;
   translate: -50% 0;
